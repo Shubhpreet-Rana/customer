@@ -2,31 +2,30 @@ import 'package:app/common/constants.dart';
 import 'package:app/common/methods/common.dart';
 import 'package:app/common/styles/styles.dart';
 import 'package:app/common/ui/headers.dart';
-import 'package:app/screens/forgot_password.dart';
+import 'package:app/screens/registration/forgot_password.dart';
+import 'package:app/screens/registration/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../common/assets.dart';
-import '../common/colors.dart';
-import '../common/ui/background.dart';
-import '../common/ui/button.dart';
-import '../common/ui/edit_text.dart';
+import '../../common/assets.dart';
+import '../../common/colors.dart';
+import '../../common/ui/background.dart';
+import '../../common/ui/common_ui.dart';
+import '../../common/ui/edit_text.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<Login> createState() => _LoginState();
 }
 
-class _SignUpState extends State<SignUp> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController mobileController = TextEditingController();
+class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool show = true;
-  bool rememberMe = false;
+  bool rememberMe = true;
   bool isLoading = false;
 
   @override
@@ -42,9 +41,9 @@ class _SignUpState extends State<SignUp> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SafeArea(bottom: false, child: AppHeaders().extendedHeader(text: AppConstants.signUp2, context: context)),
-            const SizedBox(
-              height: 60.0,
+            SafeArea(child: AppHeaders().extendedHeader(text: AppConstants.login, context: context, backNavigation: false)),
+            verticalSpacer(
+              height: 100.0,
             ),
             Expanded(
               child: Container(
@@ -70,21 +69,11 @@ class _SignUpState extends State<SignUp> {
                         AppConstants.loginMsg,
                         style: AppStyles.lightText,
                       ),
-                      const SizedBox(
+                      verticalSpacer(
                         height: 30.0,
                       ),
-                      MyEditText(AppConstants.nameHint, false, TextInputType.text, TextCapitalization.none, 10.0, nameController, Colours.hintColor.code, true),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
                       MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0, emailController, Colours.hintColor.code, true),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      MyEditText(AppConstants.mobileHint, false, TextInputType.phone, TextCapitalization.none, 10.0, mobileController, Colours.hintColor.code, true),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
+                      verticalSpacer(),
                       MyEditText(
                         AppConstants.passwordHint,
                         true,
@@ -96,19 +85,53 @@ class _SignUpState extends State<SignUp> {
                         true,
                         textInputAction: TextInputAction.done,
                       ),
-                      const SizedBox(
-                        height: 20.0,
+                      verticalSpacer(),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 24.0,
+                            height: 24.0,
+                            child: Checkbox(value: rememberMe, checkColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)), onChanged: _onRememberMeChanged),
+                          ),
+                          horizontalSpacer(
+                            width: 10.0,
+                          ),
+                          Text(
+                            AppConstants.stayLogin,
+                            style: AppStyles.blackText,
+                          ),
+                        ],
                       ),
-                      appButton(bkColor: Colours.blue.code, text: AppConstants.signUp),
-                      const SizedBox(
+                      verticalSpacer(),
+                      appButton(bkColor: Colours.blue.code, text: AppConstants.login1),
+                      verticalSpacer(),
+                      Center(
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            children: [
+                              TextSpan(text: AppConstants.forgotPwd + " ", style: AppStyles.blackText),
+                              TextSpan(
+                                text: AppConstants.recover,
+                                style: AppStyles.blackBlue,
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+                                      builder: (context) => const ForgotPassword(),
+                                    ));
+                                  },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      verticalSpacer(
                         height: 40.0,
                       ),
                       socialButton(bkColor: Colours.darkBlue.code, text: AppConstants.fb, icon: Assets.fb.name),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
+                      verticalSpacer(),
                       socialButton(bkColor: Colours.red.code, text: AppConstants.google, icon: Assets.google.name),
-                      const SizedBox(
+                      verticalSpacer(
                         height: 30.0,
                       ),
                       Center(
@@ -116,22 +139,20 @@ class _SignUpState extends State<SignUp> {
                           textAlign: TextAlign.center,
                           text: TextSpan(
                             children: [
-                              TextSpan(text: AppConstants.doAccount + " ", style: AppStyles.blackText),
+                              TextSpan(text: AppConstants.dontAccount + " ", style: AppStyles.blackText),
                               TextSpan(
-                                text: AppConstants.signIn,
+                                text: AppConstants.signUp1,
                                 style: AppStyles.blackBlue,
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    Navigator.of(context).pop();
+                                    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const SignUp()));
                                   },
                               ),
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
+                      verticalSpacer(),
                     ],
                   ),
                 ),
@@ -142,4 +163,11 @@ class _SignUpState extends State<SignUp> {
       ),
     );
   }
+
+  void _onRememberMeChanged(bool? newValue) => setState(() {
+        rememberMe = newValue!;
+        if (mounted) {
+          setState(() {});
+        }
+      });
 }

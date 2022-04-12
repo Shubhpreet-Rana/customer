@@ -1,4 +1,4 @@
-import 'package:app/screens/login.dart';
+import 'package:app/screens/registration/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

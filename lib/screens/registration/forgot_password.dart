@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../common/colors.dart';
-import '../common/constants.dart';
-import '../common/methods/common.dart';
-import '../common/ui/background.dart';
-import '../common/ui/button.dart';
-import '../common/ui/edit_text.dart';
-import '../common/ui/headers.dart';
+import '../../common/colors.dart';
+import '../../common/constants.dart';
+import '../../common/methods/common.dart';
+import '../../common/ui/background.dart';
+import '../../common/ui/common_ui.dart';
+import '../../common/ui/edit_text.dart';
+import '../../common/ui/headers.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);
@@ -62,9 +62,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         true,
                         textInputAction: TextInputAction.done,
                       ),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
+                      verticalSpacer(),
                       appButton(bkColor: Colours.blue.code, text: AppConstants.verifyHint),
                     ],
                   ),

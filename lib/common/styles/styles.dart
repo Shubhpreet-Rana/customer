@@ -8,4 +8,7 @@ class AppStyles {
   static const TextStyle lightText = TextStyle(fontSize: 14, color: Color(0xFF666666), fontWeight: FontWeight.normal);
   static TextStyle blackText = TextStyle(fontSize: 14, color: Colours.textBlack.code, fontWeight: FontWeight.normal);
   static TextStyle blackBlue = TextStyle(fontSize: 14, color: Colours.blue.code, fontWeight: FontWeight.normal);
+  static TextStyle whiteText = const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.normal);
+  static TextStyle blueLightText =  TextStyle(fontSize: 14, color: Colours.lightBlue.code, fontWeight: FontWeight.normal);
+
 }

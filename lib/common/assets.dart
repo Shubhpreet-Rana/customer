@@ -5,6 +5,7 @@ enum Assets {
   backImage,
   fb,
   google,
+  camera
 }
 
 const String svgDir = "assets/svg";
@@ -25,6 +26,8 @@ extension AssetsName on Assets {
         return "$svgDir/fb.svg";
       case Assets.google:
         return "$svgDir/google.svg";
+      case Assets.camera:
+        return "$svgDir/camera.svg";
       default:
         return "$svgDir/logo.svg";
     }
