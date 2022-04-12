@@ -3,7 +3,6 @@ import 'package:app/common/methods/common.dart';
 import 'package:app/common/styles/styles.dart';
 import 'package:app/common/ui/headers.dart';
 import 'package:app/screens/forgot_password.dart';
-import 'package:app/screens/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,18 +13,20 @@ import '../common/ui/background.dart';
 import '../common/ui/button.dart';
 import '../common/ui/edit_text.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class SignUp extends StatefulWidget {
+  const SignUp({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool show = true;
-  bool rememberMe = true;
+  bool rememberMe = false;
   bool isLoading = false;
 
   @override
@@ -41,9 +42,9 @@ class _LoginState extends State<Login> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SafeArea(child: AppHeaders().extendedHeader(text: AppConstants.login, context: context, backNavigation: false)),
+            SafeArea(bottom: false, child: AppHeaders().extendedHeader(text: AppConstants.signUp2, context: context)),
             const SizedBox(
-              height: 100.0,
+              height: 60.0,
             ),
             Expanded(
               child: Container(
@@ -72,7 +73,15 @@ class _LoginState extends State<Login> {
                       const SizedBox(
                         height: 30.0,
                       ),
+                      MyEditText(AppConstants.nameHint, false, TextInputType.text, TextCapitalization.none, 10.0, nameController, Colours.hintColor.code, true),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
                       MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0, emailController, Colours.hintColor.code, true),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      MyEditText(AppConstants.mobileHint, false, TextInputType.phone, TextCapitalization.none, 10.0, mobileController, Colours.hintColor.code, true),
                       const SizedBox(
                         height: 20.0,
                       ),
@@ -90,49 +99,7 @@ class _LoginState extends State<Login> {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 24.0,
-                            height: 24.0,
-                            child: Checkbox(value: rememberMe, checkColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)), onChanged: _onRememberMeChanged),
-                          ),
-                          const SizedBox(
-                            width: 10.0,
-                          ),
-                          Text(
-                            AppConstants.stayLogin,
-                            style: AppStyles.blackText,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      appButton(bkColor: Colours.blue.code, text: AppConstants.login1),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      Center(
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            children: [
-                              TextSpan(text: AppConstants.forgotPwd + " ", style: AppStyles.blackText),
-                              TextSpan(
-                                text: AppConstants.recover,
-                                style: AppStyles.blackBlue,
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-                                      builder: (context) => const ForgotPassword(),
-                                    ));
-                                  },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      appButton(bkColor: Colours.blue.code, text: AppConstants.signUp),
                       const SizedBox(
                         height: 40.0,
                       ),
@@ -149,13 +116,13 @@ class _LoginState extends State<Login> {
                           textAlign: TextAlign.center,
                           text: TextSpan(
                             children: [
-                              TextSpan(text: AppConstants.dontAccount + " ", style: AppStyles.blackText),
+                              TextSpan(text: AppConstants.doAccount + " ", style: AppStyles.blackText),
                               TextSpan(
-                                text: AppConstants.signUp1,
+                                text: AppConstants.signIn,
                                 style: AppStyles.blackBlue,
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const SignUp()));
+                                    Navigator.of(context).pop();
                                   },
                               ),
                             ],
@@ -175,11 +142,4 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
-  void _onRememberMeChanged(bool? newValue) => setState(() {
-        rememberMe = newValue!;
-        if (mounted) {
-          setState(() {});
-        }
-      });
 }

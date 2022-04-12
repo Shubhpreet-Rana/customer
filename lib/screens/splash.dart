@@ -16,7 +16,7 @@ class _SplashState extends State<Splash> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(milliseconds: 1000)).then((value) => Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+    Future.delayed(const Duration(milliseconds: 1000)).then((value) => Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(
           builder: (context) => const Login(),
         )));
   }

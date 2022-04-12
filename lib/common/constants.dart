@@ -12,6 +12,7 @@ class AppConstants {
   static String forgotPwd = 'Forgot Password?';
   static String forgotPwd1 = 'Forgot Password';
   static String recover = 'Recover here';
+  static String verifyHint = 'VERIFY';
   static String fb = 'LOGIN WITH FACEBOOK';
   static String google = 'LOGIN WITH GOOGLE';
   static String dontAccount = "Don't have an account?";
