@@ -10,8 +10,9 @@ class AppDropdown extends StatefulWidget {
   final List<String>? items;
   final String? selectedItem;
   final StringCallback? onChange;
+  final double height;
 
-  const AppDropdown({Key? key, this.bgColor, this.items, this.selectedItem, this.onChange}) : super(key: key);
+  const AppDropdown({Key? key, this.bgColor, this.items, this.selectedItem, this.onChange, this.height = 55.0}) : super(key: key);
 
   @override
   State<AppDropdown> createState() => _AppDropdownState();
@@ -30,7 +31,7 @@ class _AppDropdownState extends State<AppDropdown> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10.0),
-      height: 55.0,
+      height: widget.height,
       width: CommonMethods.deviceWidth(),
       decoration: BoxDecoration(color: Colours.lightGray.code, borderRadius: BorderRadius.circular(10.0)),
       child: DropdownButtonHideUnderline(
@@ -44,7 +45,7 @@ class _AppDropdownState extends State<AppDropdown> {
         }).toList(),
         onChanged: (String? val) {
           selectedItem = val;
-          if(widget.onChange!=null) {
+          if (widget.onChange != null) {
             widget.onChange!(selectedItem!);
           }
           setState(() {});

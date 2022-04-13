@@ -1,4 +1,27 @@
-enum Assets { logo, splash, splashPng, backImage, fb, google, camera, filters, menu, home, selectedHome, car, selectedCar, calender, selectedCalender, settings }
+enum Assets {
+  logo,
+  splash,
+  splashPng,
+  backImage,
+  fb,
+  google,
+  camera,
+  filters,
+  menu,
+  home,
+  selectedHome,
+  car,
+  selectedCar,
+  calender,
+  selectedCalender,
+  settings,
+  banner,
+  banner1,
+  periodic,
+  ac,
+  tyre,
+  battery,
+}
 
 const String svgDir = "assets/svg";
 const String tabsDir = "assets/svg/tabs";
@@ -15,6 +38,10 @@ extension AssetsName on Assets {
         return "$pngDir/splash.png";
       case Assets.backImage:
         return "$pngDir/back.png";
+      case Assets.banner:
+        return "$pngDir/banner.png";
+      case Assets.banner1:
+        return "$pngDir/banner1.png";
       case Assets.fb:
         return "$svgDir/fb.svg";
       case Assets.google:
@@ -39,6 +66,15 @@ extension AssetsName on Assets {
         return "$tabsDir/calender.svg";
       case Assets.settings:
         return "$tabsDir/settings1.svg";
+      case Assets.periodic:
+        return "$svgDir/periodic.svg";
+      case Assets.ac:
+        return "$svgDir/ac.svg";
+      case Assets.tyre:
+        return "$svgDir/tyre.svg";
+      case Assets.battery:
+        return "$svgDir/battery.svg";
+
       default:
         return "$svgDir/logo.svg";
     }

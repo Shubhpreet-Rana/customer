@@ -78,7 +78,8 @@ class _SignUpState extends State<SignUp> {
                       const SizedBox(
                         height: 20.0,
                       ),*/
-                      MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0, emailController, Colours.hintColor.code, true),
+                      MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0, emailController,
+                          Colours.hintColor.code, true),
                       verticalSpacer(),
                       /* MyEditText(AppConstants.mobileHint, false, TextInputType.phone, TextCapitalization.none, 10.0, mobileController, Colours.hintColor.code, true),
                       const SizedBox(
@@ -119,7 +120,7 @@ class _SignUpState extends State<SignUp> {
                               TextSpan(text: AppConstants.doAccount + " ", style: AppStyles.blackText),
                               TextSpan(
                                 text: AppConstants.signIn,
-                                style: AppStyles.blackBlue,
+                                style: AppStyles.textBlue,
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     Navigator.of(context).pop();

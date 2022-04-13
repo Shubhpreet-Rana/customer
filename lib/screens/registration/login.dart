@@ -119,7 +119,7 @@ class _LoginState extends State<Login> {
                               TextSpan(text: AppConstants.forgotPwd + " ", style: AppStyles.blackText),
                               TextSpan(
                                 text: AppConstants.recover,
-                                style: AppStyles.blackBlue,
+                                style: AppStyles.textBlue,
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
@@ -148,7 +148,7 @@ class _LoginState extends State<Login> {
                               TextSpan(text: AppConstants.dontAccount + " ", style: AppStyles.blackText),
                               TextSpan(
                                 text: AppConstants.signUp1,
-                                style: AppStyles.blackBlue,
+                                style: AppStyles.textBlue,
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const SignUp()));

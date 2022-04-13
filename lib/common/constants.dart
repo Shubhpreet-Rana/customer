@@ -55,4 +55,15 @@ class AppConstants {
   static String saveText = 'SAVE';
   static List<String> colorItems = ['Black', 'White', 'Red', 'Silver','Green',];
   static List<String> mileageItems = ['22 km/p', '21 km/p', '20 km/p', '19 km/p','18 km/p',];
+  static List<String> serviceItems = ['Basic Service', 'Test',];
+  static String sProviderText = 'Service Providers';
+  static String provider1 ="Periodic Services";
+  static String provider2 ="AC Service & Repair";
+  static String provider3 ="Tyre & Wheel Care";
+  static String provider4 ="Battery & Electronic";
+  static String bookingText = 'Bookings';
+  static String active = 'Active';
+  static String completed = 'Completed';
+  static String addToSell = 'ADD CARDS TO SELL';
+  static String viewCards = 'VIEW CARDS';
 }

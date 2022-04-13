@@ -19,6 +19,18 @@ Widget appButton({required Color? bkColor, String text = ''}) => Container(
       ),
     );
 
+Widget rowButton({required Color? bkColor, String text = ''}) => Container(
+      height: 55.0,
+      decoration: BoxDecoration(color: bkColor, borderRadius: BorderRadius.circular(10.0)),
+      child: Center(
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: AppStyles.whiteTextW500,
+        ),
+      ),
+    );
+
 Widget socialButton({required Color? bkColor, required String? icon, String text = ''}) => Container(
       width: CommonMethods.deviceWidth(),
       height: 55.0,
@@ -53,7 +65,9 @@ Widget headingText({String text = ""}) => Text(
       style: AppStyles.blackText,
     );
 
-Widget grayContainer({String text = '', required Widget icon, double paddingHorizontal = 10.0, double paddingVertical = 10.0, double bRadius = 10.0}) => Container(
+Widget grayContainer(
+        {String text = '', required Widget icon, double paddingHorizontal = 10.0, double paddingVertical = 10.0, double bRadius = 10.0}) =>
+    Container(
       padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
       decoration: BoxDecoration(color: Colours.lightGray.code, borderRadius: BorderRadius.circular(bRadius)),
       child: Column(
@@ -69,7 +83,12 @@ Widget grayContainer({String text = '', required Widget icon, double paddingHori
       ),
     );
 
-Widget searchBox({double paddingHorizontal = 10.0, double paddingVertical = 10.0, double borderRadius = 10.0, required TextEditingController controller}) => Container(
+Widget searchBox(
+        {double paddingHorizontal = 10.0,
+        double paddingVertical = 10.0,
+        double borderRadius = 10.0,
+        required TextEditingController controller}) =>
+    Container(
       padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(borderRadius)),
       child: Row(
