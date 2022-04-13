@@ -1,5 +1,10 @@
 import 'package:app/common/assets.dart';
 import 'package:app/common/colors.dart';
+import 'package:app/screens/home/pages/calender.dart';
+import 'package:app/screens/home/pages/cars.dart';
+import 'package:app/screens/home/pages/home.dart';
+import 'package:app/screens/home/pages/settings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -15,14 +20,8 @@ class HomeTabs extends StatefulWidget {
   State<HomeTabs> createState() => _HomeTabsState();
 }
 
-class _HomeTabsState extends State<HomeTabs> {
+class _HomeTabsState extends State<HomeTabs>  with TickerProviderStateMixin<HomeTabs> {
   int _selectedTabIndex = 0;
-
-  _changeIndex(int index) {
-    setState(() {
-      _selectedTabIndex = index;
-    });
-  }
 
   @override
   void initState() {
@@ -30,10 +29,48 @@ class _HomeTabsState extends State<HomeTabs> {
     super.initState();
   }
 
+  final _homeScreen = GlobalKey<NavigatorState>();
+  final _carScreen = GlobalKey<NavigatorState>();
+  final _calenderScreen = GlobalKey<NavigatorState>();
+  final _settingsScreen = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         extendBody: true,
+        body: IndexedStack(
+          index: _selectedTabIndex,
+          children: <Widget>[
+            Navigator(
+              key: _homeScreen,
+              onGenerateRoute: (route) => CupertinoPageRoute(
+                settings: route,
+                builder: (context) => const HomeTab(),
+              ),
+            ),
+            Navigator(
+              key: _carScreen,
+              onGenerateRoute: (route) => CupertinoPageRoute(
+                settings: route,
+                builder: (context) => const CarTab(),
+              ),
+            ),
+            Navigator(
+              key: _calenderScreen,
+              onGenerateRoute: (route) => CupertinoPageRoute(
+                settings: route,
+                builder: (context) => const CalenderTab(),
+              ),
+            ),
+            Navigator(
+              key: _settingsScreen,
+              onGenerateRoute: (route) => CupertinoPageRoute(
+                settings: route,
+                builder: (context) => const SettingsTab(),
+              ),
+            ),
+          ],
+        ),
         bottomNavigationBar: Container(
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(topRight: Radius.circular(30.0), topLeft: Radius.circular(30.0)),
@@ -48,7 +85,7 @@ class _HomeTabsState extends State<HomeTabs> {
               ),
               child: BottomNavigationBar(
                 currentIndex: _selectedTabIndex,
-                onTap: _changeIndex,
+                onTap: (val) => _onTap(val, context),
                 type: BottomNavigationBarType.fixed,
                 showSelectedLabels: false,
                 showUnselectedLabels: false,
@@ -69,7 +106,7 @@ class _HomeTabsState extends State<HomeTabs> {
                   ),
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(
-                      _selectedTabIndex == 2 ? Assets.selectedCalender.name :  Assets.calender.name,
+                      _selectedTabIndex == 2 ? Assets.selectedCalender.name : Assets.calender.name,
                     ),
                     label: '',
                   ),
@@ -82,23 +119,33 @@ class _HomeTabsState extends State<HomeTabs> {
                 ],
               ),
             )),
-        body: BackgroundImage(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SafeArea(
-                bottom: false,
-                child: AppHeaders().collapsedHeader(
-                    text: "",
-                    context: context,
-                    backNavigation: false,
-                    onFilterClick: () {
-                      print('filters');
-                    })),
-            verticalSpacer(
-              height: 10.0,
-            ),
-          ],
-        )));
+        );
+  }
+
+  void _onTap(int val, BuildContext context) {
+    if (_selectedTabIndex == val) {
+      switch (val) {
+        case 0:
+          _homeScreen.currentState!.popUntil((route) => route.isFirst);
+          break;
+        case 1:
+          _carScreen.currentState!.popUntil((route) => route.isFirst);
+          break;
+        case 2:
+          _calenderScreen.currentState!.popUntil((route) => route.isFirst);
+          break;
+        case 3:
+          _settingsScreen.currentState!.popUntil((route) => route.isFirst);
+          break;
+
+        default:
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          _selectedTabIndex = val;
+        });
+      }
+    }
   }
 }

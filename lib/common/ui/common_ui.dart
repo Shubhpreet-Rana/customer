@@ -68,3 +68,25 @@ Widget grayContainer({String text = '', required Widget icon, double paddingHori
         ],
       ),
     );
+
+Widget searchBox({double paddingHorizontal = 10.0, double paddingVertical = 10.0, double borderRadius = 10.0, required TextEditingController controller}) => Container(
+      padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(borderRadius)),
+      child: Row(
+        children: [
+          Icon(
+            Icons.search,
+            color: Colours.gray.code,
+          ),
+          Expanded(
+              child: TextFormField(
+            textInputAction: TextInputAction.done,
+            controller: controller,
+            decoration: const InputDecoration.collapsed(
+              border: InputBorder.none,
+              hintText: "search",
+            ),
+          ))
+        ],
+      ),
+    );

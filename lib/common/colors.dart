@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum Colours { lightGray, blue, red, darkBlue, hintColor, textBlack, darkGray, lightBlue,unSelectTab }
+enum Colours { lightGray, blue, red, darkBlue, hintColor, textBlack, darkGray, lightBlue,unSelectTab, gray }
 
 extension ColourCode on Colours {
   Color get code {
@@ -23,6 +23,8 @@ extension ColourCode on Colours {
         return const Color(0xFF93B9E2);
       case Colours.unSelectTab:
         return const Color(0xFF999999);
+      case Colours.gray:
+        return const Color(0xFFBDBDBD);
       default:
         return const Color(0xFF000000);
     }
