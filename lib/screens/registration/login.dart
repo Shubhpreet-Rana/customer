@@ -13,6 +13,7 @@ import '../../common/colors.dart';
 import '../../common/ui/background.dart';
 import '../../common/ui/common_ui.dart';
 import '../../common/ui/edit_text.dart';
+import '../home/home_tabs.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -103,7 +104,12 @@ class _LoginState extends State<Login> {
                         ],
                       ),
                       verticalSpacer(),
-                      appButton(bkColor: Colours.blue.code, text: AppConstants.login1),
+                      GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const HomeTabs()));
+                          },
+                          child: appButton(bkColor: Colours.blue.code, text: AppConstants.login1)),
                       verticalSpacer(),
                       Center(
                         child: RichText(
