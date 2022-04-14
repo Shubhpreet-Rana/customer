@@ -66,4 +66,6 @@ class AppConstants {
   static String completed = 'Completed';
   static String addToSell = 'ADD CARDS TO SELL';
   static String viewCards = 'VIEW CARDS';
+  static String location = 'View Location';
+  static String bookNow = 'Book Now';
 }

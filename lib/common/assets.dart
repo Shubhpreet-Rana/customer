@@ -21,11 +21,15 @@ enum Assets {
   ac,
   tyre,
   battery,
+  service,
+  service1,
+  blueDot,
 }
 
 const String svgDir = "assets/svg";
 const String tabsDir = "assets/svg/tabs";
 const String pngDir = "assets/png";
+const String serviceDir = "assets/png/services";
 
 extension AssetsName on Assets {
   String get name {
@@ -42,6 +46,10 @@ extension AssetsName on Assets {
         return "$pngDir/banner.png";
       case Assets.banner1:
         return "$pngDir/banner1.png";
+      case Assets.service:
+        return "$serviceDir/service.png";
+      case Assets.service1:
+        return "$serviceDir/service1.png";
       case Assets.fb:
         return "$svgDir/fb.svg";
       case Assets.google:
@@ -74,6 +82,8 @@ extension AssetsName on Assets {
         return "$svgDir/tyre.svg";
       case Assets.battery:
         return "$svgDir/battery.svg";
+      case Assets.blueDot:
+        return "$svgDir/ellipse.svg";
 
       default:
         return "$svgDir/logo.svg";

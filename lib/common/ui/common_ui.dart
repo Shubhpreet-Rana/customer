@@ -19,14 +19,20 @@ Widget appButton({required Color? bkColor, String text = ''}) => Container(
       ),
     );
 
-Widget rowButton({required Color? bkColor, String text = ''}) => Container(
-      height: 55.0,
+Widget rowButton(
+        {required Color? bkColor,
+        String text = '',
+        double paddingHorizontal = 10.0,
+        double paddingVertical = 15.0,
+        Color textColor = Colors.white}) =>
+    Container(
+      padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
       decoration: BoxDecoration(color: bkColor, borderRadius: BorderRadius.circular(10.0)),
       child: Center(
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: AppStyles.whiteTextW500,
+          style: TextStyle(fontSize: 14, color: textColor, fontWeight: FontWeight.w500),
         ),
       ),
     );
@@ -87,7 +93,8 @@ Widget searchBox(
         {double paddingHorizontal = 10.0,
         double paddingVertical = 10.0,
         double borderRadius = 10.0,
-        required TextEditingController controller}) =>
+        required TextEditingController controller,
+        String hintText = "search"}) =>
     Container(
       padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(borderRadius)),
@@ -101,9 +108,9 @@ Widget searchBox(
               child: TextFormField(
             textInputAction: TextInputAction.done,
             controller: controller,
-            decoration: const InputDecoration.collapsed(
+            decoration: InputDecoration.collapsed(
               border: InputBorder.none,
-              hintText: "search",
+              hintText: hintText,
             ),
           ))
         ],
