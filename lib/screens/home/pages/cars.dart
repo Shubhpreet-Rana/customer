@@ -36,10 +36,9 @@ class _CarTabState extends State<CarTab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SafeArea(
-              bottom: false, child: AppHeaders().collapsedHeader(text: "", context: context, backNavigation: false, onFilterClick: () {})),
-          verticalSpacer(
-            height: 10.0,
-          ),
+              bottom: false,
+              child: AppHeaders()
+                  .collapsedHeader(text: AppConstants.sProviderText, context: context, backNavigation: false, onFilterClick: () {})),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Row(
@@ -186,7 +185,14 @@ class _CarTabState extends State<CarTab> {
               children: [
                 Row(
                   children: [
-                    RatingBar.builder(
+                    RatingBarIndicator(
+                        itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: Color(0xFFF1C21C),
+                            ),
+                        rating: rating,
+                        itemSize: 18.0),
+                    /* RatingBar.builder(
                       initialRating: rating,
                       minRating: 1,
                       direction: Axis.horizontal,
@@ -201,7 +207,7 @@ class _CarTabState extends State<CarTab> {
                       onRatingUpdate: (rating) {
                         print(rating);
                       },
-                    ),
+                    ),*/
                     Text(rating.toString())
                   ],
                 ),

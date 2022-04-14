@@ -53,7 +53,7 @@ class AppHeaders {
                   padding: const EdgeInsets.only(left: 20.0),
                   child: Text(
                     text,
-                    style: AppStyles.appBarText,
+                    style: AppStyles.buttonText,
                   ),
                 )
               ],

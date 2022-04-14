@@ -68,4 +68,10 @@ class AppConstants {
   static String viewCards = 'VIEW CARDS';
   static String location = 'View Location';
   static String bookNow = 'Book Now';
+  static String myBooking = 'My Bookings';
+  static String details = 'View Details';
+  static String serviceDetails = 'Service Details';
+  static String completedOn ="Service completed on";
+  static String bookingOn ="Service booking on";
+  static String serviceCategories = "Service Categories";
 }
