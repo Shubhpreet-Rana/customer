@@ -38,7 +38,9 @@ class _HomeTabState extends State<HomeTab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SafeArea(
-              bottom: false, child: AppHeaders().collapsedHeader(text: "", context: context, backNavigation: false, onFilterClick: () {})),
+              bottom: false, child: AppHeaders().collapsedHeader(text: "", context: context, backNavigation: false, onFilterClick: () {
+            CommonMethods().openFilters(context);
+          })),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Row(
@@ -135,9 +137,9 @@ class _HomeTabState extends State<HomeTab> {
                           verticalSpacer(),
                           Row(
                             children: [
-                              Expanded(child: rowButton(bkColor: Colours.textBlack.code, text: AppConstants.addToSell)),
+                              Expanded(child: rowButton(bkColor: Colours.textBlack.code, text: AppConstants.addToSell,paddingHorizontal: 3.0)),
                               horizontalSpacer(),
-                              Expanded(child: rowButton(bkColor: Colours.blue.code, text: AppConstants.viewCards)),
+                              Expanded(child: rowButton(bkColor: Colours.blue.code, text: AppConstants.viewCards,paddingHorizontal: 8.0)),
                             ],
                           ),
                           verticalSpacer(height: 100),

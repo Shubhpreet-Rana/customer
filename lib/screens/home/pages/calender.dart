@@ -37,7 +37,7 @@ class _CalenderTabState extends State<CalenderTab> {
               child: Container(
             width: CommonMethods.deviceWidth(),
             height: CommonMethods.deviceHeight(),
-            padding: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 5.0, top: 40.0),
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 5.0, top: 20.0),
             decoration: BoxDecoration(
               color: Colours.lightGray.code,
             ),
@@ -199,7 +199,7 @@ class _CalenderTabState extends State<CalenderTab> {
                             "rating": rating,
                             "status": status
                           };
-                          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) =>  BookingDetails(item:item)));
+                          Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) =>  BookingDetails(item:item)));
                         },
                         child: rowButton(
                             bkColor: Colours.blue.code, text: AppConstants.details, paddingHorizontal: 8.0, paddingVertical: 7.0)),

@@ -38,52 +38,54 @@ class _BookingDetailsState extends State<BookingDetails> {
                   style: AppStyles.whiteText)),
           verticalSpacer(),
           Expanded(
-              child: Container(
+              child: SingleChildScrollView(
+                child: Container(
             width: CommonMethods.deviceWidth(),
             height: CommonMethods.deviceHeight(),
             decoration: BoxDecoration(
-              color: Colours.lightGray.code,
+                color: Colours.lightGray.code,
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                header(),
-                verticalSpacer(height: 10.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-                  child: Text(AppConstants.serviceCategories, style: AppStyles.blackSemiBold),
-                ),
-                verticalSpacer(height: 10.0),
-                centerWidget(),
-                verticalSpacer(height: 10.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text("28 Mar, 2022", style: AppStyles.blackSemiBold),
-                          horizontalSpacer(width: 10.0),
-                          Text(
-                            "- Booking Date",
-                            style: AppStyles.lightText,
-                          ),
-                        ],
-                      ),
-                      Icon(
-                        Icons.calendar_month,
-                        color: Colours.blue.code,
-                        size: 30.0,
-                      )
-                    ],
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  header(),
+                  verticalSpacer(height: 10.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                    child: Text(AppConstants.serviceCategories, style: AppStyles.blackSemiBold),
                   ),
-                ),
-                verticalSpacer(height: 10.0),
-                Expanded(child: bottomWidget())
-              ],
+                  verticalSpacer(height: 10.0),
+                  centerWidget(),
+                  verticalSpacer(height: 10.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text("28 Mar, 2022", style: AppStyles.blackSemiBold),
+                            horizontalSpacer(width: 10.0),
+                            Text(
+                              "- Booking Date",
+                              style: AppStyles.lightText,
+                            ),
+                          ],
+                        ),
+                        Icon(
+                          Icons.calendar_month,
+                          color: Colours.blue.code,
+                          size: 30.0,
+                        )
+                      ],
+                    ),
+                  ),
+                  verticalSpacer(height: 10.0),
+                  Expanded(child: bottomWidget())
+                ],
             ),
-          ))
+          ),
+              ))
         ],
       )),
     );
@@ -152,6 +154,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                 ],
               ),
             const Spacer(),
+            verticalSpacer(height: 10.0),
           ],
         ),
       );

@@ -130,6 +130,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                       },
                     ),
                     verticalSpacer(),
+                    if (!showAddCard)
                     submitButton(),
                     verticalSpacer(height: showAddCard ? 20 : 50),
                     if (showAddCard)

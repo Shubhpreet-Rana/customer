@@ -74,4 +74,7 @@ class AppConstants {
   static String completedOn ="Service completed on";
   static String bookingOn ="Service booking on";
   static String serviceCategories = "Service Categories";
+  static String filters ="Filters";
+  static String category = "Select Category";
+  static String ratings ="Ratings";
 }

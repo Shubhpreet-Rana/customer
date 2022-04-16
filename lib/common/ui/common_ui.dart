@@ -116,3 +116,32 @@ Widget searchBox(
         ],
       ),
     );
+
+Widget ratingBar({int selectedIndex = 4}) => ListView.builder(
+    itemCount: 5,
+    scrollDirection: Axis.horizontal,
+    itemBuilder: (context, index) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+        margin: const EdgeInsets.all(5.0),
+        decoration: BoxDecoration(
+            color: selectedIndex == index ? Colours.blue.code : Colors.white,
+            borderRadius: BorderRadius.circular(20.0),
+            border: Border.all(color: Colors.black)),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.star,
+              color: selectedIndex == index ? Colors.white : Colours.blue.code,
+            ),
+            horizontalSpacer(width: 2.0),
+            Text(
+              (index + 1).toString(),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: selectedIndex == index ? Colors.white : Colors.black),
+            )
+          ],
+        ),
+      );
+    });

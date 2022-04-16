@@ -37,8 +37,13 @@ class _CarTabState extends State<CarTab> {
         children: [
           SafeArea(
               bottom: false,
-              child: AppHeaders()
-                  .collapsedHeader(text: AppConstants.sProviderText, context: context, backNavigation: false, onFilterClick: () {})),
+              child: AppHeaders().collapsedHeader(
+                  text: AppConstants.sProviderText,
+                  context: context,
+                  backNavigation: false,
+                  onFilterClick: () {
+                    CommonMethods().openFilters(context);
+                  })),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Row(
@@ -61,7 +66,7 @@ class _CarTabState extends State<CarTab> {
               child: Container(
                   width: CommonMethods.deviceWidth(),
                   height: CommonMethods.deviceHeight(),
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.symmetric(vertical: 20.0,horizontal: 15.0),
                   decoration: BoxDecoration(
                     color: Colours.lightGray.code,
                   ),
@@ -172,7 +177,7 @@ class _CarTabState extends State<CarTab> {
           ),
           Container(
             margin: const EdgeInsets.only(bottom: 20.0, top: 2.0),
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.only(top: 10.0,bottom: 10.0,left: 4.0,right: 4.0),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(

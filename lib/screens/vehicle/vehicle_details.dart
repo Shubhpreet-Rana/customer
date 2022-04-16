@@ -197,10 +197,10 @@ class _VehicleDetailsState extends State<VehicleDetails> {
                               Icons.add,
                               color: Colours.blue.code,
                             ),
-                            paddingHorizontal: 30.0,
-                            paddingVertical: 20.0),
-                        grayContainer(text: AppConstants.imageText1, icon: Icon(Icons.add, color: Colours.blue.code), paddingHorizontal: 30.0, paddingVertical: 20.0),
-                        grayContainer(text: AppConstants.imageText1, icon: Icon(Icons.add, color: Colours.blue.code), paddingHorizontal: 30.0, paddingVertical: 20.0)
+                            paddingHorizontal: 15.0,
+                            paddingVertical: 15.0),
+                        grayContainer(text: AppConstants.imageText1, icon: Icon(Icons.add, color: Colours.blue.code), paddingHorizontal: 15.0, paddingVertical: 15.0),
+                        grayContainer(text: AppConstants.imageText1, icon: Icon(Icons.add, color: Colours.blue.code), paddingHorizontal: 15.0, paddingVertical: 15.0)
                       ],
                     ),
                     verticalSpacer(),
