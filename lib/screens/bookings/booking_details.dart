@@ -33,19 +33,19 @@ class _BookingDetailsState extends State<BookingDetails> {
               child: AppHeaders()
                   .collapsedHeader(text: AppConstants.serviceDetails, context: context, backNavigation: true, onFilterClick: () {})),
           Padding(
-              padding: const EdgeInsets.only(left: 75.0, top: 2.0),
+              padding: const EdgeInsets.only(left: 70.0, top: 2.0),
               child: Text((widget.item['status'] == 2 ? AppConstants.completedOn : AppConstants.bookingOn) + " 20 Mar, 2021",
                   style: AppStyles.whiteText)),
           verticalSpacer(),
           Expanded(
               child: SingleChildScrollView(
-                child: Container(
-            width: CommonMethods.deviceWidth(),
-            height: CommonMethods.deviceHeight(),
-            decoration: BoxDecoration(
+            child: Container(
+              width: CommonMethods.deviceWidth(),
+              height: CommonMethods.deviceHeight(),
+              decoration: BoxDecoration(
                 color: Colours.lightGray.code,
-            ),
-            child: Column(
+              ),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   header(),
@@ -83,9 +83,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                   verticalSpacer(height: 10.0),
                   Expanded(child: bottomWidget())
                 ],
+              ),
             ),
-          ),
-              ))
+          ))
         ],
       )),
     );

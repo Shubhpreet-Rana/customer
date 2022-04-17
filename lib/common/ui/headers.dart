@@ -36,7 +36,7 @@ class AppHeaders {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 30.0, top: 10.0),
+            padding: const EdgeInsets.only(left: 25.0, top: 10.0),
             child: Row(
               children: [
                 backNavigation

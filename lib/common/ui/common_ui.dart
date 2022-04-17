@@ -6,9 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../methods/common.dart';
 import '../styles/styles.dart';
 
-Widget appButton({required Color? bkColor, String text = ''}) => Container(
+Widget appButton({required Color? bkColor, String text = '',double height =55.0}) => Container(
       width: CommonMethods.deviceWidth(),
-      height: 55.0,
+      height: height,
       decoration: BoxDecoration(color: bkColor, borderRadius: BorderRadius.circular(10.0)),
       child: Center(
         child: Text(
@@ -117,31 +117,26 @@ Widget searchBox(
       ),
     );
 
-Widget ratingBar({int selectedIndex = 4}) => ListView.builder(
-    itemCount: 5,
-    scrollDirection: Axis.horizontal,
-    itemBuilder: (context, index) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-        margin: const EdgeInsets.all(5.0),
-        decoration: BoxDecoration(
-            color: selectedIndex == index ? Colours.blue.code : Colors.white,
-            borderRadius: BorderRadius.circular(20.0),
-            border: Border.all(color: Colors.black)),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.star,
-              color: selectedIndex == index ? Colors.white : Colours.blue.code,
-            ),
-            horizontalSpacer(width: 2.0),
-            Text(
-              (index + 1).toString(),
-              textAlign: TextAlign.center,
-              style: TextStyle(color: selectedIndex == index ? Colors.white : Colors.black),
-            )
-          ],
-        ),
-      );
-    });
+Widget ratingBar({bool isSelected = false, String position = "5"}) => Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+      margin: const EdgeInsets.all(5.0),
+      decoration: BoxDecoration(
+          color: isSelected ? Colours.blue.code : Colors.white,
+          borderRadius: BorderRadius.circular(20.0),
+          border: Border.all(color: Colors.black)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.star,
+            color: isSelected ? Colors.white : Colours.blue.code,
+          ),
+          horizontalSpacer(width: 2.0),
+          Text(
+            position.toString(),
+            textAlign: TextAlign.center,
+            style: TextStyle(color: isSelected ? Colors.white : Colors.black),
+          )
+        ],
+      ),
+    );

@@ -136,10 +136,11 @@ class _HomeTabState extends State<HomeTab> {
                           ),
                           verticalSpacer(),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Expanded(child: rowButton(bkColor: Colours.textBlack.code, text: AppConstants.addToSell,paddingHorizontal: 3.0)),
+                              rowButton(bkColor: Colours.textBlack.code, text: AppConstants.addToSell,paddingHorizontal: 8.0),
                               horizontalSpacer(),
-                              Expanded(child: rowButton(bkColor: Colours.blue.code, text: AppConstants.viewCards,paddingHorizontal: 8.0)),
+                              rowButton(bkColor: Colours.blue.code, text: AppConstants.viewCars,paddingHorizontal: 8.0),
                             ],
                           ),
                           verticalSpacer(height: 100),

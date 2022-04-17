@@ -12,7 +12,8 @@ enum Colours {
   unSelectTab,
   gray,
   green,
-  lightWhite
+  lightWhite,
+  midGray,
 }
 
 extension ColourCode on Colours {
@@ -42,6 +43,8 @@ extension ColourCode on Colours {
         return const Color(0xFF43B71B);
       case Colours.lightWhite:
         return const Color(0xFFF5F5F5);
+      case Colours.midGray:
+        return const Color(0xFFEBEBEB);
       default:
         return const Color(0xFF000000);
     }

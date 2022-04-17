@@ -62,11 +62,13 @@ class AppConstants {
   static String provider3 ="Tyre & Wheel Care";
   static String provider4 ="Battery & Electronic";
   static String bookingText = 'Bookings';
+  static String bookingText1 = 'Booking';
   static String active = 'Active';
   static String completed = 'Completed';
-  static String addToSell = 'ADD CARDS TO SELL';
-  static String viewCards = 'VIEW CARDS';
+  static String addToSell = 'ADD CARS TO SELL';
+  static String viewCars = 'VIEW CARS';
   static String location = 'View Location';
+  static String location1 = 'Location';
   static String bookNow = 'Book Now';
   static String myBooking = 'My Bookings';
   static String details = 'View Details';
@@ -77,4 +79,8 @@ class AppConstants {
   static String filters ="Filters";
   static String category = "Select Category";
   static String ratings ="Ratings";
+  static String applyFilters ="APPLY FILTER";
+  static String servicePopularity ="Most booked service around you";
+  static String serviceType ="General Motors";
+  static String confirmDate= "CONFIRM DATE";
 }

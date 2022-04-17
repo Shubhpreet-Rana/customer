@@ -39,7 +39,9 @@ dependencies:
   flutter_svg: ^1.0.3
   carousel_slider: ^4.0.0
   flutter_rating_bar: ^4.0.0
-  syncfusion_flutter_datepicker: ^20.1.48
+  intl: ^0.17.0
+  #syncfusion_flutter_datepicker: ^20.1.48
+  flutter_calendar_carousel: ^2.1.0
 
 dev_dependencies:
   flutter_test:

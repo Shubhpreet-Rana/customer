@@ -1,4 +1,5 @@
 import 'package:app/common/assets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,6 +12,7 @@ import '../../../common/ui/background.dart';
 import '../../../common/ui/common_ui.dart';
 import '../../../common/ui/drop_down.dart';
 import '../../../common/ui/headers.dart';
+import '../../bookings/book/service_details.dart';
 
 class CarTab extends StatefulWidget {
   const CarTab({Key? key}) : super(key: key);
@@ -66,7 +68,7 @@ class _CarTabState extends State<CarTab> {
               child: Container(
                   width: CommonMethods.deviceWidth(),
                   height: CommonMethods.deviceHeight(),
-                  padding: const EdgeInsets.symmetric(vertical: 20.0,horizontal: 15.0),
+                  padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
                   decoration: BoxDecoration(
                     color: Colours.lightGray.code,
                   ),
@@ -177,7 +179,7 @@ class _CarTabState extends State<CarTab> {
           ),
           Container(
             margin: const EdgeInsets.only(bottom: 20.0, top: 2.0),
-            padding: const EdgeInsets.only(top: 10.0,bottom: 10.0,left: 4.0,right: 4.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 4.0, right: 4.0),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -225,7 +227,21 @@ class _CarTabState extends State<CarTab> {
                         paddingHorizontal: 8.0,
                         paddingVertical: 7.0),
                     horizontalSpacer(),
-                    rowButton(bkColor: Colours.blue.code, text: AppConstants.bookNow, paddingHorizontal: 8.0, paddingVertical: 7.0),
+                    GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          Map<String, dynamic> item = {
+                            "image": image,
+                            "serviceType": serviceType,
+                            "joinDate": joinDate,
+                            "services": services,
+                            "rating": rating,
+                          };
+                          Navigator.of(context, rootNavigator: false)
+                              .push(CupertinoPageRoute(builder: (context) => ServiceDetails(item: item)));
+                        },
+                        child: rowButton(
+                            bkColor: Colours.blue.code, text: AppConstants.bookNow, paddingHorizontal: 8.0, paddingVertical: 7.0)),
                   ],
                 ),
               ],
