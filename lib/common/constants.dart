@@ -53,14 +53,29 @@ class AppConstants {
   static String imageText = 'Car Images';
   static String imageText1 = 'Upload\n Image';
   static String saveText = 'SAVE';
-  static List<String> colorItems = ['Black', 'White', 'Red', 'Silver','Green',];
-  static List<String> mileageItems = ['22 km/p', '21 km/p', '20 km/p', '19 km/p','18 km/p',];
-  static List<String> serviceItems = ['Basic Service', 'Test',];
+  static List<String> colorItems = [
+    'Black',
+    'White',
+    'Red',
+    'Silver',
+    'Green',
+  ];
+  static List<String> mileageItems = [
+    '22 km/p',
+    '21 km/p',
+    '20 km/p',
+    '19 km/p',
+    '18 km/p',
+  ];
+  static List<String> serviceItems = [
+    'Basic Service',
+    'Test',
+  ];
   static String sProviderText = 'Service Providers';
-  static String provider1 ="Periodic Services";
-  static String provider2 ="AC Service & Repair";
-  static String provider3 ="Tyre & Wheel Care";
-  static String provider4 ="Battery & Electronic";
+  static String provider1 = "Periodic Services";
+  static String provider2 = "AC Service & Repair";
+  static String provider3 = "Tyre & Wheel Care";
+  static String provider4 = "Battery & Electronic";
   static String bookingText = 'Bookings';
   static String bookingText1 = 'Booking';
   static String active = 'Active';
@@ -73,14 +88,19 @@ class AppConstants {
   static String myBooking = 'My Bookings';
   static String details = 'View Details';
   static String serviceDetails = 'Service Details';
-  static String completedOn ="Service completed on";
-  static String bookingOn ="Service booking on";
+  static String completedOn = "Service completed on";
+  static String bookingOn = "Service booking on";
   static String serviceCategories = "Service Categories";
-  static String filters ="Filters";
+  static String filters = "Filters";
   static String category = "Select Category";
-  static String ratings ="Ratings";
-  static String applyFilters ="APPLY FILTER";
-  static String servicePopularity ="Most booked service around you";
-  static String serviceType ="General Motors";
-  static String confirmDate= "CONFIRM DATE";
+  static String ratings = "Ratings";
+  static String applyFilters = "APPLY FILTER";
+  static String servicePopularity = "Most booked service around you";
+  static String serviceType = "General Motors";
+  static String confirmDate = "CONFIRM DATE";
+  static String confirmBooking = "CONFIRM BOOKING";
+  static String payOptions = "Payment Options";
+  static String holderName ="Account holder name";
+  static String newPayment ="Add new payment method ";
+  static String payNow = "PAY NOW";
 }

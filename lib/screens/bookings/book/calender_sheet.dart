@@ -1,4 +1,7 @@
 import 'package:app/common/constants.dart';
+import 'package:app/screens/bookings/book/confirm_page.dart';
+import 'package:app/screens/bookings/book/service_details.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +14,10 @@ import 'package:intl/intl.dart';
 import '../../../common/ui/common_ui.dart';
 
 class SelectDate extends StatefulWidget {
-  const SelectDate({Key? key}) : super(key: key);
+  final List<ServiceTypes> selectedServices;
+  final Map<String, dynamic> item;
+
+  const SelectDate({Key? key, required this.selectedServices, required this.item}) : super(key: key);
 
   @override
   State<SelectDate> createState() => _SelectDateState();
@@ -20,7 +26,7 @@ class SelectDate extends StatefulWidget {
 class _SelectDateState extends State<SelectDate> {
   final DateTime _currentDate = DateTime.now();
   DateTime _currentDate2 = DateTime.now();
-  String _currentMonth = DateFormat.yMMM().format(DateTime.now());
+  String _currentMonth = DateFormat.yMMMM().format(DateTime.now());
   String _currentYear = DateFormat.y().format(DateTime.now());
   DateTime _targetDateTime = DateTime.now();
 
@@ -118,7 +124,7 @@ class _SelectDateState extends State<SelectDate> {
       daysHaveCircularBorder: true,
       showOnlyCurrentMonthDate: false,
       weekendTextStyle: const TextStyle(
-        color: Colors.red,
+        color: Colors.black,
       ),
       // thisMonthDayBorderColor: Colors.grey,
       weekFormat: false,
@@ -142,11 +148,14 @@ class _SelectDateState extends State<SelectDate> {
       selectedDayTextStyle: const TextStyle(
         color: Colors.yellow,
       ),
+      weekdayTextStyle: TextStyle(
+        color: Colours.blue.code,
+      ),
       minSelectedDate: _currentDate.subtract(const Duration(days: 360)),
       maxSelectedDate: _currentDate.add(const Duration(days: 360)),
       prevDaysTextStyle: const TextStyle(
         fontSize: 16,
-        color: Colors.pinkAccent,
+        color: Colors.black,
       ),
       inactiveDaysTextStyle: const TextStyle(
         color: Colors.tealAccent,
@@ -155,7 +164,7 @@ class _SelectDateState extends State<SelectDate> {
       onCalendarChanged: (DateTime date) {
         setState(() {
           _targetDateTime = date;
-          _currentMonth = DateFormat.yMMM().format(_targetDateTime);
+          _currentMonth = DateFormat.yMMMM().format(_targetDateTime);
           _currentYear = DateFormat.y().format(_targetDateTime);
         });
       },
@@ -200,10 +209,10 @@ class _SelectDateState extends State<SelectDate> {
                       ),
                     ),
                     Text(
-                      _currentYear,
+                      _currentMonth,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 24.0,
+                        fontSize: 20.0,
                       ),
                     )
                   ],
@@ -217,7 +226,10 @@ class _SelectDateState extends State<SelectDate> {
               GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
-
+                    Navigator.of(context).pop();
+                    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
+                        builder: (context) =>
+                            ConfirmBooking(selectedServices: widget.selectedServices, item: widget.item, selectedDate: _currentDate2)));
                   },
                   child: appButton(bkColor: Colours.blue.code, text: AppConstants.confirmDate, height: 50.0)),
             ],

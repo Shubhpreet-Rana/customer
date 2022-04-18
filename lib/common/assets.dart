@@ -25,6 +25,8 @@ enum Assets {
   service1,
   blueDot,
   thumb,
+  card,
+  bank,
 }
 
 const String svgDir = "assets/svg";
@@ -87,6 +89,10 @@ extension AssetsName on Assets {
         return "$svgDir/ellipse.svg";
       case Assets.thumb:
         return "$svgDir/thumb.svg";
+      case Assets.card:
+        return "$svgDir/card.svg";
+      case Assets.bank:
+        return "$svgDir/bank.svg";
 
       default:
         return "$svgDir/logo.svg";

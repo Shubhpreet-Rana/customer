@@ -1,5 +1,4 @@
 import 'package:app/screens/bookings/book/calender_sheet.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -22,6 +21,15 @@ class ServiceDetails extends StatefulWidget {
 }
 
 class _ServiceDetailsState extends State<ServiceDetails> {
+
+  List<ServiceTypes> selectedServices = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedServices.add(vehicles[0]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,9 +126,10 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                             clipBehavior: Clip.antiAliasWithSaveLayer,
                                             backgroundColor: Colors.white,
                                             builder: (context) {
-                                              List<ServiceTypes> data = vehicles.where((element) => element.isSelected = true).toList();
-                                              //print(data.length);
-                                              return const SelectDate();
+                                              return SelectDate(
+                                                selectedServices: selectedServices,
+                                                item: widget.item,
+                                              );
                                             });
                                       },
                                       child: appButton(bkColor: Colours.blue.code, text: AppConstants.bookNow, height: 50.0)),
@@ -138,6 +147,11 @@ class _ServiceDetailsState extends State<ServiceDetails> {
 
   void _onSelect(bool? newValue, ServiceTypes type) => setState(() {
         type.isSelected = newValue!;
+        if (selectedServices.contains(type)) {
+          selectedServices.remove(type);
+        } else {
+          selectedServices.add(type);
+        }
         if (mounted) {
           setState(() {});
         }
@@ -164,7 +178,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
             ),
             verticalSpacer(height: 5.0),
             Text(
-              vehicle.price,
+             r"$"+ vehicle.price.toString(),
               style: AppStyles.textBlueSemiBold,
             ),
             verticalSpacer(height: 10.0),
@@ -265,23 +279,24 @@ class ServiceTypes {
   final String title;
   final String service;
   final String subService;
-  final String price;
+  final double price;
   final String description;
 
   ServiceTypes(this.isSelected, this.title, this.service, this.subService, this.price, this.description);
 }
 
+
 List<ServiceTypes> vehicles = [
-  ServiceTypes(true, 'Oil Change', 'Castrool Oil', 'Engine Oil', r'$250',
+  ServiceTypes(true, 'Oil Change', 'Castrool Oil', 'Engine Oil', 250.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
-  ServiceTypes(false, 'Gasonline', 'Castrool Oil', 'Engine Oil', r'$250',
+  ServiceTypes(false, 'Gasonline', 'Castrool Oil', 'Engine Oil', 270.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
-  ServiceTypes(false, 'Car Wash', 'Castrool Oil', 'Engine Oil', r'$250',
+  ServiceTypes(false, 'Car Wash', 'Castrool Oil', 'Engine Oil', 250.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
-  ServiceTypes(false, 'Auto Repair', 'Castrool Oil', 'Engine Oil', r'$250',
+  ServiceTypes(false, 'Auto Repair', 'Castrool Oil', 'Engine Oil', 160.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
-  ServiceTypes(false, 'Auto Parts', 'Castrool Oil', 'Engine Oil', r'$250',
+  ServiceTypes(false, 'Auto Parts', 'Castrool Oil', 'Engine Oil', 250.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
-  ServiceTypes(false, 'Road Side Assistance', 'Castrool Oil', 'Engine Oil', r'$250',
+  ServiceTypes(false, 'Road Side Assistance', 'Castrool Oil', 'Engine Oil', 250.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
 ];

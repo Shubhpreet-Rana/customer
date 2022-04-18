@@ -74,11 +74,13 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                     Row(
                       children: [
                         Expanded(
-                          child: MyEditText(AppConstants.fNameHint, false, TextInputType.text, TextCapitalization.none, 10.0, fNameController, Colours.hintColor.code, true),
+                          child: MyEditText(AppConstants.fNameHint, false, TextInputType.text, TextCapitalization.none, 10.0,
+                              fNameController, Colours.hintColor.code, true),
                         ),
                         horizontalSpacer(),
                         Expanded(
-                          child: MyEditText(AppConstants.lNameHint, false, TextInputType.text, TextCapitalization.none, 10.0, fNameController, Colours.hintColor.code, true),
+                          child: MyEditText(AppConstants.lNameHint, false, TextInputType.text, TextCapitalization.none, 10.0,
+                              lNameController, Colours.hintColor.code, true),
                         ),
                       ],
                     ),
@@ -93,7 +95,8 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                     verticalSpacer(),
                     headingText(text: AppConstants.mobileHint),
                     verticalSpacer(height: 10.0),
-                    MyEditText(AppConstants.mobileHint, false, TextInputType.phone, TextCapitalization.none, 10.0, mobileController, Colours.hintColor.code, true),
+                    MyEditText(AppConstants.mobileHint, false, TextInputType.phone, TextCapitalization.none, 10.0, mobileController,
+                        Colours.hintColor.code, true),
                     verticalSpacer(),
                     headingText(text: AppConstants.addressHint),
                     verticalSpacer(height: 10.0),
@@ -121,7 +124,8 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                       selectedItem: AppConstants.paymentItems[0],
                       onChange: (value) {
                         selectedPaymentOption = value;
-                        if (selectedPaymentOption == AppConstants.paymentItems[1] || selectedPaymentOption == AppConstants.paymentItems[2]) {
+                        if (selectedPaymentOption == AppConstants.paymentItems[1] ||
+                            selectedPaymentOption == AppConstants.paymentItems[2]) {
                           showAddCard = true;
                         } else {
                           showAddCard = false;
@@ -130,8 +134,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                       },
                     ),
                     verticalSpacer(),
-                    if (!showAddCard)
-                    submitButton(),
+                    if (!showAddCard) submitButton(),
                     verticalSpacer(height: showAddCard ? 20 : 50),
                     if (showAddCard)
                       Column(
@@ -165,12 +168,13 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                           Row(
                             children: [
                               Expanded(
-                                child: MyEditText(
-                                    AppConstants.cardExpDateHint, false, const TextInputType.numberWithOptions(), TextCapitalization.none, 10.0, cardExpDateController, Colours.hintColor.code, true),
+                                child: MyEditText(AppConstants.cardExpDateHint, false, const TextInputType.numberWithOptions(),
+                                    TextCapitalization.none, 10.0, cardExpDateController, Colours.hintColor.code, true),
                               ),
                               horizontalSpacer(),
                               Expanded(
-                                child: MyEditText(AppConstants.cardCvvHint, false, TextInputType.number, TextCapitalization.none, 10.0, cardCvvController, Colours.hintColor.code, true),
+                                child: MyEditText(AppConstants.cardCvvHint, false, TextInputType.number, TextCapitalization.none, 10.0,
+                                    cardCvvController, Colours.hintColor.code, true),
                               ),
                             ],
                           ),
