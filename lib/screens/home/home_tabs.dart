@@ -3,7 +3,7 @@ import 'package:app/common/colors.dart';
 import 'package:app/screens/home/pages/calender.dart';
 import 'package:app/screens/home/pages/cars.dart';
 import 'package:app/screens/home/pages/home.dart';
-import 'package:app/screens/home/pages/settings.dart';
+import 'package:app/screens/home/pages/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

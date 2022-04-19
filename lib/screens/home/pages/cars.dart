@@ -45,6 +45,9 @@ class _CarTabState extends State<CarTab> {
                   backNavigation: false,
                   onFilterClick: () {
                     CommonMethods().openFilters(context);
+                  },
+                  onNotificationClick: () {
+                    CommonMethods().openNotifications(context);
                   })),
           Padding(
             padding: const EdgeInsets.all(20.0),
@@ -80,18 +83,9 @@ class _CarTabState extends State<CarTab> {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           if (index % 2 == 0) {
-                            return listItem(
-                                image: Assets.service.name,
-                                serviceType: "Basic Service",
-                                joinDate: "15 Mar, 2021",
-                                services: ['AC Gas Change', 'Gasoline', 'Cooling Test'],
-                                rating: 5);
+                            return listItem(image: Assets.service.name, serviceType: "Basic Service", joinDate: "15 Mar, 2021", services: ['AC Gas Change', 'Gasoline', 'Cooling Test'], rating: 5);
                           } else {
-                            return listItem(
-                                image: Assets.service1.name,
-                                serviceType: "Basic Service",
-                                joinDate: "15 Mar, 2021",
-                                services: ['AC Gas Change', 'Gasoline', 'Cooling Test']);
+                            return listItem(image: Assets.service1.name, serviceType: "Basic Service", joinDate: "15 Mar, 2021", services: ['AC Gas Change', 'Gasoline', 'Cooling Test']);
                           }
                         }),
                   )))
@@ -100,13 +94,7 @@ class _CarTabState extends State<CarTab> {
     );
   }
 
-  Widget listItem(
-          {required String image,
-          required String serviceType,
-          required String joinDate,
-          required List<String> services,
-          double rating = 4}) =>
-      Column(
+  Widget listItem({required String image, required String serviceType, required String joinDate, required List<String> services, double rating = 4}) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
@@ -220,12 +208,7 @@ class _CarTabState extends State<CarTab> {
                 ),
                 Row(
                   children: [
-                    rowButton(
-                        bkColor: Colours.lightWhite.code,
-                        textColor: Colours.blue.code,
-                        text: AppConstants.location,
-                        paddingHorizontal: 8.0,
-                        paddingVertical: 7.0),
+                    rowButton(bkColor: Colours.lightWhite.code, textColor: Colours.blue.code, text: AppConstants.location, paddingHorizontal: 8.0, paddingVertical: 7.0),
                     horizontalSpacer(),
                     GestureDetector(
                         behavior: HitTestBehavior.translucent,
@@ -237,11 +220,9 @@ class _CarTabState extends State<CarTab> {
                             "services": services,
                             "rating": rating,
                           };
-                          Navigator.of(context, rootNavigator: false)
-                              .push(CupertinoPageRoute(builder: (context) => ServiceDetails(item: item)));
+                          Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => ServiceDetails(item: item)));
                         },
-                        child: rowButton(
-                            bkColor: Colours.blue.code, text: AppConstants.bookNow, paddingHorizontal: 8.0, paddingVertical: 7.0)),
+                        child: rowButton(bkColor: Colours.blue.code, text: AppConstants.bookNow, paddingHorizontal: 8.0, paddingVertical: 7.0)),
                   ],
                 ),
               ],

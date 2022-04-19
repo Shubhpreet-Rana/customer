@@ -100,7 +100,11 @@ class AppConstants {
   static String confirmDate = "CONFIRM DATE";
   static String confirmBooking = "CONFIRM BOOKING";
   static String payOptions = "Payment Options";
-  static String holderName ="Account holder name";
-  static String newPayment ="Add new payment method ";
+  static String holderName = "Account holder name";
+  static String newPayment = "Add new payment method ";
   static String payNow = "PAY NOW";
+  static String marketplace = "Car Selling Marketplace";
+  static String notifications = "Notifications";
+  static String edit = "EDIT PROFILE";
+  static String logout= "LOGOUT";
 }

@@ -71,6 +71,8 @@ flutter:
    - assets/svg/tabs/
    - assets/png/
    - assets/png/services/
+   - assets/png/cars/
+   - assets/png/avatar/
 
   fonts:
     - family: Poppins

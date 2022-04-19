@@ -1,4 +1,5 @@
 import 'package:app/common/services/NavigationService.dart';
+import 'package:app/screens/notifications/notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 
@@ -22,5 +23,8 @@ class CommonMethods {
 
   openFilters(BuildContext context) {
     Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const ApplyFilters()));
+  }
+  openNotifications(BuildContext context) {
+    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const Notifications()));
   }
 }

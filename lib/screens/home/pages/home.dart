@@ -1,6 +1,8 @@
 import 'package:app/common/assets.dart';
 import 'package:app/common/colors.dart';
+import 'package:app/screens/marketplace/view_cars.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -38,9 +40,17 @@ class _HomeTabState extends State<HomeTab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SafeArea(
-              bottom: false, child: AppHeaders().collapsedHeader(text: "", context: context, backNavigation: false, onFilterClick: () {
-            CommonMethods().openFilters(context);
-          })),
+              bottom: false,
+              child: AppHeaders().collapsedHeader(
+                  text: "",
+                  context: context,
+                  backNavigation: false,
+                  onFilterClick: () {
+                    CommonMethods().openFilters(context);
+                  },
+                  onNotificationClick: () {
+                    CommonMethods().openNotifications(context);
+                  })),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Row(
@@ -138,9 +148,15 @@ class _HomeTabState extends State<HomeTab> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              rowButton(bkColor: Colours.textBlack.code, text: AppConstants.addToSell,paddingHorizontal: 8.0),
+                              rowButton(bkColor: Colours.textBlack.code, text: AppConstants.addToSell, paddingHorizontal: 8.0),
                               horizontalSpacer(),
-                              rowButton(bkColor: Colours.blue.code, text: AppConstants.viewCars,paddingHorizontal: 8.0),
+                              GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () {
+                                    Navigator.of(context, rootNavigator: false)
+                                        .push(CupertinoPageRoute(builder: (context) => const ViewCars()));
+                                  },
+                                  child: rowButton(bkColor: Colours.blue.code, text: AppConstants.viewCars, paddingHorizontal: 8.0)),
                             ],
                           ),
                           verticalSpacer(height: 100),

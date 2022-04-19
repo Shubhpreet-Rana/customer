@@ -31,7 +31,14 @@ class AppHeaders {
         ],
       );
 
-  Widget collapsedHeader({bool backNavigation = true, required BuildContext context, String text = "", bool filterIcon = true, bool menuIcon = true, Function()? onFilterClick, Function()? onMenuClick}) =>
+  Widget collapsedHeader(
+          {bool backNavigation = true,
+          required BuildContext context,
+          String text = "",
+          bool filterIcon = true,
+          bool menuIcon = true,
+          Function()? onFilterClick,
+          Function()? onNotificationClick}) =>
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -66,11 +73,22 @@ class AppHeaders {
                 GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      onFilterClick!();
+                      if (onFilterClick != null) onFilterClick();
                     },
                     child: SvgPicture.asset(Assets.filters.name)),
                 horizontalSpacer(),
-                SvgPicture.asset(Assets.menu.name),
+                //SvgPicture.asset(Assets.menu.name),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    if (onNotificationClick != null) onNotificationClick();
+                  },
+                  child: const Icon(
+                    Icons.notifications,
+                    color: Colors.white,
+                    size: 25.0,
+                  ),
+                )
               ],
             ),
           )

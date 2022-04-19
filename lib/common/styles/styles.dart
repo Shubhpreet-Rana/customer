@@ -20,4 +20,5 @@ class AppStyles {
   static TextStyle whiteText = const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.normal);
   static TextStyle whiteTextW500 = const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w500);
   static TextStyle blueLightText = TextStyle(fontSize: 14, color: Colours.lightBlue.code, fontWeight: FontWeight.normal);
+  static TextStyle redTextW500 =  TextStyle(fontSize: 14, color: Colours.red.code, fontWeight: FontWeight.w500);
 }

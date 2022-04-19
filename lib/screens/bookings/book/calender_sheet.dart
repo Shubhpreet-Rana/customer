@@ -130,7 +130,7 @@ class _SelectDateState extends State<SelectDate> {
       weekFormat: false,
 //      firstDayOfWeek: 4,
       // markedDatesMap: _markedDateMap,
-      height: 420.0,
+      height: 280.0,
       selectedDateTime: _currentDate2,
       targetDateTime: _targetDateTime,
       customGridViewPhysics: const NeverScrollableScrollPhysics(),
