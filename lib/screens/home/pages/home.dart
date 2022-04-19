@@ -13,6 +13,7 @@ import '../../../common/ui/background.dart';
 import '../../../common/ui/common_ui.dart';
 import '../../../common/ui/drop_down.dart';
 import '../../../common/ui/headers.dart';
+import '../../marketplace/sell_car.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -148,13 +149,17 @@ class _HomeTabState extends State<HomeTab> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              rowButton(bkColor: Colours.textBlack.code, text: AppConstants.addToSell, paddingHorizontal: 8.0),
+                              GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () {
+                                    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const SellCar()));
+                                  },
+                                  child: rowButton(bkColor: Colours.textBlack.code, text: AppConstants.addToSell, paddingHorizontal: 8.0)),
                               horizontalSpacer(),
                               GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
-                                    Navigator.of(context, rootNavigator: false)
-                                        .push(CupertinoPageRoute(builder: (context) => const ViewCars()));
+                                    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const ViewCars()));
                                   },
                                   child: rowButton(bkColor: Colours.blue.code, text: AppConstants.viewCars, paddingHorizontal: 8.0)),
                             ],

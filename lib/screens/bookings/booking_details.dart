@@ -9,6 +9,7 @@ import '../../common/constants.dart';
 import '../../common/methods/common.dart';
 import '../../common/styles/styles.dart';
 import '../../common/ui/common_ui.dart';
+import '../../common/ui/edit_text.dart';
 import '../../common/ui/headers.dart';
 
 class BookingDetails extends StatefulWidget {
@@ -21,6 +22,14 @@ class BookingDetails extends StatefulWidget {
 }
 
 class _BookingDetailsState extends State<BookingDetails> {
+  TextEditingController descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,20 +37,16 @@ class _BookingDetailsState extends State<BookingDetails> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SafeArea(
-              bottom: false,
-              child: AppHeaders()
-                  .collapsedHeader(text: AppConstants.serviceDetails, context: context, backNavigation: true, onFilterClick: () {})),
+          SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: AppConstants.serviceDetails, context: context, backNavigation: true, onFilterClick: () {})),
           Padding(
               padding: const EdgeInsets.only(left: 70.0, top: 2.0),
-              child: Text((widget.item['status'] == 2 ? AppConstants.completedOn : AppConstants.bookingOn) + " 20 Mar, 2021",
-                  style: AppStyles.whiteText)),
+              child: Text((widget.item['status'] == 2 ? AppConstants.completedOn : AppConstants.bookingOn) + " 20 Mar, 2021", style: AppStyles.whiteText)),
           verticalSpacer(),
           Expanded(
               child: SingleChildScrollView(
             child: Container(
               width: CommonMethods.deviceWidth(),
-              height: CommonMethods.deviceHeight(),
+              height: CommonMethods.deviceHeight() + 250,
               decoration: BoxDecoration(
                 color: Colours.lightGray.code,
               ),
@@ -81,7 +86,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                     ),
                   ),
                   verticalSpacer(height: 10.0),
-                  Expanded(child: bottomWidget())
+                  Expanded(child: bottomWidget()),
                 ],
               ),
             ),
@@ -90,6 +95,61 @@ class _BookingDetailsState extends State<BookingDetails> {
       )),
     );
   }
+
+  Widget reviewWidget() => Column(
+        children: [
+          Text(
+            "Awesome!",
+            style: AppStyles.textBlueBold,
+          ),
+          verticalSpacer(height: 10.0),
+          Text(
+            "You rated even 4 stars",
+            style: AppStyles.lightText,
+          ),
+          verticalSpacer(height: 10.0),
+          RatingBar.builder(
+            initialRating: 4,
+            minRating: 1,
+            direction: Axis.horizontal,
+            allowHalfRating: true,
+            itemCount: 5,
+            itemSize: 35.0,
+            itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+            itemBuilder: (context, _) => const Icon(
+              Icons.star,
+              color: Color(0xFFF1C21C),
+            ),
+            onRatingUpdate: (rating) {
+              print(rating);
+            },
+          ),
+          verticalSpacer(height: 10.0),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              AppConstants.reviewHint,
+              maxLines: 1,
+              textAlign: TextAlign.start,
+              style: AppStyles.lightText,
+            ),
+          ),
+          verticalSpacer(height: 10.0),
+          MyEditText(
+            AppConstants.descriptionText,
+            false,
+            TextInputType.text,
+            TextCapitalization.none,
+            10.0,
+            descriptionController,
+            Colours.hintColor.code,
+            true,
+            maxLine: 4,
+          ),
+          verticalSpacer(),
+          appButton(bkColor: Colours.blue.code, text: AppConstants.submitReview, height: 50.0),
+        ],
+      );
 
   Widget bottomWidget() => Container(
         color: Colors.white,
@@ -138,7 +198,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                 ),
               ],
             ),
-            const Spacer(),
+            verticalSpacer(height: 50.0),
             if (widget.item['status'] == 2)
               Column(
                 children: [
@@ -149,10 +209,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                     style: AppStyles.textBlueBold,
                   ),
                   verticalSpacer(height: 10.0),
-                  Text((widget.item['status'] == 2 ? AppConstants.completedOn : AppConstants.bookingOn) + " 20 Mar, 2021",
-                      style: AppStyles.blackText),
+                  Text((widget.item['status'] == 2 ? AppConstants.completedOn : AppConstants.bookingOn) + " 20 Mar, 2021", style: AppStyles.blackText),
                 ],
               ),
+            // const Spacer(),
+            verticalSpacer(height: 30.0),
+            if (widget.item['status'] == 2) reviewWidget(),
             const Spacer(),
             verticalSpacer(height: 10.0),
           ],

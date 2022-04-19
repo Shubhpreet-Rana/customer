@@ -107,4 +107,7 @@ class AppConstants {
   static String notifications = "Notifications";
   static String edit = "EDIT PROFILE";
   static String logout= "LOGOUT";
+  static String reviewHint ="Write Your Review";
+  static String submitReview ="SUBMIT REVIEW";
+  static String addCar= "ADD CAR";
 }
