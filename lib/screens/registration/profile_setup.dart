@@ -101,7 +101,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                     headingText(text: AppConstants.addressHint),
                     verticalSpacer(height: 10.0),
                     MyEditText(
-                      AppConstants.addressHint,
+                      AppConstants.addressExp,
                       false,
                       TextInputType.streetAddress,
                       TextCapitalization.none,

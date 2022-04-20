@@ -84,6 +84,7 @@ class AppConstants {
   static String viewCars = 'VIEW CARS';
   static String location = 'View Location';
   static String location1 = 'Location';
+  static String location2 = 'Add Location';
   static String bookNow = 'Book Now';
   static String myBooking = 'My Bookings';
   static String details = 'View Details';
@@ -106,8 +107,15 @@ class AppConstants {
   static String marketplace = "Car Selling Marketplace";
   static String notifications = "Notifications";
   static String edit = "EDIT PROFILE";
-  static String logout= "LOGOUT";
-  static String reviewHint ="Write Your Review";
-  static String submitReview ="SUBMIT REVIEW";
-  static String addCar= "ADD CAR";
+  static String logout = "LOGOUT";
+  static String reviewHint = "Write Your Review";
+  static String submitReview = "SUBMIT REVIEW";
+  static String addCar = "ADD CAR";
+  static String professionalProfile = "Professional Profile";
+  static String businessName = "Business Name";
+  static String linkHint = "Website Link";
+  static String webHint = "www.example.com";
+  static String serviceImages = "Service Images";
+  static String yoe ="Total Years of Experience";
+  static String addressExp ="H.no-26, Down Street, California";
 }

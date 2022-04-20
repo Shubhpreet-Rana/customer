@@ -189,18 +189,21 @@ class _VehicleDetailsState extends State<VehicleDetails> {
                     headingText(text: AppConstants.imageText),
                     verticalSpacer(height: 10.0),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        grayContainer(
-                            text: AppConstants.imageText1,
-                            icon: Icon(
-                              Icons.add,
-                              color: Colours.blue.code,
-                            ),
-                            paddingHorizontal: 15.0,
-                            paddingVertical: 15.0),
-                        grayContainer(text: AppConstants.imageText1, icon: Icon(Icons.add, color: Colours.blue.code), paddingHorizontal: 15.0, paddingVertical: 15.0),
-                        grayContainer(text: AppConstants.imageText1, icon: Icon(Icons.add, color: Colours.blue.code), paddingHorizontal: 15.0, paddingVertical: 15.0)
+                        Expanded(
+                          child: grayContainer(
+                              text: AppConstants.imageText1,
+                              icon: Icon(
+                                Icons.add,
+                                color: Colours.blue.code,
+                              ),
+                              paddingHorizontal: 15.0,
+                              paddingVertical: 15.0),
+                        ),
+                        horizontalSpacer(width: 10.0),
+                        Expanded(child: grayContainer(text: AppConstants.imageText1, icon: Icon(Icons.add, color: Colours.blue.code), paddingHorizontal: 15.0, paddingVertical: 15.0)),
+                        horizontalSpacer(width: 10.0),
+                        Expanded(child: grayContainer(text: AppConstants.imageText1, icon: Icon(Icons.add, color: Colours.blue.code), paddingHorizontal: 15.0, paddingVertical: 15.0))
                       ],
                     ),
                     verticalSpacer(),
