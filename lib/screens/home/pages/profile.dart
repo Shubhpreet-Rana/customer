@@ -10,14 +10,14 @@ import '../../../common/ui/background.dart';
 import '../../../common/ui/common_ui.dart';
 import '../../../common/ui/headers.dart';
 
-class SettingsTab extends StatefulWidget {
-  const SettingsTab({Key? key}) : super(key: key);
+class ProfileTab extends StatefulWidget {
+  const ProfileTab({Key? key}) : super(key: key);
 
   @override
-  State<SettingsTab> createState() => _SettingsTabState();
+  State<ProfileTab> createState() => _ProfileTabState();
 }
 
-class _SettingsTabState extends State<SettingsTab> {
+class _ProfileTabState extends State<ProfileTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +52,7 @@ class _SettingsTabState extends State<SettingsTab> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        AppConstants.fNameHint,
+                        AppConstants.fNameHint+":",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.lightText,
@@ -77,7 +77,7 @@ class _SettingsTabState extends State<SettingsTab> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        AppConstants.lNameHint,
+                        AppConstants.lNameHint+":",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.lightText,
@@ -102,7 +102,7 @@ class _SettingsTabState extends State<SettingsTab> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        AppConstants.emailHint,
+                        AppConstants.emailHint+":",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.lightText,
@@ -127,7 +127,7 @@ class _SettingsTabState extends State<SettingsTab> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        AppConstants.mobileHint,
+                        AppConstants.mobileHint+":",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.lightText,
@@ -152,7 +152,7 @@ class _SettingsTabState extends State<SettingsTab> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        AppConstants.genderHint,
+                        AppConstants.genderHint+":",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.lightText,
@@ -177,7 +177,7 @@ class _SettingsTabState extends State<SettingsTab> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        AppConstants.addressHint,
+                        AppConstants.addressHint+":",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.lightText,
@@ -186,7 +186,7 @@ class _SettingsTabState extends State<SettingsTab> {
                     Expanded(
                       flex: 6,
                       child: Text(
-                        "Smi36 China town, Down street, California",
+                        "36 China town, Down street, California",
                         maxLines: 3,
                         textAlign: TextAlign.start,
                         style: AppStyles.blackSemiW400_1,

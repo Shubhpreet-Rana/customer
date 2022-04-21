@@ -66,7 +66,7 @@ class _HomeTabsState extends State<HomeTabs>  with TickerProviderStateMixin<Home
               key: _settingsScreen,
               onGenerateRoute: (route) => CupertinoPageRoute(
                 settings: route,
-                builder: (context) => const SettingsTab(),
+                builder: (context) => const ProfileTab(),
               ),
             ),
           ],
