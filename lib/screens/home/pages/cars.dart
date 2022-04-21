@@ -13,6 +13,7 @@ import '../../../common/ui/common_ui.dart';
 import '../../../common/ui/drop_down.dart';
 import '../../../common/ui/headers.dart';
 import '../../bookings/book/service_details.dart';
+import '../../maps/maps_page.dart';
 
 class CarTab extends StatefulWidget {
   const CarTab({Key? key}) : super(key: key);
@@ -83,9 +84,18 @@ class _CarTabState extends State<CarTab> {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           if (index % 2 == 0) {
-                            return listItem(image: Assets.service.name, serviceType: "Basic Service", joinDate: "15 Mar, 2021", services: ['AC Gas Change', 'Gasoline', 'Cooling Test'], rating: 5);
+                            return listItem(
+                                image: Assets.service.name,
+                                serviceType: "Basic Service",
+                                joinDate: "15 Mar, 2021",
+                                services: ['AC Gas Change', 'Gasoline', 'Cooling Test'],
+                                rating: 5);
                           } else {
-                            return listItem(image: Assets.service1.name, serviceType: "Basic Service", joinDate: "15 Mar, 2021", services: ['AC Gas Change', 'Gasoline', 'Cooling Test']);
+                            return listItem(
+                                image: Assets.service1.name,
+                                serviceType: "Basic Service",
+                                joinDate: "15 Mar, 2021",
+                                services: ['AC Gas Change', 'Gasoline', 'Cooling Test']);
                           }
                         }),
                   )))
@@ -94,7 +104,13 @@ class _CarTabState extends State<CarTab> {
     );
   }
 
-  Widget listItem({required String image, required String serviceType, required String joinDate, required List<String> services, double rating = 4}) => Column(
+  Widget listItem(
+          {required String image,
+          required String serviceType,
+          required String joinDate,
+          required List<String> services,
+          double rating = 4}) =>
+      Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
@@ -208,7 +224,18 @@ class _CarTabState extends State<CarTab> {
                 ),
                 Row(
                   children: [
-                    rowButton(bkColor: Colours.lightWhite.code, textColor: Colours.blue.code, text: AppConstants.location, paddingHorizontal: 8.0, paddingVertical: 7.0),
+                    GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          Navigator.of(context, rootNavigator: false)
+                              .push(CupertinoPageRoute(builder: (context) => const MyAppMap()));
+                        },
+                        child: rowButton(
+                            bkColor: Colours.lightWhite.code,
+                            textColor: Colours.blue.code,
+                            text: AppConstants.location,
+                            paddingHorizontal: 8.0,
+                            paddingVertical: 7.0)),
                     horizontalSpacer(),
                     GestureDetector(
                         behavior: HitTestBehavior.translucent,
@@ -220,9 +247,14 @@ class _CarTabState extends State<CarTab> {
                             "services": services,
                             "rating": rating,
                           };
-                          Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => ServiceDetails(item: item)));
+                          Navigator.of(context, rootNavigator: false)
+                              .push(CupertinoPageRoute(builder: (context) => ServiceDetails(item: item)));
                         },
-                        child: rowButton(bkColor: Colours.blue.code, text: AppConstants.bookNow, paddingHorizontal: 8.0, paddingVertical: 7.0)),
+                        child: rowButton(
+                            bkColor: Colours.blue.code,
+                            text: AppConstants.bookNow,
+                            paddingHorizontal: 8.0,
+                            paddingVertical: 7.0)),
                   ],
                 ),
               ],

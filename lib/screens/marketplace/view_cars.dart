@@ -1,4 +1,5 @@
 import 'package:app/common/assets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/colors.dart';
@@ -8,6 +9,7 @@ import '../../common/styles/styles.dart';
 import '../../common/ui/background.dart';
 import '../../common/ui/common_ui.dart';
 import '../../common/ui/headers.dart';
+import '../maps/maps_page.dart';
 
 class ViewCars extends StatefulWidget {
   const ViewCars({Key? key}) : super(key: key);
@@ -24,7 +26,10 @@ class _ViewCarsState extends State<ViewCars> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: AppConstants.marketplace, context: context, backNavigation: true, onFilterClick: () {})),
+          SafeArea(
+              bottom: false,
+              child: AppHeaders().collapsedHeader(
+                  text: AppConstants.marketplace, context: context, backNavigation: true, onFilterClick: () {})),
           verticalSpacer(),
           Expanded(
               child: Container(
@@ -220,9 +225,24 @@ class _ViewCarsState extends State<ViewCars> {
                 ),
                 Row(
                   children: [
-                    rowButton(bkColor: Colours.lightWhite.code, textColor: Colours.blue.code, text: AppConstants.location1, paddingHorizontal: 8.0, paddingVertical: 7.0),
+                    GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          Navigator.of(context, rootNavigator: false)
+                              .push(CupertinoPageRoute(builder: (context) => const MyAppMap()));
+                        },
+                        child: rowButton(
+                            bkColor: Colours.lightWhite.code,
+                            textColor: Colours.blue.code,
+                            text: AppConstants.location1,
+                            paddingHorizontal: 8.0,
+                            paddingVertical: 7.0)),
                     horizontalSpacer(width: 5.0),
-                    rowButton(bkColor: Colours.blue.code, text: AppConstants.details, paddingHorizontal: 8.0, paddingVertical: 7.0)
+                    rowButton(
+                        bkColor: Colours.blue.code,
+                        text: AppConstants.details,
+                        paddingHorizontal: 8.0,
+                        paddingVertical: 7.0)
                   ],
                 )
               ]))
@@ -243,12 +263,17 @@ class CarsForSell {
   final String sellerName;
   final bool carOwner;
 
-  CarsForSell(this.image, this.title, this.postedDate, this.year, this.price, this.color, this.mileage, this.capacity, this.sellerImage, this.sellerName, this.carOwner);
+  CarsForSell(this.image, this.title, this.postedDate, this.year, this.price, this.color, this.mileage, this.capacity,
+      this.sellerImage, this.sellerName, this.carOwner);
 }
 
 List<CarsForSell> cars = [
-  CarsForSell(Assets.carAcura.name, "Acura ILX", "2 Jan, 2022", "2020", r"$ 1,25,000", "White", "18 Km/L", "201 HP", Assets.userThomas.name, "Thomas", true),
-  CarsForSell(Assets.carRenault.name, "Renault KWID", "2 Jan, 2022", "2021", r"$ 1,25,000", "White", "18 Km/L", "201 HP", Assets.userDanish.name, "Danish", false),
-  CarsForSell(Assets.carAcura.name, "Acura ILX", "2 Jan, 2022", "2020", r"$ 1,25,000", "White", "18 Km/L", "201 HP", Assets.userThomas.name, "Thomas", true),
-  CarsForSell(Assets.carRenault.name, "Renault KWID", "2 Jan, 2022", "2021", r"$ 1,25,000", "White", "18 Km/L", "201 HP", Assets.userDanish.name, "Danish", false)
+  CarsForSell(Assets.carAcura.name, "Acura ILX", "2 Jan, 2022", "2020", r"$ 1,25,000", "White", "18 Km/L", "201 HP",
+      Assets.userThomas.name, "Thomas", true),
+  CarsForSell(Assets.carRenault.name, "Renault KWID", "2 Jan, 2022", "2021", r"$ 1,25,000", "White", "18 Km/L",
+      "201 HP", Assets.userDanish.name, "Danish", false),
+  CarsForSell(Assets.carAcura.name, "Acura ILX", "2 Jan, 2022", "2020", r"$ 1,25,000", "White", "18 Km/L", "201 HP",
+      Assets.userThomas.name, "Thomas", true),
+  CarsForSell(Assets.carRenault.name, "Renault KWID", "2 Jan, 2022", "2021", r"$ 1,25,000", "White", "18 Km/L",
+      "201 HP", Assets.userDanish.name, "Danish", false)
 ];
