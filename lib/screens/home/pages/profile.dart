@@ -25,7 +25,10 @@ class _ProfileTabState extends State<ProfileTab> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: "", context: context, backNavigation: false, onFilterClick: () {})),
+          SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: AppConstants.myProfile, context: context, backNavigation: false, onFilterClick: () {})),
+          Padding(
+              padding: const EdgeInsets.only(left: 45.0, top: 2.0),
+              child: Text(("Joined on 30 Jan, 2021"), style: AppStyles.whiteText)),
           verticalSpacer(
             height: 10.0,
           ),
