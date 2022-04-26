@@ -1,4 +1,5 @@
 import 'package:app/common/assets.dart';
+import 'package:app/screens/marketplace/view_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,14 @@ class ViewCars extends StatefulWidget {
 }
 
 class _ViewCarsState extends State<ViewCars> {
+  int selectedTab = 1;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,11 +35,42 @@ class _ViewCarsState extends State<ViewCars> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SafeArea(
-              bottom: false,
-              child: AppHeaders().collapsedHeader(
-                  text: AppConstants.marketplace, context: context, backNavigation: true, onFilterClick: () {})),
+          SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: AppConstants.marketplace, context: context, backNavigation: true, onFilterClick: () {})),
           verticalSpacer(),
+          Row(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  setState(() {
+                    selectedTab = 1;
+                  });
+                },
+                child: Text(
+                  AppConstants.allCars,
+                  textAlign: TextAlign.center,
+                  style: selectedTab == 1 ? AppStyles.whiteText : AppStyles.blueLightText,
+                ),
+              )),
+              horizontalSpacer(width: 10.0),
+              Expanded(
+                  child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  setState(() {
+                    selectedTab = 2;
+                  });
+                },
+                child: Text(
+                  AppConstants.myListedCars,
+                  textAlign: TextAlign.center,
+                  style: selectedTab == 2 ? AppStyles.whiteText : AppStyles.blueLightText,
+                ),
+              )),
+            ],
+          ),
+          verticalSpacer(height: 10.0),
           Expanded(
               child: Container(
             width: CommonMethods.deviceWidth(),
@@ -43,9 +83,10 @@ class _ViewCarsState extends State<ViewCars> {
               context: context,
               removeTop: true,
               child: ListView.builder(
-                  itemCount: cars.length,
+                  itemCount: selectedTab == 1 ? cars.length : 1,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
+                    index = selectedTab == 1 ? index : 3;
                     return listItem(cars[index]);
                   }),
             ),
@@ -60,11 +101,13 @@ class _ViewCarsState extends State<ViewCars> {
         children: [
           Container(
               padding: const EdgeInsets.all(10.0),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(10),
-                  topLeft: Radius.circular(10),
+                  topRight: const Radius.circular(10),
+                  topLeft: const Radius.circular(10),
+                  bottomRight: Radius.circular(selectedTab == 2 ? 10 : 0),
+                  bottomLeft: Radius.circular(selectedTab == 2 ? 10 : 0),
                 ),
               ),
               child: Row(
@@ -196,56 +239,56 @@ class _ViewCarsState extends State<ViewCars> {
                   ))
                 ],
               )),
-          Container(
-              margin: const EdgeInsets.only(bottom: 20.0, top: 2.0),
-              padding: const EdgeInsets.all(10.0),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                ),
-              ),
-              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colours.darkGray.code,
-                      radius: 20.0,
-                      backgroundImage: AssetImage(car.sellerImage),
+          selectedTab == 1
+              ? Container(
+                  margin: const EdgeInsets.only(bottom: 20.0, top: 2.0),
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
                     ),
-                    horizontalSpacer(width: 5.0),
-                    Text(
-                      car.sellerName,
-                      maxLines: 1,
-                      textAlign: TextAlign.start,
-                      style: AppStyles.blackSemiW400_1,
+                  ),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colours.darkGray.code,
+                          radius: 20.0,
+                          backgroundImage: AssetImage(car.sellerImage),
+                        ),
+                        horizontalSpacer(width: 5.0),
+                        Text(
+                          car.sellerName,
+                          maxLines: 1,
+                          textAlign: TextAlign.start,
+                          style: AppStyles.blackSemiW400_1,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
+                                  builder: (context) => const MyAppMap(
+                                        showPickUp: false,
+                                      )));
+                            },
+                            child: rowButton(bkColor: Colours.lightWhite.code, textColor: Colours.blue.code, text: AppConstants.location1, paddingHorizontal: 8.0, paddingVertical: 7.0)),
+                        horizontalSpacer(width: 5.0),
+                        GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => ViewCarDetails(car: car)));
+                            },
+                            child: rowButton(bkColor: Colours.blue.code, text: AppConstants.details, paddingHorizontal: 8.0, paddingVertical: 7.0))
+                      ],
                     )
-                  ],
-                ),
-                Row(
-                  children: [
-                    GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          Navigator.of(context, rootNavigator: false)
-                              .push(CupertinoPageRoute(builder: (context) => const MyAppMap()));
-                        },
-                        child: rowButton(
-                            bkColor: Colours.lightWhite.code,
-                            textColor: Colours.blue.code,
-                            text: AppConstants.location1,
-                            paddingHorizontal: 8.0,
-                            paddingVertical: 7.0)),
-                    horizontalSpacer(width: 5.0),
-                    rowButton(
-                        bkColor: Colours.blue.code,
-                        text: AppConstants.details,
-                        paddingHorizontal: 8.0,
-                        paddingVertical: 7.0)
-                  ],
-                )
-              ]))
+                  ]))
+              : const SizedBox.shrink()
         ],
       );
 }
@@ -263,17 +306,12 @@ class CarsForSell {
   final String sellerName;
   final bool carOwner;
 
-  CarsForSell(this.image, this.title, this.postedDate, this.year, this.price, this.color, this.mileage, this.capacity,
-      this.sellerImage, this.sellerName, this.carOwner);
+  CarsForSell(this.image, this.title, this.postedDate, this.year, this.price, this.color, this.mileage, this.capacity, this.sellerImage, this.sellerName, this.carOwner);
 }
 
 List<CarsForSell> cars = [
-  CarsForSell(Assets.carAcura.name, "Acura ILX", "2 Jan, 2022", "2020", r"$ 1,25,000", "White", "18 Km/L", "201 HP",
-      Assets.userThomas.name, "Thomas", true),
-  CarsForSell(Assets.carRenault.name, "Renault KWID", "2 Jan, 2022", "2021", r"$ 1,25,000", "White", "18 Km/L",
-      "201 HP", Assets.userDanish.name, "Danish", false),
-  CarsForSell(Assets.carAcura.name, "Acura ILX", "2 Jan, 2022", "2020", r"$ 1,25,000", "White", "18 Km/L", "201 HP",
-      Assets.userThomas.name, "Thomas", true),
-  CarsForSell(Assets.carRenault.name, "Renault KWID", "2 Jan, 2022", "2021", r"$ 1,25,000", "White", "18 Km/L",
-      "201 HP", Assets.userDanish.name, "Danish", false)
+  CarsForSell(Assets.carAcura.name, "Acura ILX", "2 Jan, 2022", "2020", r"$ 1,25,000", "White", "18 Km/L", "201 HP", Assets.userThomas.name, "Thomas", true),
+  CarsForSell(Assets.carRenault.name, "Renault KWID", "2 Jan, 2022", "2021", r"$ 1,25,000", "White", "18 Km/L", "201 HP", Assets.userDanish.name, "Danish", false),
+  CarsForSell(Assets.carAcura.name, "Acura ILX", "2 Jan, 2022", "2020", r"$ 1,25,000", "White", "18 Km/L", "201 HP", Assets.userThomas.name, "Thomas", true),
+  CarsForSell(Assets.carRenault.name, "Renault KWID", "2 Jan, 2022", "2021", r"$ 1,25,000", "White", "18 Km/L", "201 HP", Assets.userDanish.name, "Danish", false)
 ];

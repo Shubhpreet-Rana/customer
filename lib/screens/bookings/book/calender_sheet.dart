@@ -175,7 +175,7 @@ class _SelectDateState extends State<SelectDate> {
       },
     );
     return FractionallySizedBox(
-        heightFactor: 0.7,
+        heightFactor: 0.75,
         child: Container(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -223,6 +223,7 @@ class _SelectDateState extends State<SelectDate> {
                 margin: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: _calendarCarouselNoHeader,
               ),
+              verticalSpacer(),
               GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {

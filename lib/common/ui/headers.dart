@@ -1,6 +1,7 @@
 import 'package:app/common/assets.dart';
 import 'package:app/common/styles/styles.dart';
 import 'package:app/common/ui/common_ui.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -39,43 +40,43 @@ class AppHeaders {
           bool menuIcon = true,
           Function()? onFilterClick,
           Function()? onNotificationClick}) =>
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 25.0, top: 10.0),
-            child: Row(
+      Padding(
+        padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+        child: Row(
+          children: [
+            backNavigation
+                ? GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => Navigator.of(context).pop(),
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                  )
+                : const SizedBox.shrink(),
+            horizontalSpacer(),
+            Expanded(
+              child: AutoSizeText(
+                text,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                maxFontSize: 18.0,
+                minFontSize: 12.0,
+                style: AppStyles.buttonText,
+              ),
+            ),
+            horizontalSpacer(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                backNavigation
+                filterIcon
                     ? GestureDetector(
                         behavior: HitTestBehavior.translucent,
-                        onTap: () => Navigator.of(context).pop(),
-                        child: const Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
-                        ),
-                      )
+                        onTap: () {
+                          if (onFilterClick != null) onFilterClick();
+                        },
+                        child: SvgPicture.asset(Assets.filters.name))
                     : const SizedBox.shrink(),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Text(
-                    text,
-                    style: AppStyles.buttonText,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 30.0, top: 15.0),
-            child: Row(
-              children: [
-                GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      if (onFilterClick != null) onFilterClick();
-                    },
-                    child: SvgPicture.asset(Assets.filters.name)),
                 horizontalSpacer(),
                 //SvgPicture.asset(Assets.menu.name),
                 GestureDetector(
@@ -90,8 +91,8 @@ class AppHeaders {
                   ),
                 )
               ],
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       );
 }

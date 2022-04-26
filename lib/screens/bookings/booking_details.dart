@@ -46,7 +46,7 @@ class _BookingDetailsState extends State<BookingDetails> {
               child: SingleChildScrollView(
             child: Container(
               width: CommonMethods.deviceWidth(),
-              height: CommonMethods.deviceHeight() + 250,
+              height: CommonMethods.deviceHeight() + CommonMethods.deviceHeight()*.42,
               decoration: BoxDecoration(
                 color: Colours.lightGray.code,
               ),
@@ -148,6 +148,7 @@ class _BookingDetailsState extends State<BookingDetails> {
           ),
           verticalSpacer(),
           appButton(bkColor: Colours.blue.code, text: AppConstants.submitReview, height: 50.0),
+          verticalSpacer(),
         ],
       );
 

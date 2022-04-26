@@ -45,7 +45,7 @@ class _SignUpState extends State<SignUp> {
           children: [
             SafeArea(bottom: false, child: AppHeaders().extendedHeader(text: AppConstants.signUp2, context: context)),
             verticalSpacer(
-              height: 60.0,
+              height: 40.0,
             ),
             Expanded(
               child: Container(

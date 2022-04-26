@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../methods/common.dart';
 import '../styles/styles.dart';
 
-Widget appButton({required Color? bkColor, String text = '',double height =55.0}) => Container(
+Widget appButton({required Color? bkColor, String text = '', double height = 55.0}) => Container(
       width: CommonMethods.deviceWidth(),
       height: height,
       decoration: BoxDecoration(color: bkColor, borderRadius: BorderRadius.circular(10.0)),
@@ -72,7 +72,11 @@ Widget headingText({String text = ""}) => Text(
     );
 
 Widget grayContainer(
-        {String text = '', required Widget icon, double paddingHorizontal = 10.0, double paddingVertical = 10.0, double bRadius = 10.0}) =>
+        {String text = '',
+        required Widget icon,
+        double paddingHorizontal = 10.0,
+        double paddingVertical = 10.0,
+        double bRadius = 10.0}) =>
     Container(
       padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
       decoration: BoxDecoration(color: Colours.lightGray.code, borderRadius: BorderRadius.circular(bRadius)),
@@ -94,16 +98,20 @@ Widget searchBox(
         double paddingVertical = 10.0,
         double borderRadius = 10.0,
         required TextEditingController controller,
-        String hintText = "search"}) =>
+        String hintText = "search",
+        bool isPrefix = false,
+        Widget? prefixIcon}) =>
     Container(
       padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(borderRadius)),
       child: Row(
         children: [
-          Icon(
-            Icons.search,
-            color: Colours.gray.code,
-          ),
+          isPrefix
+              ? prefixIcon!
+              : Icon(
+                  Icons.search,
+                  color: Colours.gray.code,
+                ),
           Expanded(
               child: TextFormField(
             textInputAction: TextInputAction.done,

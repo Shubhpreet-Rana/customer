@@ -46,7 +46,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
           children: [
             SafeArea(bottom: false, child: AppHeaders().extendedHeader(text: AppConstants.setup, context: context)),
             verticalSpacer(
-              height: 60.0,
+              height: 40.0,
             ),
             Expanded(
               child: Container(

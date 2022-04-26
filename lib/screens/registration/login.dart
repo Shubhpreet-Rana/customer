@@ -44,7 +44,7 @@ class _LoginState extends State<Login> {
           children: [
             SafeArea(child: AppHeaders().extendedHeader(text: AppConstants.login, context: context, backNavigation: false)),
             verticalSpacer(
-              height: 50.0,
+              height: 40.0,
             ),
             Expanded(
               child: Container(

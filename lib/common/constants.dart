@@ -143,4 +143,8 @@ class AppConstants {
   static String totalPrice = "Total Price";
   static String totalBalance = "Total balance";
   static String myProfile = "My Profile";
+  static String pickDL ="Pick and Drop Location";
+  static String allCars = "All Cars";
+  static String myListedCars ="My Listed Cars";
+
 }

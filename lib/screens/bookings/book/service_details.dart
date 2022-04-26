@@ -1,4 +1,5 @@
 import 'package:app/screens/bookings/book/calender_sheet.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -10,6 +11,7 @@ import '../../../common/ui/background.dart';
 import '../../../common/ui/common_ui.dart';
 import '../../../common/ui/headers.dart';
 import '../../home/home_tabs.dart';
+import '../../maps/maps_page.dart';
 
 class ServiceDetails extends StatefulWidget {
   final Map<String, dynamic> item;
@@ -21,8 +23,8 @@ class ServiceDetails extends StatefulWidget {
 }
 
 class _ServiceDetailsState extends State<ServiceDetails> {
-
   List<ServiceTypes> selectedServices = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -37,13 +39,8 @@ class _ServiceDetailsState extends State<ServiceDetails> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SafeArea(
-              bottom: false,
-              child: AppHeaders()
-                  .collapsedHeader(text: widget.item['serviceType'], context: context, backNavigation: true, onFilterClick: () {})),
-          Padding(
-              padding: const EdgeInsets.only(left: 70.0, top: 2.0),
-              child: Text((AppConstants.servicePopularity), style: AppStyles.whiteText)),
+          SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: widget.item['serviceType'], context: context, backNavigation: true, onFilterClick: () {})),
+          Padding(padding: const EdgeInsets.only(left: 70.0, top: 2.0), child: Text((AppConstants.servicePopularity), style: AppStyles.whiteText)),
           verticalSpacer(),
           Expanded(
               child: Container(
@@ -113,26 +110,38 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                   verticalSpacer(),
                                   GestureDetector(
                                       behavior: HitTestBehavior.translucent,
-                                      onTap: () {
-                                        showModalBottomSheet(
-                                            context: context,
-                                            isScrollControlled: true,
-                                            useRootNavigator: true,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.vertical(
-                                                top: Radius.circular(20),
-                                              ),
-                                            ),
-                                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                                            backgroundColor: Colors.white,
-                                            builder: (context) {
-                                              return SelectDate(
-                                                selectedServices: selectedServices,
-                                                item: widget.item,
-                                              );
-                                            });
+                                      onTap: () async {
+                                        if (getButtonColor() == Colours.blue.code) {
+                                          var list = selectedServices.where((element) => element.id == "6").toList();
+                                          if (list.isNotEmpty) {
+                                            resetServices();
+                                            await Future.delayed(Duration.zero);
+                                            Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const MyAppMap()));
+                                          } else {
+                                            var data = selectedServices;
+                                            resetServices();
+                                            await Future.delayed(Duration.zero);
+                                            showModalBottomSheet(
+                                                context: context,
+                                                isScrollControlled: true,
+                                                useRootNavigator: true,
+                                                shape: const RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.vertical(
+                                                    top: Radius.circular(20),
+                                                  ),
+                                                ),
+                                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                backgroundColor: Colors.white,
+                                                builder: (context) {
+                                                  return SelectDate(
+                                                    selectedServices: data,
+                                                    item: widget.item,
+                                                  );
+                                                });
+                                          }
+                                        }
                                       },
-                                      child: appButton(bkColor: Colours.blue.code, text: AppConstants.bookNow, height: 50.0)),
+                                      child: appButton(bkColor: getButtonColor(), text: AppConstants.bookNow, height: 50.0)),
                                   verticalSpacer(height: 100.0),
                                 ],
                               )),
@@ -143,6 +152,31 @@ class _ServiceDetailsState extends State<ServiceDetails> {
         ],
       )),
     );
+  }
+
+  resetServices() {
+    for (var element in selectedServices) {
+      element.isSelected = false;
+    }
+    selectedServices.clear();
+    selectedServices.add(vehicles[0]);
+    selectedServices.first.isSelected = true;
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Color getButtonColor() {
+    if (selectedServices.length > 5) {
+      return Colours.gray.code;
+    } else {
+      var list = selectedServices.where((element) => element.id == "6").toList();
+      if (selectedServices.length > 1 && list.isNotEmpty) {
+        return Colours.gray.code;
+      } else {
+        return Colours.blue.code;
+      }
+    }
   }
 
   void _onSelect(bool? newValue, ServiceTypes type) => setState(() {
@@ -178,7 +212,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
             ),
             verticalSpacer(height: 5.0),
             Text(
-             r"$"+ vehicle.price.toString(),
+              r"$" + vehicle.price.toString(),
               style: AppStyles.textBlueSemiBold,
             ),
             verticalSpacer(height: 10.0),
@@ -275,6 +309,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
 }
 
 class ServiceTypes {
+  final String id;
   bool isSelected;
   final String title;
   final String service;
@@ -282,21 +317,20 @@ class ServiceTypes {
   final double price;
   final String description;
 
-  ServiceTypes(this.isSelected, this.title, this.service, this.subService, this.price, this.description);
+  ServiceTypes(this.id, this.isSelected, this.title, this.service, this.subService, this.price, this.description);
 }
 
-
 List<ServiceTypes> vehicles = [
-  ServiceTypes(true, 'Oil Change', 'Castrool Oil', 'Engine Oil', 250.0,
+  ServiceTypes("1", true, 'Oil Change', 'Castrool Oil', 'Engine Oil', 250.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
-  ServiceTypes(false, 'Gasonline', 'Castrool Oil', 'Engine Oil', 270.0,
+  ServiceTypes("2", false, 'Gasonline', 'Castrool Oil', 'Engine Oil', 270.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
-  ServiceTypes(false, 'Car Wash', 'Castrool Oil', 'Engine Oil', 250.0,
+  ServiceTypes("3", false, 'Car Wash', 'Castrool Oil', 'Engine Oil', 250.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
-  ServiceTypes(false, 'Auto Repair', 'Castrool Oil', 'Engine Oil', 160.0,
+  ServiceTypes("4", false, 'Auto Repair', 'Castrool Oil', 'Engine Oil', 160.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
-  ServiceTypes(false, 'Auto Parts', 'Castrool Oil', 'Engine Oil', 250.0,
+  ServiceTypes("5", false, 'Auto Parts', 'Castrool Oil', 'Engine Oil', 250.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
-  ServiceTypes(false, 'Road Side Assistance', 'Castrool Oil', 'Engine Oil', 250.0,
+  ServiceTypes("6", false, 'Road Side Assistance', 'Castrool Oil', 'Engine Oil', 250.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
 ];

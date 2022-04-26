@@ -228,7 +228,7 @@ class _CarTabState extends State<CarTab> {
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           Navigator.of(context, rootNavigator: false)
-                              .push(CupertinoPageRoute(builder: (context) => const MyAppMap()));
+                              .push(CupertinoPageRoute(builder: (context) => const MyAppMap(showPickUp: false,)));
                         },
                         child: rowButton(
                             bkColor: Colours.lightWhite.code,

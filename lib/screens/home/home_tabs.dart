@@ -112,7 +112,7 @@ class _HomeTabsState extends State<HomeTabs>  with TickerProviderStateMixin<Home
                   ),
                   const BottomNavigationBarItem(
                       icon: Icon(
-                        Icons.settings,
+                        Icons.person,
                         size: 30.0,
                       ),
                       label: ''),
