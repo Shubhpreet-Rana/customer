@@ -20,7 +20,7 @@ class HomeTabs extends StatefulWidget {
   State<HomeTabs> createState() => _HomeTabsState();
 }
 
-class _HomeTabsState extends State<HomeTabs>  with TickerProviderStateMixin<HomeTabs> {
+class _HomeTabsState extends State<HomeTabs> with TickerProviderStateMixin<HomeTabs> {
   int _selectedTabIndex = 0;
 
   @override
@@ -37,89 +37,95 @@ class _HomeTabsState extends State<HomeTabs>  with TickerProviderStateMixin<Home
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBody: true,
-        body: IndexedStack(
-          index: _selectedTabIndex,
-          children: <Widget>[
-            Navigator(
-              key: _homeScreen,
-              onGenerateRoute: (route) => CupertinoPageRoute(
-                settings: route,
-                builder: (context) => const HomeTab(),
+      extendBody: true,
+      body: IndexedStack(
+        index: _selectedTabIndex,
+        children: <Widget>[
+          Navigator(
+            key: _homeScreen,
+            onGenerateRoute: (route) => CupertinoPageRoute(
+              settings: route,
+              builder: (context) => HomeTab(
+                changeTab: () {
+                  setState(() {
+                    _selectedTabIndex = 1;
+                  });
+                },
               ),
             ),
-            Navigator(
-              key: _carScreen,
-              onGenerateRoute: (route) => CupertinoPageRoute(
-                settings: route,
-                builder: (context) => const CarTab(),
-              ),
+          ),
+          Navigator(
+            key: _carScreen,
+            onGenerateRoute: (route) => CupertinoPageRoute(
+              settings: route,
+              builder: (context) => const CarTab(),
             ),
-            Navigator(
-              key: _calenderScreen,
-              onGenerateRoute: (route) => CupertinoPageRoute(
-                settings: route,
-                builder: (context) => const CalenderTab(),
-              ),
+          ),
+          Navigator(
+            key: _calenderScreen,
+            onGenerateRoute: (route) => CupertinoPageRoute(
+              settings: route,
+              builder: (context) => const CalenderTab(),
             ),
-            Navigator(
-              key: _settingsScreen,
-              onGenerateRoute: (route) => CupertinoPageRoute(
-                settings: route,
-                builder: (context) => const ProfileTab(),
-              ),
+          ),
+          Navigator(
+            key: _settingsScreen,
+            onGenerateRoute: (route) => CupertinoPageRoute(
+              settings: route,
+              builder: (context) => const ProfileTab(),
             ),
-          ],
-        ),
-        bottomNavigationBar: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(topRight: Radius.circular(30.0), topLeft: Radius.circular(30.0)),
-              boxShadow: [
-                BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(topRight: Radius.circular(30.0), topLeft: Radius.circular(30.0)),
+            boxShadow: [
+              BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
+            ),
+            child: BottomNavigationBar(
+              currentIndex: _selectedTabIndex,
+              onTap: (val) => _onTap(val, context),
+              type: BottomNavigationBarType.fixed,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              selectedItemColor: Colours.blue.code,
+              unselectedItemColor: Colours.unSelectTab.code,
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    _selectedTabIndex == 0 ? Assets.selectedHome.name : Assets.home.name,
+                  ),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    _selectedTabIndex == 1 ? Assets.selectedCar.name : Assets.car.name,
+                  ),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    _selectedTabIndex == 2 ? Assets.selectedCalender.name : Assets.calender.name,
+                  ),
+                  label: '',
+                ),
+                const BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.person,
+                      size: 30.0,
+                    ),
+                    label: ''),
               ],
             ),
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
-              ),
-              child: BottomNavigationBar(
-                currentIndex: _selectedTabIndex,
-                onTap: (val) => _onTap(val, context),
-                type: BottomNavigationBarType.fixed,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                selectedItemColor: Colours.blue.code,
-                unselectedItemColor: Colours.unSelectTab.code,
-                items: <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      _selectedTabIndex == 0 ? Assets.selectedHome.name : Assets.home.name,
-                    ),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      _selectedTabIndex == 1 ? Assets.selectedCar.name : Assets.car.name,
-                    ),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      _selectedTabIndex == 2 ? Assets.selectedCalender.name : Assets.calender.name,
-                    ),
-                    label: '',
-                  ),
-                  const BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.person,
-                        size: 30.0,
-                      ),
-                      label: ''),
-                ],
-              ),
-            )),
-        );
+          )),
+    );
   }
 
   void _onTap(int val, BuildContext context) {

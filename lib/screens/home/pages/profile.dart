@@ -1,5 +1,6 @@
 import 'package:app/common/assets.dart';
 import 'package:app/common/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/colors.dart';
@@ -9,6 +10,7 @@ import '../../../common/ui/avatar.dart';
 import '../../../common/ui/background.dart';
 import '../../../common/ui/common_ui.dart';
 import '../../../common/ui/headers.dart';
+import '../../profile/edit_options.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({Key? key}) : super(key: key);
@@ -26,9 +28,7 @@ class _ProfileTabState extends State<ProfileTab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: AppConstants.myProfile, context: context, backNavigation: false, onFilterClick: () {})),
-          Padding(
-              padding: const EdgeInsets.only(left: 45.0, top: 2.0),
-              child: Text(("Joined on 30 Jan, 2021"), style: AppStyles.whiteText)),
+          Padding(padding: const EdgeInsets.only(left: 45.0, top: 2.0), child: Text(("Joined on 30 Jan, 2021"), style: AppStyles.whiteText)),
           verticalSpacer(
             height: 10.0,
           ),
@@ -55,7 +55,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        AppConstants.fNameHint+":",
+                        AppConstants.fNameHint + ":",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.lightText,
@@ -80,7 +80,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        AppConstants.lNameHint+":",
+                        AppConstants.lNameHint + ":",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.lightText,
@@ -105,7 +105,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        AppConstants.emailHint+":",
+                        AppConstants.emailHint + ":",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.lightText,
@@ -130,7 +130,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        AppConstants.mobileHint+":",
+                        AppConstants.mobileHint + ":",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.lightText,
@@ -155,7 +155,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        AppConstants.genderHint+":",
+                        AppConstants.genderHint + ":",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.lightText,
@@ -180,7 +180,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        AppConstants.addressHint+":",
+                        AppConstants.addressHint + ":",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.lightText,
@@ -199,7 +199,12 @@ class _ProfileTabState extends State<ProfileTab> {
                 ),
                 //verticalSpacer(height: 50.0),
                 const Spacer(),
-                appButton(bkColor: Colours.blue.code, text: AppConstants.edit, height: 50.0),
+                GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => EditOptions()));
+                    },
+                    child: appButton(bkColor: Colours.blue.code, text: AppConstants.edit, height: 50.0)),
                 verticalSpacer(),
                 Text(
                   AppConstants.logout,

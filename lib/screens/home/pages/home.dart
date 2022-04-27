@@ -16,7 +16,8 @@ import '../../../common/ui/headers.dart';
 import '../../marketplace/sell_car.dart';
 
 class HomeTab extends StatefulWidget {
-  const HomeTab({Key? key}) : super(key: key);
+  final Function changeTab;
+  const HomeTab({Key? key,required this.changeTab}) : super(key: key);
 
   @override
   State<HomeTab> createState() => _HomeTabState();
@@ -230,24 +231,30 @@ class _HomeTabState extends State<HomeTab> {
         ),
       );
 
-  Widget serviceProviders({required String icon, required String text}) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            icon,
-            height: 25.0,
-            fit: BoxFit.cover,
-          ),
-          verticalSpacer(height: 10.0),
-          Text(
-            text,
-            maxLines: 2,
-            textAlign: TextAlign.center,
-            style: AppStyles.blackSemiW400,
-          )
-        ],
-      );
+  Widget serviceProviders({required String icon, required String text}) => GestureDetector(
+    behavior: HitTestBehavior.translucent,
+    onTap: (){
+      widget.changeTab();
+    },
+    child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              icon,
+              height: 25.0,
+              fit: BoxFit.cover,
+            ),
+            verticalSpacer(height: 10.0),
+            Text(
+              text,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              style: AppStyles.blackSemiW400,
+            )
+          ],
+        ),
+  );
 
   Widget itemHomeSlider(String data) {
     return Image.asset(

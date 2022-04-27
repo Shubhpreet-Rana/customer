@@ -146,5 +146,8 @@ class AppConstants {
   static String pickDL ="Pick and Drop Location";
   static String allCars = "All Cars";
   static String myListedCars ="My Listed Cars";
-
+  static String editProfile = "Edit Details";
+  static String myProfileDetails = "My Profile Details";
+  static String myCarDetails = "My Car Details";
+  static String update = "UPDATE";
 }

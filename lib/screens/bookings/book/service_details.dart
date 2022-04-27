@@ -115,13 +115,11 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                           var list = selectedServices.where((element) => element.id == "6").toList();
                                           if (list.isNotEmpty) {
                                             resetServices();
-                                            await Future.delayed(Duration.zero);
                                             Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const MyAppMap()));
                                           } else {
                                             var data = selectedServices;
-                                            resetServices();
-                                            await Future.delayed(Duration.zero);
-                                            showModalBottomSheet(
+
+                                            await showModalBottomSheet(
                                                 context: context,
                                                 isScrollControlled: true,
                                                 useRootNavigator: true,
@@ -138,6 +136,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                                     item: widget.item,
                                                   );
                                                 });
+                                            resetServices();
                                           }
                                         }
                                       },
@@ -167,7 +166,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   }
 
   Color getButtonColor() {
-    if (selectedServices.length > 5) {
+    if (selectedServices.length > 7) {
       return Colours.gray.code;
     } else {
       var list = selectedServices.where((element) => element.id == "6").toList();
@@ -330,6 +329,10 @@ List<ServiceTypes> vehicles = [
   ServiceTypes("4", false, 'Auto Repair', 'Castrool Oil', 'Engine Oil', 160.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
   ServiceTypes("5", false, 'Auto Parts', 'Castrool Oil', 'Engine Oil', 250.0,
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
+  ServiceTypes("7", false, 'State Inspection', 'Castrool Oil', 'Engine Oil', 160.0,
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
+  ServiceTypes("8", false, 'Battery Swap', 'Castrool Oil', 'Engine Oil', 250.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
   ServiceTypes("6", false, 'Road Side Assistance', 'Castrool Oil', 'Engine Oil', 250.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),

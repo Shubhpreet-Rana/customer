@@ -33,10 +33,7 @@ class _SelectDateState extends State<SelectDate> {
   late CalendarCarousel _calendarCarouselNoHeader;
 
   static final Widget _eventIcon = Container(
-    decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(1000)),
-        border: Border.all(color: Colors.blue, width: 2.0)),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: const BorderRadius.all(Radius.circular(1000)), border: Border.all(color: Colors.blue, width: 2.0)),
     child: const Icon(
       Icons.person,
       color: Colors.amber,
@@ -226,11 +223,10 @@ class _SelectDateState extends State<SelectDate> {
               verticalSpacer(),
               GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
-                        builder: (context) =>
-                            ConfirmBooking(selectedServices: widget.selectedServices, item: widget.item, selectedDate: _currentDate2)));
+                  onTap: () async {
+                    await Navigator.of(context, rootNavigator: false)
+                        .push(CupertinoPageRoute(builder: (context) => ConfirmBooking(selectedServices: widget.selectedServices, item: widget.item, selectedDate: _currentDate2)));
+                    Navigator.pop(context);
                   },
                   child: appButton(bkColor: Colours.blue.code, text: AppConstants.confirmDate, height: 50.0)),
             ],

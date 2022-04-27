@@ -13,7 +13,9 @@ import '../../common/ui/headers.dart';
 import '../home/home_tabs.dart';
 
 class VehicleDetails extends StatefulWidget {
-  const VehicleDetails({Key? key}) : super(key: key);
+  final bool fromEdit;
+
+  const VehicleDetails({Key? key, this.fromEdit = false}) : super(key: key);
 
   @override
   State<VehicleDetails> createState() => _VehicleDetailsState();
@@ -51,7 +53,7 @@ class _VehicleDetailsState extends State<VehicleDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SafeArea(bottom: false, child: AppHeaders().extendedHeader(text: AppConstants.vehicle, context: context)),
+            SafeArea(bottom: false, child: AppHeaders().extendedHeader(text: widget.fromEdit ? AppConstants.editProfile : AppConstants.vehicle, context: context)),
             verticalSpacer(
               height: 10.0,
             ),
@@ -210,9 +212,14 @@ class _VehicleDetailsState extends State<VehicleDetails> {
                     GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
-                          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const HomeTabs()));
+                          if (widget.fromEdit) {
+                            Navigator.of(context).pop();
+                          } else {
+                            Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const HomeTabs()));
+                          }
                         },
-                        child: appButton(bkColor: Colours.blue.code, text: AppConstants.saveText))
+                        child: appButton(bkColor: Colours.blue.code, text: widget.fromEdit ? AppConstants.update : AppConstants.saveText)),
+                    verticalSpacer(),
                   ],
                 ),
               ),
