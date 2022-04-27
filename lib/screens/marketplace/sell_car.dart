@@ -11,7 +11,9 @@ import '../../common/ui/edit_text.dart';
 import '../../common/ui/headers.dart';
 
 class SellCar extends StatefulWidget {
-  const SellCar({Key? key}) : super(key: key);
+  final bool fromEdit;
+
+  const SellCar({Key? key, this.fromEdit = false}) : super(key: key);
 
   @override
   State<SellCar> createState() => _SellCarState();
@@ -160,9 +162,10 @@ class _SellCarState extends State<SellCar> {
                     GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
+                          if (widget.fromEdit) Navigator.pop(context);
                           //Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const HomeTabs()));
                         },
-                        child: appButton(bkColor: Colours.blue.code, text: AppConstants.addCar)),
+                        child: appButton(bkColor: Colours.blue.code, text: widget.fromEdit ? AppConstants.update : AppConstants.addCar)),
                     verticalSpacer(height: 120),
                   ],
                 ),

@@ -13,8 +13,9 @@ import '../../common/constants.dart';
 
 class MyAppMap extends StatefulWidget {
   final bool showPickUp;
+  final bool showMarker;
 
-  const MyAppMap({Key? key, this.showPickUp = true}) : super(key: key);
+  const MyAppMap({Key? key, this.showPickUp = true, this.showMarker = false}) : super(key: key);
 
   @override
   State<MyAppMap> createState() => MyAppMapState();
@@ -27,8 +28,8 @@ class MyAppMapState extends State<MyAppMap> {
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
-  static const CameraPosition _kLake = CameraPosition(bearing: 192.8334901395799, target: LatLng(37.43296265331129, -122.08832357078792), tilt: 59.440717697143555, zoom: 19.151926040649414);
   TextEditingController pickController = TextEditingController();
   TextEditingController dropController = TextEditingController();
 
@@ -36,6 +37,28 @@ class MyAppMapState extends State<MyAppMap> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(widget.showMarker)_add();
+  }
+
+  void _add() {
+    var markerIdVal = "Provider Location";
+    final MarkerId markerId = MarkerId(markerIdVal);
+
+    // creating a new MARKER
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(
+        _kGooglePlex.target.latitude,
+        _kGooglePlex.target.longitude,
+      ),
+      infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
+      onTap: () {},
+    );
+
+    setState(() {
+      // adding a new marker to map
+      markers[markerId] = marker;
+    });
   }
 
   @override
@@ -96,6 +119,7 @@ class MyAppMapState extends State<MyAppMap> {
                 myLocationEnabled: false,
                 zoomControlsEnabled: false,
                 mapToolbarEnabled: false,
+                markers: Set<Marker>.of(markers.values),
               ),
             ),
             verticalSpacer(height: 40.0)

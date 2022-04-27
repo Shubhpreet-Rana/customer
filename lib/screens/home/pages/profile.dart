@@ -202,7 +202,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => EditOptions()));
+                      Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const EditOptions()));
                     },
                     child: appButton(bkColor: Colours.blue.code, text: AppConstants.edit, height: 50.0)),
                 verticalSpacer(),
