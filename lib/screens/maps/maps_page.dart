@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../common/colors.dart';
+import '../../common/location_util.dart';
 import '../../common/methods/common.dart';
 import '../../common/ui/background.dart';
 import '../../common/ui/common_ui.dart';
@@ -23,6 +25,7 @@ class MyAppMap extends StatefulWidget {
 
 class MyAppMapState extends State<MyAppMap> {
   final Completer<GoogleMapController> _controller = Completer();
+  GoogleMapController? mapController;
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -33,23 +36,38 @@ class MyAppMapState extends State<MyAppMap> {
   TextEditingController pickController = TextEditingController();
   TextEditingController dropController = TextEditingController();
 
+  Position? position;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(widget.showMarker)_add();
+    if (widget.showMarker) _add(text: "Provider Location", latitude: _kGooglePlex.target.latitude, longitude: _kGooglePlex.target.longitude);
+    if (widget.showPickUp) showCurrentLocation();
   }
 
-  void _add() {
-    var markerIdVal = "Provider Location";
+  showCurrentLocation() async {
+    position = await LocationUtil.getLocation();
+    if (position != null) {
+      if (position?.latitude != null && position?.longitude != null) {
+        if (mapController != null) {
+          mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position!.latitude, position!.longitude), zoom: 17.0)));
+        }
+        _add(text: "Your Location", latitude: position!.latitude, longitude: position!.longitude);
+      }
+    }
+  }
+
+  void _add({required String text, required double latitude, required double longitude}) {
+    var markerIdVal = text;
     final MarkerId markerId = MarkerId(markerIdVal);
 
     // creating a new MARKER
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(
-        _kGooglePlex.target.latitude,
-        _kGooglePlex.target.longitude,
+        latitude,
+        longitude,
       ),
       infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
       onTap: () {},
@@ -93,7 +111,7 @@ class MyAppMapState extends State<MyAppMap> {
                                   Icons.location_pin,
                                   color: Colors.red,
                                 ))),
-                        horizontalSpacer(),
+                        /*horizontalSpacer(),
                         Expanded(
                             child: searchBox(
                                 controller: dropController,
@@ -102,7 +120,7 @@ class MyAppMapState extends State<MyAppMap> {
                                 prefixIcon: const Icon(
                                   Icons.location_pin,
                                   color: Colors.green,
-                                ))),
+                                ))),*/
                       ],
                     ),
                   )
@@ -114,6 +132,7 @@ class MyAppMapState extends State<MyAppMap> {
                 initialCameraPosition: _kGooglePlex,
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
+                  mapController = controller;
                 },
                 myLocationButtonEnabled: false,
                 myLocationEnabled: false,
