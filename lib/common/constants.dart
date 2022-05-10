@@ -121,8 +121,8 @@ class AppConstants {
   static String addressExp = "H.no-26, Down Street, California";
   static String selectCategory = "Select Service Category";
   static String oilChange = "Oil Change";
-  static String gasoline = "Gasoline";
-  static String carWash = "Car Wash";
+  static String gasoline = "Gasoline Delivery";
+  static String carWash = "Mobile Car Wash";
   static String autoRepair = "Auto Repair";
   static String autoParts = "Auto Parts";
   static String roadSideAssistance = "Road Side Assistance";

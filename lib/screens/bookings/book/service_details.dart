@@ -322,9 +322,9 @@ class ServiceTypes {
 List<ServiceTypes> vehicles = [
   ServiceTypes("1", true, 'Oil Change', 'Castrool Oil', 'Engine Oil', 250.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
-  ServiceTypes("2", false, 'Gasonline', 'Castrool Oil', 'Engine Oil', 270.0,
+  ServiceTypes("2", false, 'Gasonline Delivery', 'Castrool Oil', 'Engine Oil', 270.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
-  ServiceTypes("3", false, 'Car Wash', 'Castrool Oil', 'Engine Oil', 250.0,
+  ServiceTypes("3", false, 'Mobile Car Wash', 'Castrool Oil', 'Engine Oil', 250.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),
   ServiceTypes("4", false, 'Auto Repair', 'Castrool Oil', 'Engine Oil', 160.0,
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.'),

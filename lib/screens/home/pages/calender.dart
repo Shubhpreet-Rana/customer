@@ -53,7 +53,7 @@ class _CalenderTabState extends State<CalenderTab> {
                           image: Assets.service.name,
                           serviceType: "Transmission Service",
                           joinDate: "15 Mar, 2021",
-                          services: ['AC Gas Change', 'Gasoline', 'Cooling Test'],
+                          services: ['AC Gas Change', 'Gasoline Delivery', 'Cooling Test'],
                           rating: 5,
                           status: 1);
                     } else {
@@ -61,7 +61,7 @@ class _CalenderTabState extends State<CalenderTab> {
                           image: Assets.service1.name,
                           serviceType: "AC Service",
                           joinDate: "15 Mar, 2021",
-                          services: ['AC Gas Change', 'Gasoline', 'Cooling Test'],
+                          services: ['AC Gas Change', 'Gasoline Delivery', 'Cooling Test'],
                           status: 2);
                     }
                   }),

@@ -78,8 +78,7 @@ class _SignUpState extends State<SignUp> {
                       const SizedBox(
                         height: 20.0,
                       ),*/
-                      MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0, emailController,
-                          Colours.hintColor.code, true),
+                      MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0, emailController, Colours.hintColor.code, true),
                       verticalSpacer(),
                       /* MyEditText(AppConstants.mobileHint, false, TextInputType.phone, TextCapitalization.none, 10.0, mobileController, Colours.hintColor.code, true),
                       const SizedBox(
@@ -100,7 +99,8 @@ class _SignUpState extends State<SignUp> {
                       GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () {
-                            Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const ProfileSetUp()));
+                            validate();
+                            //Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const ProfileSetUp()));
                           },
                           child: appButton(bkColor: Colours.blue.code, text: AppConstants.signUp)),
                       verticalSpacer(
@@ -140,5 +140,10 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
+  }
+
+  validate() {
+    if (emailController.text == "") CommonMethods().showTopFlash(context: context, message: "Email is required.");
+    return;
   }
 }

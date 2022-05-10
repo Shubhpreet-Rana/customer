@@ -86,7 +86,7 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                             ),
                           ),
                           horizontalSpacer(width: 10.0),
-                          const Text('Car Wash'),
+                          const Text('Mobile Car Wash'),
                         ],
                       ),
                       verticalSpacer(height: 10.0),
