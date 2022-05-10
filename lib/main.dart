@@ -1,12 +1,15 @@
 import 'package:app/common/methods/common.dart';
 import 'package:app/screens/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import 'bloc/auth/auth_bloc.dart';
 import 'common/constants.dart';
 import 'common/methods/custom_storage.dart';
 import 'common/services/NavigationService.dart';
 import 'common/services/getit.dart';
+import 'data/repository/auth_repository.dart';
 
 void main() async {
   setup();
@@ -22,13 +25,29 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: locator<NavigationService>().navigatorKey,
-      title: AppConstants.appName,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<AuthRepository>(
+          create: (context) => AuthRepository(),
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(
+            create: (context) => AuthBloc(
+              authRepository: RepositoryProvider.of<AuthRepository>(context),
+            ),
+          ),
+        ],
+        child: MaterialApp(
+          navigatorKey: locator<NavigationService>().navigatorKey,
+          title: AppConstants.appName,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const Splash(),
+        ),
       ),
-      home: const Splash(),
     );
   }
 }

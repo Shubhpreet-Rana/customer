@@ -50,6 +50,9 @@ dependencies:
   rxdart: ^0.27.3
   dio: ^4.0.6
   flash: ^2.0.3+2
+  flutter_bloc: ^8.0.1
+  equatable: ^2.0.3
+  email_validator: ^2.0.1
 
 dev_dependencies:
   flutter_test:

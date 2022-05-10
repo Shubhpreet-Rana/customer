@@ -7,7 +7,9 @@ import 'package:app/screens/registration/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/auth/auth_bloc.dart';
 import '../../common/assets.dart';
 import '../../common/colors.dart';
 import '../../common/ui/background.dart';
@@ -37,136 +39,168 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BackgroundImage(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SafeArea(child: AppHeaders().extendedHeader(text: AppConstants.login, context: context, backNavigation: false)),
-            verticalSpacer(
-              height: 40.0,
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is LoggedInSuccessfully) {
+          /* context.read<HomeBloc>().add(LoadUserEvent());
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const HomePage(),
             ),
-            Expanded(
-              child: Container(
-                width: CommonMethods.deviceWidth(),
-                height: CommonMethods.deviceHeight(),
-                padding: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 5.0, top: 40.0),
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(33),
-                    topRight: Radius.circular(33),
+          );*/
+        }
+        if (state is LoggedInFailed) {
+          CommonMethods().showTopFlash(context: context, message: state.error);
+        }
+      },
+      child: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+        if (state is Loading) {
+          // Showing the loading indicator while the user is signing in
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (state is NotLoggedIn) {
+          return Scaffold(
+            body: BackgroundImage(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SafeArea(child: AppHeaders().extendedHeader(text: AppConstants.login, context: context, backNavigation: false)),
+                  verticalSpacer(
+                    height: 40.0,
                   ),
-                  color: Color.fromRGBO(255, 255, 255, 1),
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppConstants.welcome,
-                        style: AppStyles.darkText,
+                  Expanded(
+                    child: Container(
+                      width: CommonMethods.deviceWidth(),
+                      height: CommonMethods.deviceHeight(),
+                      padding: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 5.0, top: 40.0),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(33),
+                          topRight: Radius.circular(33),
+                        ),
+                        color: Color.fromRGBO(255, 255, 255, 1),
                       ),
-                      Text(
-                        AppConstants.loginMsg,
-                        style: AppStyles.lightText,
-                      ),
-                      verticalSpacer(
-                        height: 30.0,
-                      ),
-                      MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0, emailController, Colours.hintColor.code, true),
-                      verticalSpacer(),
-                      MyEditText(
-                        AppConstants.passwordHint,
-                        true,
-                        TextInputType.text,
-                        TextCapitalization.none,
-                        10.0,
-                        passwordController,
-                        Colours.hintColor.code,
-                        true,
-                        textInputAction: TextInputAction.done,
-                      ),
-                      verticalSpacer(),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 24.0,
-                            height: 24.0,
-                            child: Checkbox(value: rememberMe, checkColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)), onChanged: _onRememberMeChanged),
-                          ),
-                          horizontalSpacer(
-                            width: 10.0,
-                          ),
-                          Text(
-                            AppConstants.stayLogin,
-                            style: AppStyles.blackText,
-                          ),
-                        ],
-                      ),
-                      verticalSpacer(),
-                      GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onTap: () {
-                            Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const HomeTabs()));
-                          },
-                          child: appButton(bkColor: Colours.blue.code, text: AppConstants.login1)),
-                      verticalSpacer(),
-                      Center(
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            children: [
-                              TextSpan(text: AppConstants.forgotPwd + " ", style: AppStyles.blackText),
-                              TextSpan(
-                                text: AppConstants.recover,
-                                style: AppStyles.textBlue,
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-                                      builder: (context) => const ForgotPassword(),
-                                    ));
-                                  },
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppConstants.welcome,
+                              style: AppStyles.darkText,
+                            ),
+                            Text(
+                              AppConstants.loginMsg,
+                              style: AppStyles.lightText,
+                            ),
+                            verticalSpacer(
+                              height: 30.0,
+                            ),
+                            MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0, emailController, Colours.hintColor.code, true),
+                            verticalSpacer(),
+                            MyEditText(
+                              AppConstants.passwordHint,
+                              true,
+                              TextInputType.text,
+                              TextCapitalization.none,
+                              10.0,
+                              passwordController,
+                              Colours.hintColor.code,
+                              true,
+                              textInputAction: TextInputAction.done,
+                            ),
+                            verticalSpacer(),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 24.0,
+                                  height: 24.0,
+                                  child: Checkbox(value: rememberMe, checkColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)), onChanged: _onRememberMeChanged),
+                                ),
+                                horizontalSpacer(
+                                  width: 10.0,
+                                ),
+                                Text(
+                                  AppConstants.stayLogin,
+                                  style: AppStyles.blackText,
+                                ),
+                              ],
+                            ),
+                            verticalSpacer(),
+                            GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const HomeTabs()));
+                                },
+                                child: appButton(bkColor: Colours.blue.code, text: AppConstants.login1)),
+                            verticalSpacer(),
+                            Center(
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(text: AppConstants.forgotPwd + " ", style: AppStyles.blackText),
+                                    TextSpan(
+                                      text: AppConstants.recover,
+                                      style: AppStyles.textBlue,
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+                                            builder: (context) => const ForgotPassword(),
+                                          ));
+                                        },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+                            verticalSpacer(
+                              height: 40.0,
+                            ),
+                            socialButton(bkColor: Colours.darkBlue.code, text: AppConstants.fb, icon: Assets.fb.name),
+                            verticalSpacer(),
+                            socialButton(bkColor: Colours.red.code, text: AppConstants.google, icon: Assets.google.name),
+                            verticalSpacer(
+                              height: 30.0,
+                            ),
+                            Center(
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(text: AppConstants.dontAccount + " ", style: AppStyles.blackText),
+                                    TextSpan(
+                                      text: AppConstants.signUp1,
+                                      style: AppStyles.textBlue,
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          context.read<AuthBloc>().add(
+                                                RegisterEvent(),
+                                              );
+                                          await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const SignUp()));
+                                          context.read<AuthBloc>().add(
+                                                LogInEvent(),
+                                              );
+                                        },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            verticalSpacer(),
+                          ],
                         ),
                       ),
-                      verticalSpacer(
-                        height: 40.0,
-                      ),
-                      socialButton(bkColor: Colours.darkBlue.code, text: AppConstants.fb, icon: Assets.fb.name),
-                      verticalSpacer(),
-                      socialButton(bkColor: Colours.red.code, text: AppConstants.google, icon: Assets.google.name),
-                      verticalSpacer(
-                        height: 30.0,
-                      ),
-                      Center(
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            children: [
-                              TextSpan(text: AppConstants.dontAccount + " ", style: AppStyles.blackText),
-                              TextSpan(
-                                text: AppConstants.signUp1,
-                                style: AppStyles.textBlue,
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const SignUp()));
-                                  },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      verticalSpacer(),
-                    ],
-                  ),
-                ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-      ),
+            ),
+          );
+        }
+        return Container();
+      }),
     );
   }
 
