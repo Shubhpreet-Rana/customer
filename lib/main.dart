@@ -1,10 +1,13 @@
 import 'package:app/common/methods/common.dart';
+import 'package:app/data/repository/profile_repository.dart';
+import 'package:app/screens/registration/profile_setup.dart';
 import 'package:app/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import 'bloc/auth/auth_bloc.dart';
+import 'bloc/profile/create/create_profile_bloc.dart';
 import 'common/constants.dart';
 import 'common/methods/custom_storage.dart';
 import 'common/services/NavigationService.dart';
@@ -30,12 +33,20 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<AuthRepository>(
           create: (context) => AuthRepository(),
         ),
+        RepositoryProvider<ProfileRepository>(
+          create: (context) => ProfileRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(
               authRepository: RepositoryProvider.of<AuthRepository>(context),
+            ),
+          ),
+          BlocProvider<CreateProfileBloc>(
+            create: (context) => CreateProfileBloc(
+              profileRepository: RepositoryProvider.of<ProfileRepository>(context),
             ),
           ),
         ],
@@ -46,6 +57,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           home: const Splash(),
+         // home: const ProfileSetUp(),
         ),
       ),
     );

@@ -137,17 +137,23 @@ class AppConstants {
   static String pickLocation = "Pick Location";
   static String dropLocation = "Drop Location";
   static String completeBooking = "Complete Booking";
-  static String paymentAndE ="Payments and Earnings";
-  static String bankAccount ="Bank Account";
-  static String cancel ="Cancel";
+  static String paymentAndE = "Payments and Earnings";
+  static String bankAccount = "Bank Account";
+  static String cancel = "Cancel";
   static String totalPrice = "Total Price";
   static String totalBalance = "Total balance";
   static String myProfile = "My Profile";
-  static String pickDL ="Pick and Drop Location";
+  static String pickDL = "Pick and Drop Location";
   static String allCars = "All Cars";
-  static String myListedCars ="My Listed Cars";
+  static String myListedCars = "My Listed Cars";
   static String editProfile = "Edit Details";
   static String myProfileDetails = "My Profile Details";
   static String myCarDetails = "My Car Details";
   static String update = "UPDATE";
+
+  //Preferences keys
+
+  static String rememberMe = "REMEMBER_USER";
+  static String userInfo = "USER_DATA";
+
 }

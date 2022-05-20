@@ -8,8 +8,9 @@ class Avatar extends StatelessWidget {
   final double radius;
   final bool isCamera;
   final String imagePath;
+  final Function onSelect;
 
-  const Avatar({Key? key, this.radius = 35.0, this.isCamera = false, this.imagePath = ""}) : super(key: key);
+  const Avatar({Key? key, this.radius = 35.0, this.isCamera = false, this.imagePath = "", required this.onSelect}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,16 @@ class Avatar extends StatelessWidget {
               radius: radius,
               backgroundImage: AssetImage(imagePath),
             ),
-      if (isCamera) Positioned(right: 4, bottom: 0, child: SvgPicture.asset(Assets.camera.name))
+      if (isCamera)
+        Positioned(
+            right: 4,
+            bottom: 0,
+            child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  onSelect();
+                },
+                child: SvgPicture.asset(Assets.camera.name)))
     ]);
   }
 }

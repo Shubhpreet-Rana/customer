@@ -1,9 +1,11 @@
 import 'dart:async' show Future;
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../constants.dart';
+
 class PreferenceUtils {
-  static Future<SharedPreferences> get _instance async =>
-      _prefsInstance ??= await SharedPreferences.getInstance();
+  static Future<SharedPreferences> get _instance async => _prefsInstance ??= await SharedPreferences.getInstance();
   static SharedPreferences? _prefsInstance;
 
   // call this method from iniState() function of mainApp().
@@ -18,7 +20,17 @@ class PreferenceUtils {
 
   static Future<bool> setString(String key, String value) async {
     var prefs = await _instance;
-    return prefs.setString(key, value) ;
+    return prefs.setString(key, value);
+  }
+
+  static Future<bool> setBool(String key, bool value) async {
+    var prefs = await _instance;
+    return prefs.setBool(key, value);
+  }
+
+  static dynamic getUserInfo(String key, [String? defValue]) {
+    String userInfo = getString(AppConstants.userInfo);
+    return json.decode(userInfo);
   }
 }
 /*

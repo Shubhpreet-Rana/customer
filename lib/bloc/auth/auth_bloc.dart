@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:app/common/constants.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import '../../common/methods/custom_storage.dart';
 import '../../data/repository/auth_repository.dart';
 
 part 'auth_event.dart';
+
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -14,8 +18,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<RegisterRequested>(_registerUser);
     on<RegisterEvent>((event, emit) => emit(NotRegistered()));
     on<LogInEvent>((event, emit) => emit(NotLoggedIn()));
-    on<LogOutRequested>(_logOutUser);
+    on<LogOutRequested>(  _logOutUser);
   }
+
   final AuthRepository authRepository;
 
   FutureOr<void> _logInUser(
@@ -29,12 +34,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
 
-      if (res['success'] == true) {
-       /* await locator.setUserToken(userToken: res["token"]).then((value) {
-          emit(LoggedInSuccessfully());
-        });*/
+      if (res['status'] == 1) {
+        await PreferenceUtils.setString(AppConstants.userInfo, json.encode(res)).then((value) {
+          if (res['user']['screen'] == "setup_profile") {
+            emit(LoggedInSuccessfullyProfileSetup());
+          } else if (res['user']['screen'] == "add_vehicle") {
+            emit(LoggedInSuccessfullyAddVehicle());
+          } else {
+            emit(LoggedInSuccessfully());
+          }
+        });
       } else {
-        emit(LoggedInFailed(res['msg']));
+        emit(LoggedInFailed(res['message']));
         emit(NotLoggedIn());
       }
     } catch (e) {
@@ -54,7 +65,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
         confirmPassword: event.confirmPassword,
       );
-      if (res['message'] == "Registration Successful") {
+      if (res['status'] == 1) {
         emit(RegisteredSuccessfully());
         emit(NotLoggedIn());
       } else {
@@ -67,8 +78,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  FutureOr<void> _logOutUser(
-      LogOutRequested event, Emitter<AuthState> emit) async {
+  FutureOr<void> _logOutUser(LogOutRequested event, Emitter<AuthState> emit) async {
     //await locator.prefs.clear();
     emit(NotLoggedIn());
   }

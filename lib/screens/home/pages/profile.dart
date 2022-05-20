@@ -46,6 +46,9 @@ class _ProfileTabState extends State<ProfileTab> {
                   radius: 50.0,
                   isCamera: true,
                   imagePath: Assets.userPeter1.name,
+                  onSelect: (){
+
+                  },
                 ),
                 verticalSpacer(height: 30.0),
                 Row(

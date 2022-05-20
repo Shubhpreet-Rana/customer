@@ -13,6 +13,15 @@ class LoggedInSuccessfully extends AuthState {
   List<Object?> get props => [];
 }
 
+class LoggedInSuccessfullyProfileSetup extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+class LoggedInSuccessfullyAddVehicle extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
 class NotLoggedIn extends AuthState {
   @override
   List<Object?> get props => [];

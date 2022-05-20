@@ -3,7 +3,7 @@ class EndPoints {
 
   static const String allUsers = '/users/all';
   static const String userEmail = '/users/email';
-  static const String login = '/users/login';
+  static const String login = '/boulou/public/api/login';
   static const String register = '/boulou/public/api/register';
-  static const String profile = '/users/profile';
+  static const String profile = '/boulou/public/api/profile';
 }
