@@ -28,8 +28,8 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   TextEditingController nameController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController(text: kDebugMode ? "boulou@yopmail.com" : "");
+  TextEditingController passwordController = TextEditingController(text: kDebugMode ? "12345678" : "");
   bool show = true;
   bool rememberMe = false;
   bool isLoading = false;
@@ -38,10 +38,6 @@ class _SignUpState extends State<SignUp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (kDebugMode) {
-      emailController.text = "dharmaniz1.alok@gmail.com";
-      passwordController.text = "123456";
-    }
   }
 
   @override
@@ -55,7 +51,8 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(listener: (context, state) {
       if (state is RegisteredSuccessfully) {
-        Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const ProfileSetUp()));
+        Navigator.of(context, rootNavigator: true)
+            .pushReplacement(CupertinoPageRoute(builder: (context) => const ProfileSetUp()));
       }
       if (state is RegisteredFailed) {
         CommonMethods().showTopFlash(context: context, message: state.error);
@@ -101,7 +98,8 @@ class _SignUpState extends State<SignUp> {
                               const SizedBox(
                                 height: 20.0,
                               ),*/
-                        MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0, emailController, Colours.hintColor.code, true),
+                        MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0,
+                            emailController, Colours.hintColor.code, true),
                         verticalSpacer(),
                         /* MyEditText(AppConstants.mobileHint, false, TextInputType.phone, TextCapitalization.none, 10.0, mobileController, Colours.hintColor.code, true),
                               const SizedBox(

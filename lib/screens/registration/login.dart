@@ -31,8 +31,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController(text: kDebugMode ? "boulou@yopmail.com" : "");
+  TextEditingController passwordController = TextEditingController(text: kDebugMode ? "12345678" : "");
   bool show = true;
   bool rememberMe = true;
   bool isLoading = false;
@@ -41,10 +41,6 @@ class _LoginState extends State<Login> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (kDebugMode) {
-      emailController.text = "dharmaniz1.alok@gmail.com";
-      passwordController.text = "123456";
-    }
   }
 
   @override
@@ -52,7 +48,6 @@ class _LoginState extends State<Login> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is LoggedInSuccessfullyProfileSetup) {
-
           Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const ProfileSetUp()));
         }
         if (state is LoggedInSuccessfullyAddVehicle) {
@@ -104,7 +99,8 @@ class _LoginState extends State<Login> {
                           verticalSpacer(
                             height: 30.0,
                           ),
-                          MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0, emailController, Colours.hintColor.code, true),
+                          MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0,
+                              emailController, Colours.hintColor.code, true),
                           verticalSpacer(),
                           MyEditText(
                             AppConstants.passwordHint,
@@ -123,7 +119,11 @@ class _LoginState extends State<Login> {
                               SizedBox(
                                 width: 24.0,
                                 height: 24.0,
-                                child: Checkbox(value: rememberMe, checkColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)), onChanged: _onRememberMeChanged),
+                                child: Checkbox(
+                                    value: rememberMe,
+                                    checkColor: Colors.white,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                    onChanged: _onRememberMeChanged),
                               ),
                               horizontalSpacer(
                                 width: 10.0,
@@ -189,7 +189,8 @@ class _LoginState extends State<Login> {
                                         context.read<AuthBloc>().add(
                                               RegisterEvent(),
                                             );
-                                        await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const SignUp()));
+                                        await Navigator.of(context, rootNavigator: true)
+                                            .push(CupertinoPageRoute(builder: (context) => const SignUp()));
                                         context.read<AuthBloc>().add(
                                               LogInEvent(),
                                             );

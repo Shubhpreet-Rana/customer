@@ -66,8 +66,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         confirmPassword: event.confirmPassword,
       );
       if (res['status'] == 1) {
+        await PreferenceUtils.setString(AppConstants.userInfo, json.encode(res)).then((value) {
         emit(RegisteredSuccessfully());
-        emit(NotLoggedIn());
+        emit(NotLoggedIn());  });
       } else {
         emit(RegisteredFailed(res['message']));
         emit(NotRegistered());
