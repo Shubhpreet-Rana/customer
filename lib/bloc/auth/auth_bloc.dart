@@ -18,6 +18,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<RegisterRequested>(_registerUser);
     on<RegisterEvent>((event, emit) => emit(NotRegistered()));
     on<LogInEvent>((event, emit) => emit(NotLoggedIn()));
+    on<OtpRequested>(_sendOtp);
+    on<RecoverEmailEvent>((event, emit) => emit(ForgotPasswordOtpNotSend()));
     on<LogOutRequested>(  _logOutUser);
   }
 
@@ -76,6 +78,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       emit(RegisteredFailed(e.toString()));
       emit(NotRegistered());
+    }
+  }
+
+  FutureOr<void> _sendOtp(
+      OtpRequested event,
+      Emitter<AuthState> emit,
+      ) async {
+    emit(Loading());
+    try {
+      final res = await authRepository.sendOtpToEmail(
+        email: event.email,
+      );
+      if (res['status'] == 1) {
+        emit(ForgotPasswordOtpSent(res['message']));
+        emit(ForgotPasswordOtpNotVerified());
+      } else {
+        emit(ForgotPasswordOtpSendFailed(res['message']));
+        emit(ForgotPasswordOtpNotSend());
+      }
+    } catch (e) {
+      emit(ForgotPasswordOtpSendFailed(e.toString()));
+      emit(ForgotPasswordOtpNotSend());
     }
   }
 

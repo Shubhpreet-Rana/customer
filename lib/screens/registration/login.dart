@@ -157,6 +157,9 @@ class _LoginState extends State<Login> {
                                     style: AppStyles.textBlue,
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
+                                        context.read<AuthBloc>().add(
+                                          RecoverEmailEvent(),
+                                        );
                                         Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
                                           builder: (context) => const ForgotPassword(),
                                         ));

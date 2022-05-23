@@ -88,4 +88,28 @@ class AuthRepository {
     }
     return completer.future;
   }
+  Future<Map<String, dynamic>> sendOtpToEmail({
+    required String email,
+  }) async {
+    Completer<Map<String, dynamic>> completer = Completer<Map<String, dynamic>>();
+    try {
+      final response = await netWorkLocator.dio.post('${EndPoints.baseUrl}${EndPoints.forgotPassword}', data: {
+        'email': email,
+      });
+      if (response.statusCode != 200) {
+        throw Exception('Failed to sign up');
+      }
+      completer.complete(response.data);
+    } catch (e) {
+      Map<String, dynamic> error = {"message": "failed", "status": 0};
+      if (e is DioError) {
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        error.update("message", (value) => errorMessage);
+        completer.complete(error);
+      } else {
+        completer.complete(error);
+      }
+    }
+    return completer.future;
+  }
 }

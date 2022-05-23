@@ -24,4 +24,12 @@ class RegisterRequested extends AuthEvent {
   final String confirmPassword;
 }
 
+class RecoverEmailEvent extends AuthEvent {}
+
+class OtpRequested extends AuthEvent {
+  OtpRequested(this.email);
+
+  final String email;
+}
+
 class LogOutRequested extends AuthEvent {}

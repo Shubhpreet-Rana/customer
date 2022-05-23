@@ -52,7 +52,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
     return BlocListener<CreateProfileBloc, CreateProfileState>(
       listener: (context, state) {
         if (state is CreatedSuccessfully) {
-          CommonMethods().showTopFlash(context: context, message: state.success, title: "success!", titleColor: Colors.green);
+          CommonMethods().showTopFlash(context: context, message: state.success,isSuccess: true);
           Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
         }
         if (state is CreatedFailed) {
@@ -92,6 +92,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                           radius: 50.0,
                           isCamera: true,
                           imagePath: selectedImage == null ? "" : selectedImage!.path,
+                          isFile: true,
                           onSelect: () async {
                             selectedImage = await CommonMethods().showAlertDialog(context);
                             if (mounted) setState(() {});

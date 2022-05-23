@@ -8,11 +8,14 @@ class AppConstants {
   static String emailHint = 'Email Address';
   static String emailHint1 = 'Enter Registered Email';
   static String passwordHint = 'Password';
+  static String passwordHint1 = 'New Password';
   static String stayLogin = 'Keep me logged in.';
   static String forgotPwd = 'Forgot Password?';
   static String forgotPwd1 = 'Forgot Password';
   static String recover = 'Recover here';
   static String verifyHint = 'VERIFY';
+  static String otpText = 'Send OTP';
+  static String otpText1 = 'Enter OTP';
   static String fb = 'LOGIN WITH FACEBOOK';
   static String google = 'LOGIN WITH GOOGLE';
   static String dontAccount = "Don't have an account?";

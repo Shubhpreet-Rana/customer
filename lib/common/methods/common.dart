@@ -39,7 +39,7 @@ class CommonMethods {
       String title = "Error!",
       required String message,
       String btnText = "DISMISS",
-      Color titleColor = Colors.red,
+        bool isSuccess = false,
       FlashBehavior style = FlashBehavior.floating}) {
     showFlash(
       context: context,
@@ -57,7 +57,7 @@ class CommonMethods {
           behavior: style,
           position: FlashPosition.top,
           child: FlashBar(
-            title: Text(title, style: TextStyle(color: titleColor, fontSize: 20.0)),
+            title: Text(isSuccess ? "success!":title, style: TextStyle(color: isSuccess ? Colors.green : Colors.red, fontSize: 20.0)),
             content: Text(message, style: const TextStyle(color: Colors.black, fontSize: 16.0)),
             showProgressIndicator: false,
             primaryAction: TextButton(
