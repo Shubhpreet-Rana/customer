@@ -6,4 +6,5 @@ class EndPoints {
   static const String login = '/boulou/public/api/login';
   static const String register = '/boulou/public/api/register';
   static const String profile = '/boulou/public/api/profile';
+  static const String addVehicle = '/boulou/public/api/addvehicle';
 }

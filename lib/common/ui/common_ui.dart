@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app/common/colors.dart';
 import 'package:app/common/constants.dart';
 import 'package:flutter/material.dart';
@@ -71,26 +73,30 @@ Widget headingText({String text = ""}) => Text(
       style: AppStyles.blackText,
     );
 
-Widget grayContainer(
-        {String text = '',
-        required Widget icon,
-        double paddingHorizontal = 10.0,
-        double paddingVertical = 10.0,
-        double bRadius = 10.0}) =>
+Widget grayContainer({
+  String text = '',
+  required Widget icon,
+  double paddingHorizontal = 10.0,
+  double paddingVertical = 10.0,
+  double bRadius = 10.0,
+  Widget? child,
+}) =>
     Container(
-      padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
+      padding:
+          EdgeInsets.symmetric(horizontal: child != null ? 0 : paddingHorizontal, vertical: child != null ? 0 : paddingVertical),
       decoration: BoxDecoration(color: Colours.lightGray.code, borderRadius: BorderRadius.circular(bRadius)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          icon,
-          Text(
-            text,
-            style: AppStyles.lightText,
-          )
-        ],
-      ),
+      child: child ??
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              icon,
+              Text(
+                text,
+                style: AppStyles.lightText,
+              )
+            ],
+          ),
     );
 
 Widget searchBox(

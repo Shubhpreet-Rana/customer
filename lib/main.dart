@@ -1,4 +1,6 @@
+import 'package:app/bloc/vehicle/add/add_vehicle_bloc.dart';
 import 'package:app/common/methods/common.dart';
+import 'package:app/data/repository/add_vehicle_repository.dart';
 import 'package:app/data/repository/profile_repository.dart';
 import 'package:app/screens/registration/profile_setup.dart';
 import 'package:app/screens/splash.dart';
@@ -36,6 +38,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<ProfileRepository>(
           create: (context) => ProfileRepository(),
         ),
+        RepositoryProvider<AddVehicleRepository>(
+          create: (context) => AddVehicleRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -49,6 +54,11 @@ class MyApp extends StatelessWidget {
               profileRepository: RepositoryProvider.of<ProfileRepository>(context),
             ),
           ),
+          BlocProvider<AddVehicleBloc>(
+            create: (context) => AddVehicleBloc(
+              addVehicleRepository: RepositoryProvider.of<AddVehicleRepository>(context),
+            ),
+          ),
         ],
         child: MaterialApp(
           navigatorKey: locator<NavigationService>().navigatorKey,
@@ -57,7 +67,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           home: const Splash(),
-         // home: const ProfileSetUp(),
+          // home: const ProfileSetUp(),
         ),
       ),
     );

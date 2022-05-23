@@ -39,7 +39,7 @@ class CommonMethods {
       String title = "Error!",
       required String message,
       String btnText = "DISMISS",
-        bool isSuccess = false,
+      bool isSuccess = false,
       FlashBehavior style = FlashBehavior.floating}) {
     showFlash(
       context: context,
@@ -57,7 +57,8 @@ class CommonMethods {
           behavior: style,
           position: FlashPosition.top,
           child: FlashBar(
-            title: Text(isSuccess ? "success!":title, style: TextStyle(color: isSuccess ? Colors.green : Colors.red, fontSize: 20.0)),
+            title: Text(isSuccess ? "success!" : title,
+                style: TextStyle(color: isSuccess ? Colors.green : Colors.red, fontSize: 20.0)),
             content: Text(message, style: const TextStyle(color: Colors.black, fontSize: 16.0)),
             showProgressIndicator: false,
             primaryAction: TextButton(
@@ -70,7 +71,7 @@ class CommonMethods {
     );
   }
 
-  Future<XFile?> showAlertDialog(BuildContext context) async {
+  Future<XFile?> showAlertDialog(BuildContext context, {int imageQuality = 85}) async {
     XFile? selectedImage;
     await showDialog(
         context: context,
@@ -81,7 +82,7 @@ class CommonMethods {
                 CupertinoDialogAction(
                     isDefaultAction: true,
                     onPressed: () async {
-                      selectedImage = await pickOrCaptureImage(false);
+                      selectedImage = await pickOrCaptureImage(false, imageQuality: imageQuality);
                       Navigator.pop(context);
                     },
                     child: const Text("Gallery")),
@@ -89,7 +90,7 @@ class CommonMethods {
                     textStyle: const TextStyle(color: Colors.red),
                     isDefaultAction: true,
                     onPressed: () async {
-                      selectedImage = await pickOrCaptureImage(true);
+                      selectedImage = await pickOrCaptureImage(true, imageQuality: imageQuality);
                       Navigator.pop(context);
                     },
                     child: const Text("Camera")),
@@ -98,10 +99,10 @@ class CommonMethods {
     return selectedImage;
   }
 
-  Future<XFile?> pickOrCaptureImage(bool isCamera) async {
+  Future<XFile?> pickOrCaptureImage(bool isCamera, {int imageQuality = 85}) async {
     // Pick an image
     if (!isCamera) {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: imageQuality);
       return image;
     }
     // Capture a photo

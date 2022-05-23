@@ -53,7 +53,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
       listener: (context, state) {
         if (state is CreatedSuccessfully) {
           CommonMethods().showTopFlash(context: context, message: state.success,isSuccess: true);
-          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
+          Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
         }
         if (state is CreatedFailed) {
           CommonMethods().showTopFlash(context: context, message: state.error);
