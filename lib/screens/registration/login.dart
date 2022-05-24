@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/profile/create/create_profile_bloc.dart' as profile;
+import '../../bloc/profile/view/profile_bloc.dart';
 import '../../common/assets.dart';
 import '../../common/colors.dart';
 import '../../common/methods/custom_storage.dart';
@@ -31,7 +32,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController emailController = TextEditingController(text: kDebugMode ? "sahil.vehiclemarketplace@gmail.com" : "");
+  TextEditingController emailController = TextEditingController(text: kDebugMode ? "gursewaksingh@gmail.com" : "");
   TextEditingController passwordController = TextEditingController(text: kDebugMode ? "12345678" : "");
   bool show = true;
   bool rememberMe = true;
@@ -51,11 +52,12 @@ class _LoginState extends State<Login> {
           Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const ProfileSetUp()));
         }
         if (state is LoggedInSuccessfullyAddVehicle) {
-          Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
+          Navigator.of(context, rootNavigator: true)
+              .push(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
         }
         if (state is LoggedInSuccessfully) {
           PreferenceUtils.setBool(AppConstants.rememberMe, rememberMe);
-          // context.read<HomeBloc>().add(LoadUserEvent());
+          context.read<ProfileBloc>().add(ProfileFetchEvent());
           Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const HomeTabs()));
         }
         if (state is LoggedInFailed) {
@@ -158,8 +160,8 @@ class _LoginState extends State<Login> {
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         context.read<AuthBloc>().add(
-                                          RecoverEmailEvent(),
-                                        );
+                                              RecoverEmailEvent(),
+                                            );
                                         Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
                                           builder: (context) => const ForgotPassword(),
                                         ));

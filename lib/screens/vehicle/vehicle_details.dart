@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/bloc/profile/view/profile_bloc.dart';
 import 'package:app/bloc/vehicle/add/add_vehicle_bloc.dart';
 import 'package:app/common/styles/styles.dart';
 import 'package:flutter/cupertino.dart';
@@ -101,6 +102,7 @@ class _VehicleDetailsState extends State<VehicleDetails> {
       listener: (context, state) {
         if (state is AddedSuccessfully) {
           CommonMethods().showTopFlash(context: context, message: state.success, isSuccess: true);
+          context.read<ProfileBloc>().add(ProfileFetchEvent());
           Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const HomeTabs()));
         }
         if (state is AddVehicleFailed) {

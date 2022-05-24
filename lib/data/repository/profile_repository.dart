@@ -8,6 +8,7 @@ import 'package:path/path.dart';
 import '../../common/constants.dart';
 import '../../common/methods/custom_storage.dart';
 import '../../common/services/getit.dart';
+import '../../model/User.dart';
 import '../endpoints/endpoints.dart';
 import '../network/dio_client.dart';
 import '../network/exceptions.dart';
@@ -72,34 +73,28 @@ class ProfileRepository {
     return completer.future;
   }
 
-/* Future<Map<String, dynamic>> logIn({
-    required String email,
-    required String password,
-  }) async {
-    Completer<Map<String, dynamic>> completer = Completer<Map<String, dynamic>>();
+  Future<User?> getUserProfileDetails() async {
+    var userInfo = PreferenceUtils.getUserInfo(AppConstants.userInfo);
+    String token = userInfo['token'];
     try {
-      final response = await netWorkLocator.dio.post(
-        '${EndPoints.baseUrl}${EndPoints.login}',
-        data: {
-          'email': email,
-          'password': password,
-        },
+      Map<String, String> headers = {
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
+      };
+      final response = await netWorkLocator.dio.get(
+        '${EndPoints.baseUrl}${EndPoints.getProfile}',
+        options: Options(
+          headers: headers,
+        ),
       );
-      if (response.statusCode != 200) {
-        throw Exception('Failed to sign in');
-      }
-
-      completer.complete(response.data);
+      return User.fromJson(response.data);
     } catch (e) {
-      Map<String, dynamic> error = {"message": "failed"};
+      Map<String, dynamic> error = {"message": "failed", "status": 0};
       if (e is DioError) {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         error.update("message", (value) => errorMessage);
-        completer.complete(error);
-      } else {
-        completer.complete(error);
-      }
+      } else {}
+      return null;
     }
-    return completer.future;
-  }*/
+  }
 }

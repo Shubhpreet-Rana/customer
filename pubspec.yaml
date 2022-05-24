@@ -58,6 +58,7 @@ dependencies:
   http_parser: ^4.0.1
   path:
   place_picker: ^0.9.20-nullsafety
+  extended_image:
 
 dev_dependencies:
   flutter_test:

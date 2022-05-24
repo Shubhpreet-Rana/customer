@@ -28,7 +28,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   TextEditingController nameController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
-  TextEditingController emailController = TextEditingController(text: kDebugMode ? "boulou@yopmail.com" : "");
+  TextEditingController emailController = TextEditingController(text: kDebugMode ? "gursewaksingh@gmail.com" : "");
   TextEditingController passwordController = TextEditingController(text: kDebugMode ? "12345678" : "");
   bool show = true;
   bool rememberMe = false;

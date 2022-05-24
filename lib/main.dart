@@ -10,6 +10,7 @@ import 'package:get_it/get_it.dart';
 
 import 'bloc/auth/auth_bloc.dart';
 import 'bloc/profile/create/create_profile_bloc.dart';
+import 'bloc/profile/view/profile_bloc.dart';
 import 'common/constants.dart';
 import 'common/methods/custom_storage.dart';
 import 'common/services/NavigationService.dart';
@@ -57,6 +58,11 @@ class MyApp extends StatelessWidget {
           BlocProvider<AddVehicleBloc>(
             create: (context) => AddVehicleBloc(
               addVehicleRepository: RepositoryProvider.of<AddVehicleRepository>(context),
+            ),
+          ),
+          BlocProvider<ProfileBloc>(
+            create: (context) => ProfileBloc(
+              profileRepository: RepositoryProvider.of<ProfileRepository>(context),
             ),
           ),
         ],
