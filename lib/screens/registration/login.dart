@@ -31,7 +31,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController emailController = TextEditingController(text: kDebugMode ? "mytest@gmail.com" : "");
+  TextEditingController emailController = TextEditingController(text: kDebugMode ? "sahil.vehiclemarketplace@gmail.com" : "");
   TextEditingController passwordController = TextEditingController(text: kDebugMode ? "12345678" : "");
   bool show = true;
   bool rememberMe = true;

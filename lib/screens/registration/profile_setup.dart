@@ -6,17 +6,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../bloc/profile/create/create_profile_bloc.dart';
 import '../../common/colors.dart';
 import '../../common/constants.dart';
+import '../../common/location_util.dart';
 import '../../common/methods/common.dart';
 import '../../common/ui/common_ui.dart';
 import '../../common/ui/drop_down.dart';
 import '../../common/ui/edit_text.dart';
 import '../../common/ui/headers.dart';
 import '../vehicle/vehicle_details.dart';
+import 'package:place_picker/place_picker.dart';
 
 class ProfileSetUp extends StatefulWidget {
   final bool fromEdit;
@@ -52,8 +55,9 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
     return BlocListener<CreateProfileBloc, CreateProfileState>(
       listener: (context, state) {
         if (state is CreatedSuccessfully) {
-          CommonMethods().showTopFlash(context: context, message: state.success,isSuccess: true);
-          Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
+          CommonMethods().showTopFlash(context: context, message: state.success, isSuccess: true);
+          Navigator.of(context, rootNavigator: true)
+              .pushReplacement(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
         }
         if (state is CreatedFailed) {
           CommonMethods().showTopFlash(context: context, message: state.error);
@@ -151,9 +155,32 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                           Colours.hintColor.code,
                           true,
                           isSuffix: true,
-                          suffixIcon: Icon(
-                            Icons.location_pin,
-                            color: Colours.blue.code,
+                          suffixIcon: GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () async {
+                              try {
+                                Position? position = await LocationUtil.getLocation();
+                                if (position != null) {
+                                  LatLng latLng = LatLng(position.latitude, position.longitude);
+                                  //void showPlacePicker() async {
+                                    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => PlacePicker(
+                                              "AIzaSyDwRUHAaH9s2UWjuSZ6QPXOVFtz9gYE7wU",
+                                              displayLocation: latLng,
+                                            )));
+
+                                    // Handle the result in your way
+                                    print(result);
+                                 // }
+                                }
+                              } catch (e) {
+                                throw e.toString();
+                              }
+                            },
+                            child: Icon(
+                              Icons.location_pin,
+                              color: Colours.blue.code,
+                            ),
                           ),
                         ),
                         verticalSpacer(),

@@ -32,4 +32,14 @@ class OtpRequested extends AuthEvent {
   final String email;
 }
 
+class ResetPasswordEvent extends AuthEvent {}
+
+class ResetPasswordRequested extends AuthEvent {
+  ResetPasswordRequested(this.email, this.otp, this.password);
+
+  final String email;
+  final String otp;
+  final String password;
+}
+
 class LogOutRequested extends AuthEvent {}

@@ -20,7 +20,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LogInEvent>((event, emit) => emit(NotLoggedIn()));
     on<OtpRequested>(_sendOtp);
     on<RecoverEmailEvent>((event, emit) => emit(ForgotPasswordOtpNotSend()));
-    on<LogOutRequested>(  _logOutUser);
+    on<ResetPasswordRequested>(_resetPassword);
+    on<ResetPasswordEvent>((event, emit) => emit(ForgotPasswordOtpNotVerified()));
+    on<LogOutRequested>(_logOutUser);
   }
 
   final AuthRepository authRepository;
@@ -69,8 +71,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       if (res['status'] == 1) {
         await PreferenceUtils.setString(AppConstants.userInfo, json.encode(res)).then((value) {
-        emit(RegisteredSuccessfully());
-        emit(NotLoggedIn());  });
+          emit(RegisteredSuccessfully());
+          emit(NotLoggedIn());
+        });
       } else {
         emit(RegisteredFailed(res['message']));
         emit(NotRegistered());
@@ -82,9 +85,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _sendOtp(
-      OtpRequested event,
-      Emitter<AuthState> emit,
-      ) async {
+    OtpRequested event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(Loading());
     try {
       final res = await authRepository.sendOtpToEmail(
@@ -100,6 +103,29 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       emit(ForgotPasswordOtpSendFailed(e.toString()));
       emit(ForgotPasswordOtpNotSend());
+    }
+  }
+
+  FutureOr<void> _resetPassword(
+    ResetPasswordRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(Loading());
+    try {
+      final res = await authRepository.resetPassword(
+        email: event.email,
+        otp: event.otp,
+        password: event.password,
+      );
+      if (res['status'] == 1) {
+        emit(ForgotPasswordOtpVerified(res['message']));
+      } else {
+        emit(ForgotPasswordOtpVerificationFailed(res['message']));
+        emit(ForgotPasswordOtpNotVerified());
+      }
+    } catch (e) {
+      emit(ForgotPasswordOtpVerificationFailed(e.toString()));
+      emit(ForgotPasswordOtpNotVerified());
     }
   }
 

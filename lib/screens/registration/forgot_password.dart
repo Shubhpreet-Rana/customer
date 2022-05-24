@@ -37,15 +37,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        /*if (state is RegisteredSuccessfully) {
-          Navigator.of(context, rootNavigator: true)
-              .pushReplacement(CupertinoPageRoute(builder: (context) => const ProfileSetUp()));
-        }*/
         if (state is ForgotPasswordOtpSent) {
           CommonMethods().showTopFlash(context: context, message: state.message, isSuccess: true);
         }
         if (state is ForgotPasswordOtpSendFailed) {
           CommonMethods().showTopFlash(context: context, message: state.error);
+        }
+        if (state is ForgotPasswordOtpVerificationFailed) {
+          CommonMethods().showTopFlash(context: context, message: state.error);
+        }
+        if (state is ForgotPasswordOtpVerified) {
+          CommonMethods().showTopFlash(context: context, message: state.message, isSuccess: true);
+          Navigator.of(context).pop();
         }
       },
       child: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
@@ -100,7 +103,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 verticalSpacer(),
                                 MyEditText(
                                   AppConstants.otpText1,
-                                  true,
+                                  false,
                                   TextInputType.number,
                                   TextCapitalization.none,
                                   10.0,
@@ -144,7 +147,19 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       CommonMethods().showTopFlash(context: context, message: "Invalid email.");
       return;
     }
-    if (state is ForgotPasswordOtpNotSend) _requestOtp(context);
+    if (state is ForgotPasswordOtpNotSend) {
+      _requestOtp(context);
+    } else {
+      if (passwordController.text.length < 6) {
+        CommonMethods().showTopFlash(context: context, message: "Enter minimum 6 characters for password");
+        return;
+      }
+      if (otpController.text == "") {
+        CommonMethods().showTopFlash(context: context, message: "OTP is required.");
+        return;
+      }
+      _verifyOtp(context);
+    }
   }
 
   void _requestOtp(BuildContext context) {
@@ -152,6 +167,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       OtpRequested(
         emailController.text,
       ),
+    );
+  }
+
+  void _verifyOtp(BuildContext context) {
+    BlocProvider.of<AuthBloc>(context).add(
+      ResetPasswordRequested(emailController.text, otpController.text.trim(), passwordController.text),
     );
   }
 }
