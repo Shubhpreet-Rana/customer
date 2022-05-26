@@ -9,4 +9,5 @@ class EndPoints {
   static const String profile = '/boulou/public/api/profile';
   static const String addVehicle = '/boulou/public/api/addvehicle';
   static const String getProfile = '/boulou/public/api/getprofile';
+  static const String getVehicle = '/boulou/public/api/vehicle';
 }

@@ -69,6 +69,7 @@ class AuthRepository {
         data: {
           'email': email,
           'password': password,
+          'user_type': 2,
         },
       );
       if (response.statusCode != 200) {

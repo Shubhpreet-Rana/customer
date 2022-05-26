@@ -57,8 +57,8 @@ dependencies:
   mime: ^1.0.2
   http_parser: ^4.0.1
   path:
-  place_picker: ^0.9.20-nullsafety
   extended_image:
+  geocoding:
 
 dev_dependencies:
   flutter_test:

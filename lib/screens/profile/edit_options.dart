@@ -9,6 +9,7 @@ import '../../common/ui/common_ui.dart';
 import '../../common/ui/headers.dart';
 import '../registration/profile_setup.dart';
 import '../registration/signup.dart';
+import '../vehicle/edit_vehicle.dart';
 import '../vehicle/vehicle_details.dart';
 
 class EditOptions extends StatefulWidget {
@@ -52,8 +53,7 @@ class _EditOptionsState extends State<EditOptions> {
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-                            builder: (context) => const VehicleDetails(
-                                  fromEdit: true,
+                            builder: (context) => const EditVehicle(
                                 )));
                       },
                       child: appButton(bkColor: Colours.blue.code, text: AppConstants.myCarDetails, height: 50.0)),

@@ -20,9 +20,7 @@ import '../../common/ui/headers.dart';
 import '../home/home_tabs.dart';
 
 class VehicleDetails extends StatefulWidget {
-  final bool fromEdit;
-
-  const VehicleDetails({Key? key, this.fromEdit = false}) : super(key: key);
+  const VehicleDetails({Key? key}) : super(key: key);
 
   @override
   State<VehicleDetails> createState() => _VehicleDetailsState();
@@ -115,10 +113,7 @@ class _VehicleDetailsState extends State<VehicleDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SafeArea(
-                    bottom: false,
-                    child: AppHeaders().extendedHeader(
-                        text: widget.fromEdit ? AppConstants.editProfile : AppConstants.vehicle, context: context)),
+                SafeArea(bottom: false, child: AppHeaders().extendedHeader(text: AppConstants.vehicle, context: context)),
                 verticalSpacer(
                   height: 10.0,
                 ),
@@ -448,15 +443,9 @@ class _VehicleDetailsState extends State<VehicleDetails> {
                             : GestureDetector(
                                 behavior: HitTestBehavior.translucent,
                                 onTap: () {
-                                  if (widget.fromEdit) {
-                                    Navigator.of(context).pop();
-                                  } else {
-                                    validate();
-                                  }
+                                  validate();
                                 },
-                                child: appButton(
-                                    bkColor: Colours.blue.code,
-                                    text: widget.fromEdit ? AppConstants.update : AppConstants.saveText)),
+                                child: appButton(bkColor: Colours.blue.code, text: AppConstants.saveText)),
                         verticalSpacer(),
                       ],
                     ),
@@ -614,9 +603,9 @@ class Car {
   String price;
   String dateOfService;
   String description;
-  String image1;
-  String image2;
-  String image3;
+  String? image1;
+  String? image2;
+  String? image3;
 
   Car(this.brand, this.model, this.engine, this.color, this.mileage, this.price, this.dateOfService, this.description,
       this.image1, this.image2, this.image3);

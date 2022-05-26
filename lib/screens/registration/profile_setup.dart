@@ -7,8 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../bloc/profile/create/create_profile_bloc.dart';
 import '../../common/colors.dart';
 import '../../common/constants.dart';
@@ -18,8 +18,8 @@ import '../../common/ui/common_ui.dart';
 import '../../common/ui/drop_down.dart';
 import '../../common/ui/edit_text.dart';
 import '../../common/ui/headers.dart';
+import '../maps/pick_location.dart';
 import '../vehicle/vehicle_details.dart';
-import 'package:place_picker/place_picker.dart';
 
 class ProfileSetUp extends StatefulWidget {
   final bool fromEdit;
@@ -43,6 +43,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
   String? selectedPaymentOption;
   bool showAddCard = false;
   XFile? selectedImage;
+  Map<String, dynamic> locationResult = {};
 
   @override
   void initState() {
@@ -163,15 +164,17 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                                 if (position != null) {
                                   LatLng latLng = LatLng(position.latitude, position.longitude);
                                   //void showPlacePicker() async {
-                                    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => PlacePicker(
-                                              "AIzaSyDwRUHAaH9s2UWjuSZ6QPXOVFtz9gYE7wU",
-                                              displayLocation: latLng,
-                                            )));
+                                  Map<String, dynamic>? result = await Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => PlacePicker(
+                                            displayLocation: latLng,
+                                          )));
 
-                                    // Handle the result in your way
-                                    print(result);
-                                 // }
+                                  if (mounted && result != null && result.isNotEmpty) {
+                                    setState(() {
+                                      locationResult = result;
+                                      addressController.text = result['address'];
+                                    });
+                                  }
                                 }
                               } catch (e) {
                                 throw e.toString();

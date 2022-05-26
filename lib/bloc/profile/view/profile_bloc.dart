@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../data/repository/profile_repository.dart';
-import '../../../model/User.dart';
+import '../../../model/user.dart';
 
 part 'profile_event.dart';
 

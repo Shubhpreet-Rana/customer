@@ -6,8 +6,10 @@ import 'package:app/screens/home/pages/home.dart';
 import 'package:app/screens/home/pages/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../bloc/vehicle/view/vehicle_bloc.dart';
 import '../../common/constants.dart';
 import '../../common/ui/background.dart';
 import '../../common/ui/common_ui.dart';
@@ -36,6 +38,7 @@ class _HomeTabsState extends State<HomeTabs> with TickerProviderStateMixin<HomeT
 
   @override
   Widget build(BuildContext context) {
+    context.read<VehicleBloc>().add(VehicleFetchEvent());
     return Scaffold(
       extendBody: true,
       body: IndexedStack(

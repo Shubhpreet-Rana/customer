@@ -219,6 +219,20 @@
             </list>
           </value>
         </entry>
+        <entry key="geocoding">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/geocoding-2.0.4/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="geocoding_platform_interface">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/geocoding_platform_interface-2.0.1/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="geolocator">
           <value>
             <list>
@@ -492,13 +506,6 @@
             </list>
           </value>
         </entry>
-        <entry key="place_picker">
-          <value>
-            <list>
-              <option value="$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/place_picker-0.9.20-nullsafety/lib" />
-            </list>
-          </value>
-        </entry>
         <entry key="platform">
           <value>
             <list>
@@ -712,6 +719,8 @@
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_rating_bar-4.0.0/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_svg-1.0.3/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_swipe_action_cell-2.2.0/lib" />
+      <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/geocoding-2.0.4/lib" />
+      <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/geocoding_platform_interface-2.0.1/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-8.2.0/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_android-3.1.6/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_apple-2.1.2/lib" />
@@ -751,7 +760,6 @@
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.3/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.5/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/petitparser-4.4.0/lib" />
-      <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/place_picker-0.9.20-nullsafety/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.1.0/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.1.2/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/process-4.2.4/lib" />

@@ -17,7 +17,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
     on<VehicleEvent>((event, emit) => emit(NotAdded()));
   }
 
-  final AddVehicleRepository addVehicleRepository;
+  final VehicleRepository addVehicleRepository;
 
   Future<FutureOr<void>> _addVehicle(
     AddVehicleRequested event,

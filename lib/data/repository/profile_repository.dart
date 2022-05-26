@@ -8,7 +8,7 @@ import 'package:path/path.dart';
 import '../../common/constants.dart';
 import '../../common/methods/custom_storage.dart';
 import '../../common/services/getit.dart';
-import '../../model/User.dart';
+import '../../model/user.dart';
 import '../endpoints/endpoints.dart';
 import '../network/dio_client.dart';
 import '../network/exceptions.dart';
