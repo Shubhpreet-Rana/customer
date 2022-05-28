@@ -24,3 +24,23 @@ class VehicleError extends VehicleState {
     required this.message,
   });
 }
+
+class LoadingEditUpdate extends VehicleState {
+  List<Object?> get props1 => [];
+}
+class EditedSuccessfully extends VehicleState {
+  final String success;
+  const EditedSuccessfully(this.success);
+  List<Object?> get props1 => [];
+}
+
+class NotEdited extends VehicleState {
+  List<Object?> get props1 => [];
+}
+
+class EditVehicleFailed extends VehicleState {
+  final String error;
+
+  const EditVehicleFailed(this.error);
+  List<Object?> get props1 => [error];
+}

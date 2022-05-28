@@ -8,3 +8,9 @@ abstract class VehicleEvent extends Equatable {
 }
 
 class VehicleFetchEvent extends VehicleEvent {}
+class VehicleEditEvent extends VehicleEvent {}
+class EditVehicleRequested extends VehicleEvent {
+  const EditVehicleRequested(this.cars);
+
+  final List<EditCar> cars;
+}
