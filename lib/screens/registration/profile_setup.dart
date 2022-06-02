@@ -9,7 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:place_picker/place_picker.dart';
 import '../../bloc/profile/create/create_profile_bloc.dart';
+import '../../bloc/profile/view/profile_bloc.dart';
 import '../../common/colors.dart';
 import '../../common/constants.dart';
 import '../../common/location_util.dart';
@@ -40,15 +42,29 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
   TextEditingController cardCvvController = TextEditingController();
   TextEditingController cardNameController = TextEditingController();
   int selectedGender = 1;
+  String genderText = AppConstants.genderItems[0];
   String? selectedPaymentOption;
   bool showAddCard = false;
   XFile? selectedImage;
-  Map<String, dynamic> locationResult = {};
+  String? imageUrl;
+  double locationLat = 0.0;
+  double locationLang = 0.0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    var state = context.read<ProfileBloc>().state;
+    if (state is ProfileLoaded) {
+      fNameController.text = state.userProfile.user!.firstName ?? "";
+      lNameController.text = state.userProfile.user!.lastName ?? "";
+      mobileController.text = state.userProfile.user!.mobile ?? "";
+      addressController.text = state.userProfile.user!.address ?? "";
+      genderText = state.userProfile.user!.getGenderText;
+      imageUrl = state.userProfile.user!.userImage;
+      locationLat = double.tryParse(state.userProfile.user!.addressLat!) ?? 0.0;
+      locationLang = double.tryParse(state.userProfile.user!.addressLong!) ?? 0.0;
+    }
   }
 
   @override
@@ -96,8 +112,13 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                         Avatar(
                           radius: 50.0,
                           isCamera: true,
-                          imagePath: selectedImage == null ? "" : selectedImage!.path,
-                          isFile: true,
+                          imagePath: widget.fromEdit && selectedImage == null
+                              ? imageUrl!
+                              : selectedImage == null
+                                  ? ""
+                                  : selectedImage!.path,
+                          isFile: selectedImage != null ? true : false,
+                          fromUrl: widget.fromEdit && selectedImage == null ? true : false,
                           onSelect: () async {
                             selectedImage = await CommonMethods().showAlertDialog(context);
                             if (mounted) setState(() {});
@@ -125,7 +146,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                         AppDropdown(
                           bgColor: Colours.blue.code,
                           items: AppConstants.genderItems,
-                          selectedItem: AppConstants.genderItems[0],
+                          selectedItem: genderText,
                           onChange: (item) {
                             if (item == AppConstants.genderItems[0]) {
                               selectedGender = 1;
@@ -162,7 +183,22 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                               try {
                                 Position? position = await LocationUtil.getLocation();
                                 if (position != null) {
-                                  LatLng latLng = LatLng(position.latitude, position.longitude);
+                                  LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => PlacePicker(
+                                            "AIzaSyBPFuOfeRqXLrspLP3_p7MmgL2OaLzg9nk",
+                                          )));
+
+                                  // Handle the result in your way
+                                  print(result);
+
+                                  if (mounted && result != null) {
+                                    setState(() {
+                                      locationLat = result.latLng!.latitude;
+                                      locationLang = result.latLng!.longitude;
+                                      addressController.text = result.formattedAddress!;
+                                    });
+                                  }
+                                  /*LatLng latLng = LatLng(position.latitude, position.longitude);
                                   //void showPlacePicker() async {
                                   Map<String, dynamic>? result = await Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => PlacePicker(
@@ -174,7 +210,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                                       locationResult = result;
                                       addressController.text = result['address'];
                                     });
-                                  }
+                                  }*/
                                 }
                               } catch (e) {
                                 throw e.toString();
@@ -317,7 +353,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
       return;
     }
     if (mobileController.text.length < 8) {
-      CommonMethods().showTopFlash(context: context, message: "Please enter full address.");
+      CommonMethods().showTopFlash(context: context, message: "Please enter full address or select from map.");
       return;
     }
     if (selectedImage == null) {
@@ -330,7 +366,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
   void _createUpdateProfile(BuildContext context) {
     BlocProvider.of<CreateProfileBloc>(context).add(
       CreateProfileRequested(fNameController.text, lNameController.text, mobileController.text, addressController.text,
-          selectedGender, selectedImage!.path),
+          selectedGender, selectedImage!.path, locationLat, locationLang),
     );
   }
 

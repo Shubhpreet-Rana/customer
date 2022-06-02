@@ -10,20 +10,20 @@ import '../../common/colors.dart';
 import '../../common/constants.dart';
 import '../../common/ui/common_ui.dart';
 
-class PlacePicker extends StatefulWidget {
+class PickLocation extends StatefulWidget {
   final LatLng? displayLocation;
 
-  const PlacePicker({
+  const PickLocation({
     Key? key,
     this.displayLocation,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => PlacePickerState();
+  State<StatefulWidget> createState() => PickLocationState();
 }
 
 /// Place picker state
-class PlacePickerState extends State<PlacePicker> {
+class PickLocationState extends State<PickLocation> {
   final Completer<GoogleMapController> mapController = Completer();
 
   /// Indicator for the selected location
@@ -39,7 +39,7 @@ class PlacePickerState extends State<PlacePicker> {
   LatLng? selectedLatLng;
 
   // constructor
-  PlacePickerState();
+  PickLocationState();
 
   void onMapCreated(GoogleMapController controller) {
     mapController.complete(controller);

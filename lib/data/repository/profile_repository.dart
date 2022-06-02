@@ -25,6 +25,8 @@ class ProfileRepository {
     required String address,
     required String mobile,
     required String imagePath,
+    required double lat,
+    required double lang,
   }) async {
     Completer<Map<String, dynamic>> completer = Completer<Map<String, dynamic>>();
     var userInfo = PreferenceUtils.getUserInfo(AppConstants.userInfo);
@@ -42,6 +44,8 @@ class ProfileRepository {
         'gender': "1",
         'address': address,
         'mobile': mobile,
+        'address_lat': lat,
+        'address_long': lang,
         'user_image': MultipartFile.fromFileSync(imagePath,
             contentType: MediaType(mimeTypeData![0], mimeTypeData[1]), filename: basename(imagePath)),
       });

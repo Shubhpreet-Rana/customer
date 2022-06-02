@@ -43,6 +43,8 @@ class UserClass {
     this.gender,
     this.mobile,
     this.address,
+    this.addressLat,
+    this.addressLong,
     this.emailVerifiedAt,
     this.otp,
     this.apiToken,
@@ -59,6 +61,8 @@ class UserClass {
   String? userImage;
   int? gender;
   String? mobile;
+  String? addressLat;
+  String? addressLong;
   String? address;
   DateTime? emailVerifiedAt;
   int? otp;
@@ -87,6 +91,8 @@ class UserClass {
         gender: json["gender"],
         mobile: json["mobile"],
         address: json["address"],
+        addressLat: json["address_lat"],
+        addressLong: json["address_long"],
         emailVerifiedAt: json["email_verified_at"],
         otp: json["otp"],
         apiToken: json["api_token"],
@@ -105,6 +111,8 @@ class UserClass {
         "gender": gender,
         "mobile": mobile,
         "address": address,
+        "address_lat": addressLat,
+        "address_long": addressLong,
         "email_verified_at": emailVerifiedAt,
         "otp": otp,
         "api_token": apiToken,

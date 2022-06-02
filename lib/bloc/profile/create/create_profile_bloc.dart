@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 part 'create_profile_event.dart';
+
 part 'create_profile_state.dart';
 
 class CreateProfileBloc extends Bloc<CreateEvent, CreateProfileState> {
@@ -28,7 +29,9 @@ class CreateProfileBloc extends Bloc<CreateEvent, CreateProfileState> {
           gender: event.gender,
           address: event.address,
           imagePath: event.imagePath,
-          mobile: event.mobile);
+          mobile: event.mobile,
+          lat: event.lat,
+          lang: event.lang);
       if (res['status'] == 1) {
         emit(CreatedSuccessfully(res['message']));
       } else {
