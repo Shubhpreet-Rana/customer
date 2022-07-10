@@ -137,7 +137,7 @@ class AppConstants {
   static String type = "Type";
   static String addPaymentMethod = "ADD PAYMENT METHOD";
   static String markAsCompleted = "MARK AS COMPLETED";
-  static String pickLocation = "Pick Location";
+  static String pickLocation = "Pick Lcation";
   static String dropLocation = "Drop Location";
   static String completeBooking = "Complete Booking";
   static String paymentAndE = "Payments and Earnings";

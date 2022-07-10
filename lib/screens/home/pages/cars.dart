@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:app/common/assets.dart';
+import 'package:app/model/getServiceProviderList_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart%20';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../bloc/serviceProvider/service_provider_bloc.dart';
 import '../../../common/colors.dart';
 import '../../../common/constants.dart';
 import '../../../common/methods/common.dart';
@@ -29,6 +35,8 @@ class _CarTabState extends State<CarTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    BlocProvider.of<ServiceProviderBloc>(context)
+        .add(AllServiceProviderList("", ""));
   }
 
   @override
@@ -55,7 +63,9 @@ class _CarTabState extends State<CarTab> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(child: searchBox(controller: searchController, hintText: "service")),
+                Expanded(
+                    child: searchBox(
+                        controller: searchController, hintText: "service")),
                 horizontalSpacer(),
                 Expanded(
                   child: AppDropdown(
@@ -72,30 +82,79 @@ class _CarTabState extends State<CarTab> {
               child: Container(
                   width: CommonMethods.deviceWidth(),
                   height: CommonMethods.deviceHeight(),
-                  padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 15.0),
                   decoration: BoxDecoration(
                     color: Colours.lightGray.code,
                   ),
-                  child: MediaQuery.removePadding(
-                    context: context,
-                    removeTop: true,
-                    child: ListView.builder(
-                        itemCount: 5,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          if (index % 2 == 0) {
-                            return listItem(image: Assets.service.name, serviceType: "Basic Service", joinDate: "15 Mar, 2021", services: ['AC Gas Change', 'Gasoline', 'Cooling Test'], rating: 5);
-                          } else {
-                            return listItem(image: Assets.service1.name, serviceType: "Basic Service", joinDate: "15 Mar, 2021", services: ['AC Gas Change', 'Gasoline', 'Cooling Test']);
-                          }
-                        }),
-                  )))
+                  child: BlocListener<ServiceProviderBloc,
+                          ServiceProviderState>(
+                      listener: (context, state) {},
+                      child: BlocBuilder<ServiceProviderBloc,
+                          ServiceProviderState>(builder: (context, state) {
+                        if (state is Loading) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        if (state is GetAllServiceProviderFetchSuccessfully) {
+                          var data = state.props[0];
+                          List<ProviderData> providerData =
+                              data as List<ProviderData>;
+                          return MediaQuery.removePadding(
+                            context: context,
+                            removeTop: true,
+                            child: providerData.length > 0
+                                ? ListView.builder(
+                                    itemCount: providerData.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      List<String> list = [];
+                                      var serviceData =
+                                          providerData[index].serviceCategory;
+                                      var data = serviceData!.toJson();
+                                      data.forEach((key, value) {
+                                        if(value!=null) {
+                                          list.add(key.toString());
+                                        }
+                                      });
+
+                                      return listItem(
+                                          image: providerData[index]
+                                              .profile!
+                                              .userImage!,
+                                          serviceType: providerData[index]
+                                              .profile!
+                                              .businessName!,
+                                          joinDate: "15 Mar, 2021",
+                                          services:
+                                              List.generate(list.length, (i) {
+                                            return list[i];
+                                          }),
+                                          rating: 5);
+                                    })
+                                : Container(
+                                    child: Text("No service providers"),
+                                  ),
+                          );
+                        }
+                        return Center(
+                          child: Container(
+                            child: Text("No Service Provider found"),
+                          ),
+                        );
+                      }))))
         ],
       )),
     );
   }
 
-  Widget listItem({required String image, required String serviceType, required String joinDate, required List<String> services, double rating = 4}) => Column(
+  Widget listItem(
+          {required String image,
+          required String serviceType,
+          required String joinDate,
+          required List<String> services,
+          double rating = 4}) =>
+      Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
@@ -112,12 +171,11 @@ class _CarTabState extends State<CarTab> {
                 SizedBox(
                   width: 100.0,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Image.asset(
-                      image,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: CachedNetworkImage(
+                        imageUrl: image,
+                        fit: BoxFit.fill,
+                      )),
                 ),
                 horizontalSpacer(width: 10.0),
                 Expanded(
@@ -168,7 +226,8 @@ class _CarTabState extends State<CarTab> {
           ),
           Container(
             margin: const EdgeInsets.only(bottom: 20.0, top: 2.0),
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 4.0, right: 4.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 4.0, right: 4.0),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -212,13 +271,19 @@ class _CarTabState extends State<CarTab> {
                     GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
-                          Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
-                              builder: (context) => const MyAppMap(
-                                    showPickUp: false,
-                                    showMarker: true,
-                                  )));
+                          Navigator.of(context, rootNavigator: false)
+                              .push(CupertinoPageRoute(
+                                  builder: (context) => const MyAppMap(
+                                        showPickUp: false,
+                                        showMarker: true,
+                                      )));
                         },
-                        child: rowButton(bkColor: Colours.lightWhite.code, textColor: Colours.blue.code, text: AppConstants.location, paddingHorizontal: 8.0, paddingVertical: 7.0)),
+                        child: rowButton(
+                            bkColor: Colours.lightWhite.code,
+                            textColor: Colours.blue.code,
+                            text: AppConstants.location,
+                            paddingHorizontal: 8.0,
+                            paddingVertical: 7.0)),
                     horizontalSpacer(),
                     GestureDetector(
                         behavior: HitTestBehavior.translucent,
@@ -230,9 +295,16 @@ class _CarTabState extends State<CarTab> {
                             "services": services,
                             "rating": rating,
                           };
-                          Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => ServiceDetails(item: item)));
+                          Navigator.of(context, rootNavigator: false).push(
+                              CupertinoPageRoute(
+                                  builder: (context) =>
+                                      ServiceDetails(item: item)));
                         },
-                        child: rowButton(bkColor: Colours.blue.code, text: AppConstants.bookNow, paddingHorizontal: 8.0, paddingVertical: 7.0)),
+                        child: rowButton(
+                            bkColor: Colours.blue.code,
+                            text: AppConstants.bookNow,
+                            paddingHorizontal: 8.0,
+                            paddingVertical: 7.0)),
                   ],
                 ),
               ],

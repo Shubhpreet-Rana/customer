@@ -1,7 +1,9 @@
+import 'package:app/bloc/serviceProvider/service_provider_bloc.dart';
 import 'package:app/bloc/vehicle/add/add_vehicle_bloc.dart';
 import 'package:app/common/methods/common.dart';
 import 'package:app/data/repository/add_vehicle_repository.dart';
 import 'package:app/data/repository/profile_repository.dart';
+import 'package:app/data/repository/service_provider_repository.dart';
 import 'package:app/screens/registration/profile_setup.dart';
 import 'package:app/screens/splash.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +45,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<VehicleRepository>(
           create: (context) => VehicleRepository(),
         ),
+        RepositoryProvider<ServiceProviderRepository>(
+          create: (context) => ServiceProviderRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -70,9 +75,14 @@ class MyApp extends StatelessWidget {
             create: (context) => VehicleBloc(
               vehicleRepository: RepositoryProvider.of<VehicleRepository>(context),
             ),
+          ), BlocProvider<ServiceProviderBloc>(
+            create: (context) => ServiceProviderBloc(
+              serviceProviderRepository: RepositoryProvider.of<ServiceProviderRepository>(context),
+            ),
           ),
         ],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           navigatorKey: locator<NavigationService>().navigatorKey,
           title: AppConstants.appName,
           theme: ThemeData(

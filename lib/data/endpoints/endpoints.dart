@@ -11,4 +11,6 @@ class EndPoints {
   static const String getProfile = '/boulou/public/api/getprofile';
   static const String getVehicle = '/boulou/public/api/vehicle';
   static const String editVehicle = '/boulou/public/api/editvehicle';
+  static const String getProviderList = '/boulou/public/api/serviceprovider';
+  static const String getCategoryList = '/boulou/public/api/category';
 }
