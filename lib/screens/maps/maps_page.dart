@@ -16,8 +16,9 @@ import '../../common/constants.dart';
 class MyAppMap extends StatefulWidget {
   final bool showPickUp;
   final bool showMarker;
+  final LatLng? latLng;
 
-  const MyAppMap({Key? key, this.showPickUp = true, this.showMarker = false}) : super(key: key);
+  const MyAppMap({Key? key, this.showPickUp = true, this.showMarker = false,this.latLng}) : super(key: key);
 
   @override
   State<MyAppMap> createState() => MyAppMapState();
@@ -27,7 +28,7 @@ class MyAppMapState extends State<MyAppMap> {
   final Completer<GoogleMapController> _controller = Completer();
   GoogleMapController? mapController;
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
+  CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -42,6 +43,12 @@ class MyAppMapState extends State<MyAppMap> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(widget.latLng!=null){
+      _kGooglePlex=CameraPosition(
+        target: widget.latLng!,
+        zoom: 14.4746,
+      );
+    }
     if (widget.showMarker) _add(text: "Provider Location", latitude: _kGooglePlex.target.latitude, longitude: _kGooglePlex.target.longitude);
     if (widget.showPickUp) showCurrentLocation();
   }

@@ -46,15 +46,20 @@ class ServiceProviderRepository {
   }
 
   Future<Map<String, dynamic>> getAllServiceProvider(
-      {String? categoryName, String? catid}) async {
+      {String? categoryName, String? catid,String? rating}) async {
     Completer<Map<String, dynamic>> completer =
         Completer<Map<String, dynamic>>();
     try {
       Map<String, dynamic> mapData = {};
-      if (categoryName != null && categoryName != "")
+      if (categoryName != null && categoryName != "") {
         mapData.putIfAbsent("business_name", () => categoryName);
-      if (catid != null && catid != "")
+      }
+      if (catid != null && catid != "") {
         mapData.putIfAbsent("cat_id", () => catid);
+      }
+      if (rating != null && rating != "") {
+        mapData.putIfAbsent("rating", () => rating);
+      }
       var userInfo = PreferenceUtils.getUserInfo(AppConstants.userInfo);
       String token = userInfo['token'];
       Map<String, String> headers = {

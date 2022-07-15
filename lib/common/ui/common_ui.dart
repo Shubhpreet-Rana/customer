@@ -8,15 +8,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../methods/common.dart';
 import '../styles/styles.dart';
 
-Widget appButton({required Color? bkColor, String text = '', double height = 55.0}) => Container(
-      width: CommonMethods.deviceWidth(),
-      height: height,
-      decoration: BoxDecoration(color: bkColor, borderRadius: BorderRadius.circular(10.0)),
-      child: Center(
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: AppStyles.buttonText,
+Widget appButton(
+        {required Color? bkColor, String text = '', double height = 55.0,GestureTapCallback? onTapped,}) =>
+    GestureDetector(
+      onTap:onTapped,
+      child: Container(
+        width: CommonMethods.deviceWidth(),
+        height: height,
+        decoration: BoxDecoration(
+            color: bkColor, borderRadius: BorderRadius.circular(10.0)),
+        child: Center(
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: AppStyles.buttonText,
+          ),
         ),
       ),
     );
@@ -28,21 +34,27 @@ Widget rowButton(
         double paddingVertical = 15.0,
         Color textColor = Colors.white}) =>
     Container(
-      padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
-      decoration: BoxDecoration(color: bkColor, borderRadius: BorderRadius.circular(10.0)),
+      padding: EdgeInsets.symmetric(
+          horizontal: paddingHorizontal, vertical: paddingVertical),
+      decoration: BoxDecoration(
+          color: bkColor, borderRadius: BorderRadius.circular(10.0)),
       child: Center(
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14, color: textColor, fontWeight: FontWeight.w500),
+          style: TextStyle(
+              fontSize: 14, color: textColor, fontWeight: FontWeight.w500),
         ),
       ),
     );
 
-Widget socialButton({required Color? bkColor, required String? icon, String text = ''}) => Container(
+Widget socialButton(
+        {required Color? bkColor, required String? icon, String text = ''}) =>
+    Container(
       width: CommonMethods.deviceWidth(),
       height: 55.0,
-      decoration: BoxDecoration(color: bkColor, borderRadius: BorderRadius.circular(10.0)),
+      decoration: BoxDecoration(
+          color: bkColor, borderRadius: BorderRadius.circular(10.0)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -82,9 +94,12 @@ Widget grayContainer({
   Widget? child,
 }) =>
     Container(
-      padding:
-          EdgeInsets.symmetric(horizontal: child != null ? 0 : paddingHorizontal, vertical: child != null ? 0 : paddingVertical),
-      decoration: BoxDecoration(color: Colours.lightGray.code, borderRadius: BorderRadius.circular(bRadius)),
+      padding: EdgeInsets.symmetric(
+          horizontal: child != null ? 0 : paddingHorizontal,
+          vertical: child != null ? 0 : paddingVertical),
+      decoration: BoxDecoration(
+          color: Colours.lightGray.code,
+          borderRadius: BorderRadius.circular(bRadius)),
       child: child ??
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -108,8 +123,11 @@ Widget searchBox(
         bool isPrefix = false,
         Widget? prefixIcon}) =>
     Container(
-      padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(borderRadius)),
+      padding: EdgeInsets.symmetric(
+          horizontal: paddingHorizontal, vertical: paddingVertical),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(borderRadius)),
       child: Row(
         children: [
           isPrefix
@@ -131,11 +149,11 @@ Widget searchBox(
       ),
     );
 
-Widget ratingBar({bool isSelected = false, String position = "5"}) => Container(
+Widget ratingBar({int? currentRatingIndex, int? index}) => Container(
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
       margin: const EdgeInsets.all(5.0),
       decoration: BoxDecoration(
-          color: isSelected ? Colours.blue.code : Colors.white,
+          color: currentRatingIndex == index ? Colours.blue.code : Colors.white,
           borderRadius: BorderRadius.circular(20.0),
           border: Border.all(color: Colors.black)),
       child: Row(
@@ -143,13 +161,16 @@ Widget ratingBar({bool isSelected = false, String position = "5"}) => Container(
         children: [
           Icon(
             Icons.star,
-            color: isSelected ? Colors.white : Colours.blue.code,
+            color:
+                currentRatingIndex == index ? Colors.white : Colours.blue.code,
           ),
           horizontalSpacer(width: 2.0),
           Text(
-            position.toString(),
+            "${index! + 1}",
             textAlign: TextAlign.center,
-            style: TextStyle(color: isSelected ? Colors.white : Colors.black),
+            style: TextStyle(
+                color:
+                    currentRatingIndex == index ? Colors.white : Colors.black),
           )
         ],
       ),

@@ -47,10 +47,10 @@ class ServiceProviderBloc
     Emitter<ServiceProviderState> emit,
   ) async {
     List<ProviderData>? providerData = [];
-    emit(Loading());
+    emit(CarScreenLoading());
     try {
       final res = await serviceProviderRepository.getAllServiceProvider(
-          categoryName: event.name, catid: event.catid);
+          categoryName: event.name, catid: event.catid,rating:event.rating);
       if (res['status'] == 1) {
         GetServiceProviderList getServiceProviderList =
             GetServiceProviderList.fromJson(res);

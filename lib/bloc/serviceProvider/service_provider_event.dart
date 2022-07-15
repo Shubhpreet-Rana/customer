@@ -7,11 +7,13 @@ abstract class ServiceProviderEvent extends Equatable {
 
 class GetCategoryList extends ServiceProviderEvent {
 }
-class AllServiceProviderList extends ServiceProviderEvent{
-  AllServiceProviderList(this.name, this.catid);
+
+class AllServiceProviderList extends ServiceProviderEvent {
+  AllServiceProviderList(this.name, this.catid, this.rating);
 
   final String? name;
   final String? catid;
+  final String? rating;
 }
 
 

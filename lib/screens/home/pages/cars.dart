@@ -1,18 +1,17 @@
-import 'dart:convert';
-
 import 'package:app/common/assets.dart';
+import 'package:app/common/methods/common.dart';
 import 'package:app/model/getServiceProviderList_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart%20';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../bloc/serviceProvider/service_provider_bloc.dart';
 import '../../../common/colors.dart';
 import '../../../common/constants.dart';
-import '../../../common/methods/common.dart';
 import '../../../common/styles/styles.dart';
 import '../../../common/ui/background.dart';
 import '../../../common/ui/common_ui.dart';
@@ -36,7 +35,7 @@ class _CarTabState extends State<CarTab> {
     // TODO: implement initState
     super.initState();
     BlocProvider.of<ServiceProviderBloc>(context)
-        .add(AllServiceProviderList("", ""));
+        .add(AllServiceProviderList("", "", ""));
   }
 
   @override
@@ -44,67 +43,67 @@ class _CarTabState extends State<CarTab> {
     return Scaffold(
       body: BackgroundImage(
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SafeArea(
-              bottom: false,
-              child: AppHeaders().collapsedHeader(
-                  text: AppConstants.sProviderText,
-                  context: context,
-                  backNavigation: false,
-                  onFilterClick: () {
-                    CommonMethods().openFilters(context);
-                  },
-                  onNotificationClick: () {
-                    CommonMethods().openNotifications(context);
-                  })),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                    child: searchBox(
-                        controller: searchController, hintText: "service")),
-                horizontalSpacer(),
-                Expanded(
-                  child: AppDropdown(
-                    bgColor: Colours.blue.code,
-                    items: AppConstants.serviceItems,
-                    selectedItem: AppConstants.serviceItems[0],
-                    height: 44.0,
-                  ),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SafeArea(
+                  bottom: false,
+                  child: AppHeaders().collapsedHeader(
+                      text: AppConstants.sProviderText,
+                      context: context,
+                      backNavigation: false,
+                      onFilterClick: () {
+                        CommonMethods().openFilters(context);
+                      },
+                      onNotificationClick: () {
+                        CommonMethods().openNotifications(context);
+                      })),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child: searchBox(
+                            controller: searchController, hintText: "service")),
+                    horizontalSpacer(),
+                    Expanded(
+                      child: AppDropdown(
+                        bgColor: Colours.blue.code,
+                        items: AppConstants.serviceItems,
+                        selectedItem: AppConstants.serviceItems[0],
+                        height: 44.0,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-              child: Container(
-                  width: CommonMethods.deviceWidth(),
-                  height: CommonMethods.deviceHeight(),
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 20.0, horizontal: 15.0),
-                  decoration: BoxDecoration(
-                    color: Colours.lightGray.code,
-                  ),
-                  child: BlocListener<ServiceProviderBloc,
+              ),
+              Expanded(
+                  child: Container(
+                      width: CommonMethods.deviceWidth(),
+                      height: CommonMethods.deviceHeight(),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20.0, horizontal: 15.0),
+                      decoration: BoxDecoration(
+                        color: Colours.lightGray.code,
+                      ),
+                      child: BlocListener<ServiceProviderBloc,
                           ServiceProviderState>(
-                      listener: (context, state) {},
-                      child: BlocBuilder<ServiceProviderBloc,
-                          ServiceProviderState>(builder: (context, state) {
-                        if (state is Loading) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        if (state is GetAllServiceProviderFetchSuccessfully) {
-                          var data = state.props[0];
-                          List<ProviderData> providerData =
+                          listener: (context, state) {},
+                          child: BlocBuilder<ServiceProviderBloc,
+                              ServiceProviderState>(builder: (context, state) {
+                            if (state is CarScreenLoading) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            if (state is GetAllServiceProviderFetchSuccessfully) {
+                              var data = state.props[0];
+                              List<ProviderData> providerData =
                               data as List<ProviderData>;
-                          return MediaQuery.removePadding(
-                            context: context,
-                            removeTop: true,
-                            child: providerData.length > 0
-                                ? ListView.builder(
+                              return MediaQuery.removePadding(
+                                context: context,
+                                removeTop: true,
+                                child: providerData.isNotEmpty
+                                    ? ListView.builder(
                                     itemCount: providerData.length,
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
@@ -113,7 +112,7 @@ class _CarTabState extends State<CarTab> {
                                           providerData[index].serviceCategory;
                                       var data = serviceData!.toJson();
                                       data.forEach((key, value) {
-                                        if(value!=null) {
+                                        if (value != null) {
                                           list.add(key.toString());
                                         }
                                       });
@@ -125,35 +124,43 @@ class _CarTabState extends State<CarTab> {
                                           serviceType: providerData[index]
                                               .profile!
                                               .businessName!,
-                                          joinDate: "15 Mar, 2021",
+                                          joinDate: providerData[index]
+                                              .profile!.joinDate!,
                                           services:
-                                              List.generate(list.length, (i) {
+                                          List.generate(list.length, (i) {
                                             return list[i];
                                           }),
-                                          rating: 5);
+                                          lat: providerData[index]
+                                              .profile!.addressLat!,
+                                          long: providerData[index]
+                                              .profile!.addressLong!,
+                                          rating: providerData[index]
+                                              .profile!.rating != null ? double
+                                              .parse(providerData[index]
+                                              .profile!.rating!) : 4.0);
+
+
                                     })
-                                : Container(
-                                    child: Text("No service providers"),
-                                  ),
-                          );
-                        }
-                        return Center(
-                          child: Container(
-                            child: Text("No Service Provider found"),
-                          ),
-                        );
-                      }))))
-        ],
-      )),
+                                    : const Text("No data found"),
+                              );
+                            }
+                            return const Center(
+                              child: Text("No data found"),
+                            );
+                          }))))
+            ],
+          )),
     );
   }
 
-  Widget listItem(
-          {required String image,
-          required String serviceType,
-          required String joinDate,
-          required List<String> services,
-          double rating = 4}) =>
+  Widget listItem({required String image,
+    required String serviceType,
+    required String joinDate,
+    required List<String> services,
+    double rating = 4,
+    double? lat,
+    double? long,
+  }) =>
       Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -241,10 +248,11 @@ class _CarTabState extends State<CarTab> {
                 Row(
                   children: [
                     RatingBarIndicator(
-                        itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: Color(0xFFF1C21C),
-                            ),
+                        itemBuilder: (context, _) =>
+                        const Icon(
+                          Icons.star,
+                          color: Color(0xFFF1C21C),
+                        ),
                         rating: rating,
                         itemSize: 18.0),
                     /* RatingBar.builder(
@@ -273,10 +281,12 @@ class _CarTabState extends State<CarTab> {
                         onTap: () {
                           Navigator.of(context, rootNavigator: false)
                               .push(CupertinoPageRoute(
-                                  builder: (context) => const MyAppMap(
-                                        showPickUp: false,
-                                        showMarker: true,
-                                      )));
+                              builder: (context) =>
+                                  MyAppMap(
+                                      showPickUp: false,
+                                      showMarker: true,
+                                      latLng: LatLng(lat!, long!)
+                                  )));
                         },
                         child: rowButton(
                             bkColor: Colours.lightWhite.code,
@@ -312,4 +322,9 @@ class _CarTabState extends State<CarTab> {
           )
         ],
       );
+
+  getDefaultRefreshData() {
+    BlocProvider.of<ServiceProviderBloc>(context)
+        .add(AllServiceProviderList("", "", ""));
+  }
 }

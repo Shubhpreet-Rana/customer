@@ -2,7 +2,7 @@ import 'package:app/bloc/serviceProvider/service_provider_bloc.dart';
 import 'package:app/model/getCategoryListModel.dart';
 import 'package:app/model/getServiceProviderList_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart ';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/colors.dart';
 import '../../common/constants.dart';
@@ -21,17 +21,19 @@ class ApplyFilters extends StatefulWidget {
 }
 
 class _ApplyFiltersState extends State<ApplyFilters> {
-  int _radioValue1 = 0;
+  int _radioValue1 = 1000; // for non selection of radio button
   TextEditingController addressController = TextEditingController();
   List<ServiceCategory> serviceCategoryList = [];
   ServiceCategoryData? categoryData;
+  String selectedCategoryId="";
+  int currentRatingIndex = 4;
 
   void _handleRadioValueChange1(int value, ServiceCategoryData data) {
     setState(() {
       _radioValue1 = value;
       categoryData = data;
+      selectedCategoryId=categoryData!.id.toString();
     });
-
     print(categoryData!.id.toString());
   }
 
@@ -52,12 +54,13 @@ class _ApplyFiltersState extends State<ApplyFilters> {
           SafeArea(
               bottom: false,
               child: AppHeaders().extendedHeader(
-                onTapped: (){
-                  BlocProvider.of<ServiceProviderBloc>(context)
-                      .add(AllServiceProviderList("", categoryData!.id.toString()));
-                  Navigator.of(context).pop();
-                },
-                  text: AppConstants.filters, context: context)),
+                  onTapped: () {
+                    BlocProvider.of<ServiceProviderBloc>(context)
+                        .add(AllServiceProviderList("", "", ""));
+                    Navigator.of(context).pop();
+                  },
+                  text: AppConstants.filters,
+                  context: context)),
           verticalSpacer(
             height: 40.0,
           ),
@@ -83,11 +86,14 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                     var data = state.props[0];
                     List<ServiceCategoryData> serviceCategory =
                         data as List<ServiceCategoryData>;
+                    if(serviceCategory.length>0){
+                      categoryData=serviceCategory[0];
+                    }
                     return SingleChildScrollView(
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (serviceCategory.length > 0)
+                        if (serviceCategory.isNotEmpty)
                           Container(
                             padding: const EdgeInsets.only(
                                 left: 50.0,
@@ -182,16 +188,26 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                           child: SizedBox(
                               height: 58.0,
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: List.generate(5, (index) {
+                                    return GestureDetector(
+                                        onTap: () {
+                                          currentRatingIndex = index;
+                                          setState(() {});
+                                        },
+                                        child: ratingBar(
+                                            currentRatingIndex:
+                                                currentRatingIndex,
+                                            index: index));
+                                  }) /*[
                                   ratingBar(position: "1"),
                                   ratingBar(position: "2"),
                                   ratingBar(position: "3"),
                                   ratingBar(position: "4"),
                                   ratingBar(position: "5", isSelected: true)
-                                ],
-                              )),
+                                ],*/
+                                  )),
                         ),
                         Container(
                             padding: const EdgeInsets.only(
@@ -223,18 +239,25 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                                   ),
                                 ),
                                 verticalSpacer(),
-                                GestureDetector(
-                                    behavior: HitTestBehavior.translucent,
-                                    onTap: () {},
-                                    child: appButton(
-                                        bkColor: Colours.blue.code,
-                                        text: AppConstants.applyFilters))
+                                appButton(
+                                    bkColor: Colours.blue.code,
+                                    text: AppConstants.applyFilters,
+                                    onTapped: () {
+                                      BlocProvider.of<ServiceProviderBloc>(
+                                              context)
+                                          .add(AllServiceProviderList(
+                                              "",
+                                          selectedCategoryId,
+                                          "${currentRatingIndex+1}"));
+                                      Navigator.of(context).pop();
+
+                                    })
                               ],
                             ))
                       ],
                     ));
                   }
-                  return Center(
+                  return const Center(
                     child: Text("No Category List"),
                   );
                 })),
@@ -254,7 +277,9 @@ class _ApplyFiltersState extends State<ApplyFilters> {
               SizedBox(
                 height: 24.0,
                 width: 24.0,
-                child: Radio(
+                child:
+
+                Radio(
                   value: index,
                   groupValue: _radioValue1,
                   onChanged: (int? value) {

@@ -6,6 +6,10 @@ class Loading extends ServiceProviderState {
   @override
   List<Object?> get props => [];
 }
+class CarScreenLoading extends ServiceProviderState {
+  @override
+  List<Object?> get props => [];
+}
 
 class CategoryListFetchSuccessfully extends ServiceProviderState {
   List<ServiceCategoryData> serviceCategory;
