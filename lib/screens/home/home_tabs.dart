@@ -1,3 +1,4 @@
+import 'package:app/bloc/serviceProvider/service_provider_bloc.dart';
 import 'package:app/common/assets.dart';
 import 'package:app/common/colors.dart';
 import 'package:app/screens/home/pages/calender.dart';
@@ -61,7 +62,7 @@ class _HomeTabsState extends State<HomeTabs> with TickerProviderStateMixin<HomeT
             key: _carScreen,
             onGenerateRoute: (route) => CupertinoPageRoute(
               settings: route,
-              builder: (context) => const CarTab(),
+              builder: (context) =>  CarTab(),
             ),
           ),
           Navigator(
@@ -154,6 +155,10 @@ class _HomeTabsState extends State<HomeTabs> with TickerProviderStateMixin<HomeT
         setState(() {
           _selectedTabIndex = val;
         });
+        if(_selectedTabIndex==1){
+          BlocProvider.of<ServiceProviderBloc>(context)
+              .add(AllServiceProviderList("", "", "",{}));
+        }
       }
     }
   }

@@ -9,11 +9,12 @@ class GetCategoryList extends ServiceProviderEvent {
 }
 
 class AllServiceProviderList extends ServiceProviderEvent {
-  AllServiceProviderList(this.name, this.catid, this.rating);
+  AllServiceProviderList(this.name, this.catid,this.rating,this.location);
 
   final String? name;
   final String? catid;
   final String? rating;
+  Map<String,dynamic>? location;
 }
 
 

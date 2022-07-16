@@ -46,7 +46,7 @@ class ServiceProviderRepository {
   }
 
   Future<Map<String, dynamic>> getAllServiceProvider(
-      {String? categoryName, String? catid,String? rating}) async {
+      {String? categoryName, String? catid,String? rating,Map<String,dynamic>? location}) async {
     Completer<Map<String, dynamic>> completer =
         Completer<Map<String, dynamic>>();
     try {
@@ -60,13 +60,21 @@ class ServiceProviderRepository {
       if (rating != null && rating != "") {
         mapData.putIfAbsent("rating", () => rating);
       }
+      if(location!.isNotEmpty){
+        if(location.containsKey("lat")){
+          mapData.putIfAbsent("address_lat", () => location['lat']);
+        }
+        if(location.containsKey("long")){
+          mapData.putIfAbsent("address_long", () => location['long']);
+        }
+      }
       var userInfo = PreferenceUtils.getUserInfo(AppConstants.userInfo);
       String token = userInfo['token'];
       Map<String, String> headers = {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
       };
-      String url = "${EndPoints.baseUrl}${EndPoints.getProviderList}";
+      String url = "${EndPoints.baseUrl}${EndPoints.getProviderList}" ;
       print(url);
       final response = await netWorkLocator.dio.get(url,
           options: Options(

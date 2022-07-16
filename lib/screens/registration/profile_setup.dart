@@ -62,8 +62,8 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
       addressController.text = state.userProfile.user!.address ?? "";
       genderText = state.userProfile.user!.getGenderText;
       imageUrl = state.userProfile.user!.userImage;
-      locationLat = double.tryParse(state.userProfile.user!.addressLat!) ?? 0.0;
-      locationLang = double.tryParse(state.userProfile.user!.addressLong!) ?? 0.0;
+      locationLat =(state.userProfile.user!.addressLat!=null? double.tryParse(state.userProfile.user!.addressLat!): 0.0)!;
+      locationLang =(state.userProfile.user!.addressLong!=null? double.tryParse(state.userProfile.user!.addressLong!): 0.0)!;
     }
   }
 

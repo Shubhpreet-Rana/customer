@@ -5,6 +5,7 @@ import 'package:app/model/getCategoryListModel.dart';
 import 'package:app/model/getServiceProviderList_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../data/repository/service_provider_repository.dart';
 
@@ -50,7 +51,7 @@ class ServiceProviderBloc
     emit(CarScreenLoading());
     try {
       final res = await serviceProviderRepository.getAllServiceProvider(
-          categoryName: event.name, catid: event.catid,rating:event.rating);
+          categoryName: event.name, catid: event.catid,rating:event.rating,location: event.location);
       if (res['status'] == 1) {
         GetServiceProviderList getServiceProviderList =
             GetServiceProviderList.fromJson(res);

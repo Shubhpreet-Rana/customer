@@ -1,8 +1,12 @@
 import 'package:app/bloc/serviceProvider/service_provider_bloc.dart';
+import 'package:app/common/location_util.dart';
 import 'package:app/model/getCategoryListModel.dart';
 import 'package:app/model/getServiceProviderList_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:place_picker/entities/location_result.dart';
+import 'package:place_picker/place_picker.dart';
 
 import '../../common/colors.dart';
 import '../../common/constants.dart';
@@ -25,14 +29,16 @@ class _ApplyFiltersState extends State<ApplyFilters> {
   TextEditingController addressController = TextEditingController();
   List<ServiceCategory> serviceCategoryList = [];
   ServiceCategoryData? categoryData;
-  String selectedCategoryId="";
+  String selectedCategoryId = "";
   int currentRatingIndex = 4;
+  double locationLat = 0.0;
+  double locationLang = 0.0;
 
   void _handleRadioValueChange1(int value, ServiceCategoryData data) {
     setState(() {
       _radioValue1 = value;
       categoryData = data;
-      selectedCategoryId=categoryData!.id.toString();
+      selectedCategoryId = categoryData!.id.toString();
     });
     print(categoryData!.id.toString());
   }
@@ -56,7 +62,7 @@ class _ApplyFiltersState extends State<ApplyFilters> {
               child: AppHeaders().extendedHeader(
                   onTapped: () {
                     BlocProvider.of<ServiceProviderBloc>(context)
-                        .add(AllServiceProviderList("", "", ""));
+                        .add(AllServiceProviderList("", "", "",{}));
                     Navigator.of(context).pop();
                   },
                   text: AppConstants.filters,
@@ -86,8 +92,8 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                     var data = state.props[0];
                     List<ServiceCategoryData> serviceCategory =
                         data as List<ServiceCategoryData>;
-                    if(serviceCategory.length>0){
-                      categoryData=serviceCategory[0];
+                    if (serviceCategory.length > 0) {
+                      categoryData = serviceCategory[0];
                     }
                     return SingleChildScrollView(
                         child: Column(
@@ -223,7 +229,7 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                                   style: AppStyles.blackSemiBold,
                                 ),
                                 verticalSpacer(height: 10.0),
-                                MyEditText(
+                                /*       MyEditText(
                                   AppConstants.location1,
                                   false,
                                   TextInputType.streetAddress,
@@ -237,6 +243,54 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                                     Icons.location_pin,
                                     color: Colours.blue.code,
                                   ),
+                                ),*/
+                                MyEditText(
+                                  AppConstants.location1,
+                                  false,
+                                  TextInputType.streetAddress,
+                                  TextCapitalization.none,
+                                  10.0,
+                                  addressController,
+                                  Colours.hintColor.code,
+                                  true,
+                                  isSuffix: true,
+                                  suffixIcon: GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () async {
+                                      try {
+                                        Position? position =
+                                            await LocationUtil.getLocation();
+                                        if (position != null) {
+                                          LocationResult result =
+                                              await Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PlacePicker(
+                                                            "AIzaSyBPFuOfeRqXLrspLP3_p7MmgL2OaLzg9nk",
+                                                          )));
+
+                                          // Handle the result in your way
+
+                                          if (mounted && result != null) {
+                                            setState(() {
+                                              locationLat =
+                                                  result.latLng!.latitude;
+                                              locationLang =
+                                                  result.latLng!.longitude;
+                                              addressController.text =
+                                                  result.formattedAddress!;
+                                            });
+                                          }
+                                        }
+                                      } catch (e) {
+                                        throw e.toString();
+                                      }
+                                    },
+                                    child: Icon(
+                                      Icons.location_pin,
+                                      color: Colours.blue.code,
+                                    ),
+                                  ),
                                 ),
                                 verticalSpacer(),
                                 appButton(
@@ -247,10 +301,15 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                                               context)
                                           .add(AllServiceProviderList(
                                               "",
-                                          selectedCategoryId,
-                                          "${currentRatingIndex+1}"));
+                                              selectedCategoryId,
+                                              "${currentRatingIndex + 1}",
+                                              addressController.text.isNotEmpty
+                                                  ? {
+                                                      "lat": locationLat,
+                                                      "long": locationLang
+                                                    }
+                                                  : {}));
                                       Navigator.of(context).pop();
-
                                     })
                               ],
                             ))
@@ -277,9 +336,7 @@ class _ApplyFiltersState extends State<ApplyFilters> {
               SizedBox(
                 height: 24.0,
                 width: 24.0,
-                child:
-
-                Radio(
+                child: Radio(
                   value: index,
                   groupValue: _radioValue1,
                   onChanged: (int? value) {
