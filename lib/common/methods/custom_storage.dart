@@ -27,10 +27,17 @@ class PreferenceUtils {
     var prefs = await _instance;
     return prefs.setBool(key, value);
   }
+  static Future<bool> getBool(String key) async {
+    return _prefsInstance!.getBool(key) ?? false;
+  }
 
   static dynamic getUserInfo(String key, [String? defValue]) {
     String userInfo = getString(AppConstants.userInfo);
     return json.decode(userInfo);
+  }
+
+  clearAllPreferences()async{
+   await _prefsInstance!.clear();
   }
 }
 /*

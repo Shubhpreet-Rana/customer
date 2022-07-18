@@ -1,8 +1,11 @@
 import 'package:app/common/assets.dart';
 import 'package:app/common/constants.dart';
+import 'package:app/common/methods/custom_storage.dart';
+import 'package:app/screens/registration/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../bloc/profile/view/profile_bloc.dart';
 import '../../../common/colors.dart';
@@ -224,11 +227,17 @@ class _ProfileTabState extends State<ProfileTab> {
                         },
                         child: appButton(bkColor: Colours.blue.code, text: AppConstants.edit, height: 50.0)),
                     verticalSpacer(),
-                    Text(
-                      AppConstants.logout,
-                      maxLines: 3,
-                      textAlign: TextAlign.start,
-                      style: AppStyles.redTextW500,
+                    GestureDetector(
+                      onTap: (){
+                        PreferenceUtils().clearAllPreferences();
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Login()));
+                      },
+                      child: Text(
+                        AppConstants.logout,
+                        maxLines: 3,
+                        textAlign: TextAlign.start,
+                        style: AppStyles.redTextW500,
+                      ),
                     ),
                     const Spacer(),
                   ],
