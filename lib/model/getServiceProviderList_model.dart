@@ -169,12 +169,14 @@ class RoadSideAssistance {
     this.description,
     this.price,
     this.availability,
+    this.gstRate,
   });
 
   int? catId;
   String? description;
   String? price;
   String? availability;
+  int? gstRate;
 
   factory RoadSideAssistance.fromJson(Map<String, dynamic> json) =>
       RoadSideAssistance(
@@ -182,6 +184,7 @@ class RoadSideAssistance {
         description: json["description"],
         price: json["price"],
         availability: json["availability"],
+        gstRate: json["gst_rate"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -189,6 +192,7 @@ class RoadSideAssistance {
         "description": description,
         "price": price,
         "availability": availability,
+        "gst_rate": gstRate
       };
 }
 
@@ -199,6 +203,7 @@ class CarWash {
     this.type,
     this.price,
     this.availability,
+    this.gstRate,
   });
 
   int? catId;
@@ -206,6 +211,7 @@ class CarWash {
   String? type;
   String? price;
   String? availability;
+  int? gstRate;
 
   factory CarWash.fromJson(Map<String, dynamic> json) => CarWash(
         catId: json["cat_id"],
@@ -213,6 +219,7 @@ class CarWash {
         type: json["type"],
         price: json["price"],
         availability: json["availability"],
+        gstRate: json["gst_rate"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -221,6 +228,7 @@ class CarWash {
         "type": type,
         "price": price,
         "availability": availability,
+        "gst_rate": gstRate,
       };
 }
 
@@ -232,6 +240,7 @@ class Gasoline {
     this.brand,
     this.price,
     this.availability,
+    this.gstRate,
   });
 
   int? catId;
@@ -240,6 +249,7 @@ class Gasoline {
   String? brand;
   String? price;
   String? availability;
+  int? gstRate;
 
   factory Gasoline.fromJson(Map<String, dynamic> json) => Gasoline(
         catId: json["cat_id"],
@@ -248,6 +258,7 @@ class Gasoline {
         brand: json["brand"],
         price: json["price"],
         availability: json["availability"],
+        gstRate: json["gst_rate"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -257,5 +268,6 @@ class Gasoline {
         "brand": brand,
         "price": price,
         "availability": availability,
+        'gst_rate': gstRate
       };
 }

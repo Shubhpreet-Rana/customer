@@ -186,7 +186,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
   double getTotal() {
     double total = 0;
     for (var item in widget.selectedServices) {
-      total = total + item.price;
+      total = total + double.parse(item.price);
     }
     return total;
   }
