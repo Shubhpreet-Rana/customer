@@ -6,7 +6,13 @@ class Loading extends ServiceProviderState {
   @override
   List<Object?> get props => [];
 }
+
 class CarScreenLoading extends ServiceProviderState {
+  @override
+  List<Object?> get props => [];
+}
+
+class BookServiceLoading extends ServiceProviderState {
   @override
   List<Object?> get props => [];
 }
@@ -14,7 +20,7 @@ class CarScreenLoading extends ServiceProviderState {
 class CategoryListFetchSuccessfully extends ServiceProviderState {
   List<ServiceCategoryData> serviceCategory;
 
-  CategoryListFetchSuccessfully(this.serviceCategory):super();
+  CategoryListFetchSuccessfully(this.serviceCategory) : super();
 
   @override
   List<Object> get props => [serviceCategory];
@@ -32,15 +38,30 @@ class CategoryListFailed extends ServiceProviderState {
 class GetAllServiceProviderFetchSuccessfully extends ServiceProviderState {
   List<ProviderData> providerData;
 
-  GetAllServiceProviderFetchSuccessfully(this.providerData):super();
+  GetAllServiceProviderFetchSuccessfully(this.providerData) : super();
 
   @override
   List<Object> get props => [providerData];
 }
-class  GetAllServiceProviderFailed extends ServiceProviderState {
+
+class GetAllServiceProviderFailed extends ServiceProviderState {
   final String? error;
 
   GetAllServiceProviderFailed(this.error);
+
+  @override
+  List<Object?> get props => [error];
+}
+
+class BookingSuccessfully extends ServiceProviderState {
+  @override
+  List<Object?> get props => [];
+}
+
+class BookingFailed extends ServiceProviderState {
+  final String error;
+
+  BookingFailed(this.error);
 
   @override
   List<Object?> get props => [error];

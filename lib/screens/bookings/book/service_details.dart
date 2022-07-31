@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../common/colors.dart';
 import '../../../common/constants.dart';
@@ -13,7 +14,6 @@ import '../../../common/styles/styles.dart';
 import '../../../common/ui/background.dart';
 import '../../../common/ui/common_ui.dart';
 import '../../../common/ui/headers.dart';
-import '../../home/home_tabs.dart';
 import '../../maps/maps_page.dart';
 
 class ServiceDetails extends StatefulWidget {
@@ -30,6 +30,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   List<ServiceTypes>? serviceType = [];
   String? address;
   List<ServiceCategory>? serviceCategory;
+  LatLng? latLng;
 
   @override
   void initState() {
@@ -46,17 +47,23 @@ class _ServiceDetailsState extends State<ServiceDetails> {
           serviceTypes = ServiceTypes(
               value['cat_id'].toString(),
               false,
-              key??"",
+              key ?? "",
               "service",
               "subService",
               value['price'].toString(),
               value['description'],
-              value['gstRate'].toString());
+              value['gst_rate'].toString());
         }
         serviceType!.add(serviceTypes!);
+        var data = ServiceTypes("2", false, "Gasoline", "service", "subService",
+            "248", "Nice gasoline oil", "30");
+        var data2 = ServiceTypes("5", false, "cholestrol", "service",
+            "subService", "100", "Nice cholestrol oil", "5");
+        serviceType!.add(data);
+        serviceType!.add(data2);
       });
     }
-    selectedServices.add(serviceType![0]);
+    //selectedServices.add(serviceType![0]);
     getAddressFromLatLong(widget.item['lat']!, widget.item['long']);
   }
 
@@ -171,7 +178,9 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                   GestureDetector(
                                       behavior: HitTestBehavior.translucent,
                                       onTap: () async {
-                                        if (getButtonColor() ==
+                                        bookNow();
+
+                                        /*    if (getButtonColor() ==
                                             Colours.blue.code) {
                                           var list = selectedServices
                                               .where((element) =>
@@ -179,37 +188,52 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                               .toList();
                                           if (list.isNotEmpty) {
                                             resetServices();
-                                            Navigator.of(context,
-                                                    rootNavigator: false)
-                                                .push(CupertinoPageRoute(
-                                                    builder: (context) =>
-                                                        const MyAppMap()));
+
+                                            var data = selectedServices;
+                                            latLng != null
+                                                ? await showModalBottomSheet(
+                                                    context: context,
+                                                    isScrollControlled: true,
+                                                    useRootNavigator: true,
+                                                    shape:
+                                                        const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.vertical(
+                                                        top:
+                                                            Radius.circular(20),
+                                                      ),
+                                                    ),
+                                                    clipBehavior: Clip
+                                                        .antiAliasWithSaveLayer,
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    builder: (context) {
+                                                      //serviceType!.add(value)
+                                                      return SelectDate(
+                                                        selectedServices: data,
+                                                        item: widget.item,
+                                                      );
+                                                    })
+                                                : Navigator.of(context,
+                                                        rootNavigator: false)
+                                                    .push(CupertinoPageRoute(
+                                                        builder: (context) =>
+                                                            MyAppMap(
+                                                                isDetailPage:
+                                                                    false,
+                                                                callback:
+                                                                    (LatLng?
+                                                                        value) {
+                                                                  latLng =
+                                                                      value;
+                                                                  print(value);
+                                                                })));
                                           } else {
                                             var data = selectedServices;
 
-                                            await showModalBottomSheet(
-                                                context: context,
-                                                isScrollControlled: true,
-                                                useRootNavigator: true,
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.vertical(
-                                                    top: Radius.circular(20),
-                                                  ),
-                                                ),
-                                                clipBehavior:
-                                                    Clip.antiAliasWithSaveLayer,
-                                                backgroundColor: Colors.white,
-                                                builder: (context) {
-                                                  return SelectDate(
-                                                    selectedServices: data,
-                                                    item: widget.item,
-                                                  );
-                                                });
                                             resetServices();
                                           }
-                                        }
+                                        }*/
                                       },
                                       child: appButton(
                                           bkColor: getButtonColor(),
@@ -232,38 +256,52 @@ class _ServiceDetailsState extends State<ServiceDetails> {
       element.isSelected = false;
     }
     selectedServices.clear();
-    selectedServices.add(serviceType![0]);
-    selectedServices.first.isSelected = true;
     if (mounted) {
       setState(() {});
     }
   }
 
   Color getButtonColor() {
-    if (selectedServices.length > 7) {
-      return Colours.gray.code;
+    if (selectedServices.length > 0) {
+      return Colours.blue.code;
     } else {
-      var list =
-          selectedServices.where((element) => element.id == "6").toList();
-      if (selectedServices.length > 1 && list.isNotEmpty) {
-        return Colours.gray.code;
-      } else {
-        return Colours.blue.code;
-      }
+      return Colours.gray.code;
     }
   }
 
-  void _onSelect(bool? newValue, ServiceTypes type) => setState(() {
+  _onSelect(bool? newValue, ServiceTypes type) {
+    if (selectedServices.length > 0) {
+      // ignore: curly_braces_in_flow_control_structures
+      if (selectedServices.contains(type)) {
         type.isSelected = newValue!;
-        if (selectedServices.contains(type)) {
-          selectedServices.remove(type);
+        selectedServices.remove(type);
+      } else {
+        var data =
+            selectedServices.where((element) => element.id == "6").toList();
+        if (data.isNotEmpty) {
+          CommonMethods().showTopFlash(
+              context: context,
+              message:
+                  "You cannot select another service category with road side assistance",
+              isSuccess: false);
         } else {
-          selectedServices.add(type);
+          if (type.id == "6") {
+            CommonMethods().showTopFlash(
+                context: context,
+                message: "You cannot select road side assistance",
+                isSuccess: false);
+          } else {
+            type.isSelected = newValue!;
+            selectedServices.add(type);
+          }
         }
-        if (mounted) {
-          setState(() {});
-        }
-      });
+      }
+    } else {
+      type.isSelected = newValue!;
+      selectedServices.add(type);
+    }
+    if (mounted) setState(() {});
+  }
 
   _buildExpandableContent(ServiceTypes vehicle) {
     return ListTile(
@@ -278,7 +316,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                   vehicle.title,
                   style: AppStyles.blackBold,
                 ),
-               /* Text(
+                /* Text(
                   "- " + vehicle.subService,
                   style: AppStyles.lightText,
                 ),*/
@@ -384,6 +422,65 @@ class _ServiceDetailsState extends State<ServiceDetails> {
           ],
         ),
       );
+
+  bookNow() async {
+    if (selectedServices.isNotEmpty) {
+      List<ServiceTypes> roadSideAssistanceExist =
+          selectedServices.where((element) => element.id == "6").toList();
+      if (roadSideAssistanceExist.isNotEmpty) {
+        Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
+            builder: (context) => MyAppMap(
+                  serviceTypes: roadSideAssistanceExist[0],
+                  callback: (LatLng latLng) async {
+                    if (latLng != null) {
+                      ServiceTypes roadSideAssistanceType =
+                          roadSideAssistanceExist[0];
+                      roadSideAssistanceType.lat = latLng.latitude;
+                      roadSideAssistanceType.long = latLng.latitude;
+
+                      await showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          useRootNavigator: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20),
+                            ),
+                          ),
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          backgroundColor: Colors.white,
+                          builder: (context) {
+                            return SelectDate(
+                              selectedServices: [roadSideAssistanceType],
+                              item: widget.item,
+                            );
+                          });
+                    }
+                  },
+                )));
+      } else {
+        List<ServiceTypes> serviceCategories=selectedServices;
+        await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            useRootNavigator: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20),
+              ),
+            ),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            backgroundColor: Colors.white,
+            builder: (context) {
+              return SelectDate(
+                selectedServices: serviceCategories,
+                item: widget.item,
+              );
+            });
+      }
+      resetServices();
+    }
+  }
 }
 
 class ServiceTypes {
@@ -395,7 +492,10 @@ class ServiceTypes {
   final String price;
   final String description;
   String? gstRate;
+  double? lat;
+  double? long;
 
   ServiceTypes(this.id, this.isSelected, this.title, this.service,
-      this.subService, this.price, this.description, this.gstRate);
+      this.subService, this.price, this.description, this.gstRate,
+      {this.lat, this.long});
 }

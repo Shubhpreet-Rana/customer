@@ -19,6 +19,7 @@ class ServiceProviderBloc
       : super(Loading()) {
     on<GetCategoryList>(categoryList);
     on<AllServiceProviderList>(getAllServiceProviders);
+    on<BookService>(bookService);
   }
 
   ServiceProviderRepository serviceProviderRepository;
@@ -62,6 +63,24 @@ class ServiceProviderBloc
       }
     } catch (e) {
       emit(CategoryListFailed(e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> bookService(
+      BookService event,
+    Emitter<ServiceProviderState> emit,
+  ) async {
+    emit(BookServiceLoading());
+    try {
+      final res = await serviceProviderRepository.bookService(
+          amount: event.amount,date : event.date,service_cat_id:event.service_cat_id,address_lat: event.address_lat,address_long:event.address_long,gst_amount:event.gst_amount,time: event.time);
+      if (res['status'] == 1) {
+        emit(BookingSuccessfully());
+      } else {
+        emit(BookingFailed(res['message']));
+      }
+    } catch (e) {
+      emit(BookingFailed(e.toString()));
     }
   }
 }

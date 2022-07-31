@@ -16,6 +16,18 @@ class AllServiceProviderList extends ServiceProviderEvent {
   final String? rating;
   Map<String,dynamic>? location;
 }
+class BookService extends ServiceProviderEvent {
+  BookService(this.amount, this.date,this.address_lat,this.address_long,this.gst_amount,this.time,this.service_cat_id);
+
+  final String? amount;
+  final String? date;
+  final String? address_lat;
+  final String? address_long;
+  final String? gst_amount;
+  final String? time;
+  final List<String>? service_cat_id;
+
+}
 
 
 

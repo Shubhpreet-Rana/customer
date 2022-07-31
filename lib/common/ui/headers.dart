@@ -39,14 +39,16 @@ class AppHeaders {
         ],
       );
 
-  Widget collapsedHeader(
-          {bool backNavigation = true,
-          required BuildContext context,
-          String text = "",
-          bool filterIcon = true,
-          bool menuIcon = true,
-          Function()? onFilterClick,
-          Function()? onNotificationClick}) =>
+  Widget collapsedHeader({
+    bool backNavigation = true,
+    required BuildContext context,
+    String text = "",
+    bool filterIcon = true,
+    bool menuIcon = true,
+    Function()? onFilterClick,
+    Function()? onNotificationClick,
+    IconData bellIcon = Icons.notifications,
+  }) =>
       Padding(
         padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
         child: Row(
@@ -91,8 +93,8 @@ class AppHeaders {
                   onTap: () {
                     if (onNotificationClick != null) onNotificationClick();
                   },
-                  child: const Icon(
-                    Icons.notifications,
+                  child:  Icon(
+                    bellIcon,
                     color: Colors.white,
                     size: 25.0,
                   ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/screens/bookings/book/service_details.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -17,8 +18,17 @@ class MyAppMap extends StatefulWidget {
   final bool showPickUp;
   final bool showMarker;
   final LatLng? latLng;
+  final ServiceTypes? serviceTypes;
+  Function? callback;
 
-  const MyAppMap({Key? key, this.showPickUp = true, this.showMarker = false,this.latLng}) : super(key: key);
+  MyAppMap(
+      {Key? key,
+      this.showPickUp = true,
+      this.showMarker = false,
+      this.latLng,
+      this.serviceTypes,
+      this.callback})
+      : super(key: key);
 
   @override
   State<MyAppMap> createState() => MyAppMapState();
@@ -28,7 +38,7 @@ class MyAppMapState extends State<MyAppMap> {
   final Completer<GoogleMapController> _controller = Completer();
   GoogleMapController? mapController;
 
-  CameraPosition _kGooglePlex = CameraPosition(
+  CameraPosition _kGooglePlex = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -43,13 +53,18 @@ class MyAppMapState extends State<MyAppMap> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(widget.latLng!=null){
-      _kGooglePlex=CameraPosition(
+    if (widget.latLng != null) {
+      _kGooglePlex = CameraPosition(
         target: widget.latLng!,
         zoom: 14.4746,
       );
     }
-    if (widget.showMarker) _add(text: "Provider Location", latitude: _kGooglePlex.target.latitude, longitude: _kGooglePlex.target.longitude);
+    if (widget.showMarker) {
+      _add(
+          text: "Provider Location",
+          latitude: _kGooglePlex.target.latitude,
+          longitude: _kGooglePlex.target.longitude);
+    }
     if (widget.showPickUp) showCurrentLocation();
   }
 
@@ -58,14 +73,23 @@ class MyAppMapState extends State<MyAppMap> {
     if (position != null) {
       if (position?.latitude != null && position?.longitude != null) {
         if (mapController != null) {
-          mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position!.latitude, position!.longitude), zoom: 17.0)));
+          mapController?.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(
+                  target: LatLng(position!.latitude, position!.longitude),
+                  zoom: 17.0)));
         }
-        _add(text: "Your Location", latitude: position!.latitude, longitude: position!.longitude);
+        _add(
+            text: "Your Location",
+            latitude: position!.latitude,
+            longitude: position!.longitude);
       }
     }
   }
 
-  void _add({required String text, required double latitude, required double longitude}) {
+  void _add(
+      {required String text,
+      required double latitude,
+      required double longitude}) {
     var markerIdVal = text;
     final MarkerId markerId = MarkerId(markerIdVal);
 
@@ -100,25 +124,45 @@ class MyAppMapState extends State<MyAppMap> {
                     context: context,
                     backNavigation: true,
                     filterIcon: false,
+                    bellIcon: widget.serviceTypes != null
+                        ? Icons.check
+                        : Icons.notifications,
                     onNotificationClick: () {
-                      CommonMethods().openNotifications(context);
+                      if (widget.serviceTypes != null) {
+                        LatLng latLng = LatLng(_kGooglePlex.target.latitude,
+                            _kGooglePlex.target.longitude);
+                        if (widget.callback != null) {
+                          widget.callback!(latLng);
+                          Navigator.of(context).pop();
+                        }
+                        /*if (widget.callback != null) {
+                        LatLng latLng = LatLng(_kGooglePlex.target.latitude,
+                            _kGooglePlex.target.longitude);
+                        widget.callback!(latLng);
+                        Navigator.of(context).pop();
+                      }*/
+
+                      } else {
+                        CommonMethods().openNotifications(context);
+                      }
                     })),
-            widget.showPickUp
-                ? Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                            child: searchBox(
-                                controller: pickController,
-                                isPrefix: true,
-                                hintText: AppConstants.addressExp,
-                                prefixIcon: const Icon(
-                                  Icons.location_pin,
-                                  color: Colors.red,
-                                ))),
-                        /*horizontalSpacer(),
+            widget.serviceTypes == null
+                ? (widget.showPickUp
+                    ? Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                child: searchBox(
+                                    controller: pickController,
+                                    isPrefix: true,
+                                    hintText: AppConstants.addressExp,
+                                    prefixIcon: const Icon(
+                                      Icons.location_pin,
+                                      color: Colors.red,
+                                    ))),
+                            /*horizontalSpacer(),
                         Expanded(
                             child: searchBox(
                                 controller: dropController,
@@ -128,10 +172,11 @@ class MyAppMapState extends State<MyAppMap> {
                                   Icons.location_pin,
                                   color: Colors.green,
                                 ))),*/
-                      ],
-                    ),
-                  )
-                : const SizedBox.shrink(),
+                          ],
+                        ),
+                      )
+                    : const SizedBox.shrink())
+                : SizedBox.shrink(),
             verticalSpacer(height: widget.showPickUp ? 0.0 : 20.0),
             Expanded(
               child: GoogleMap(

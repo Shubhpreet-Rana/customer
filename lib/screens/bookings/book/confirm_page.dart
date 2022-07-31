@@ -1,10 +1,14 @@
 import 'package:app/screens/bookings/book/payment_options.dart';
 import 'package:app/screens/bookings/book/service_details.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
 
+import '../../../bloc/serviceProvider/service_provider_bloc.dart';
 import '../../../common/colors.dart';
 import '../../../common/constants.dart';
 import '../../../common/methods/common.dart';
@@ -17,14 +21,43 @@ class ConfirmBooking extends StatefulWidget {
   final List<ServiceTypes> selectedServices;
   final Map<String, dynamic> item;
   final DateTime selectedDate;
+  String? selectedTime;
 
-  const ConfirmBooking({Key? key, required this.selectedServices, required this.item, required this.selectedDate}) : super(key: key);
+  ConfirmBooking(
+      {Key? key,
+      required this.selectedServices,
+      required this.item,
+      required this.selectedDate,
+      this.selectedTime})
+      : super(key: key);
 
   @override
   State<ConfirmBooking> createState() => _ConfirmBookingState();
 }
 
 class _ConfirmBookingState extends State<ConfirmBooking> {
+  String address = "";
+
+  Future<void> getAddressFromLatLong(double latitude, double longitude) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(latitude, longitude);
+    print(placemarks);
+    Placemark place = placemarks[0];
+    var data =
+        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    address = data;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.item != null) {
+      getAddressFromLatLong(widget.item['lat'], widget.item['long']);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,8 +65,17 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: widget.item['serviceType'], context: context, backNavigation: true, onFilterClick: () {})),
-          Padding(padding: const EdgeInsets.only(left: 70.0, top: 2.0), child: Text((AppConstants.servicePopularity), style: AppStyles.whiteText)),
+          SafeArea(
+              bottom: false,
+              child: AppHeaders().collapsedHeader(
+                  text: widget.item['serviceType'],
+                  context: context,
+                  backNavigation: true,
+                  onFilterClick: () {})),
+          Padding(
+              padding: const EdgeInsets.only(left: 70.0, top: 2.0),
+              child: Text((AppConstants.servicePopularity),
+                  style: AppStyles.whiteText)),
           verticalSpacer(),
           Expanded(
               child: Container(
@@ -47,7 +89,6 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                     children: [
                       header(),
                       verticalSpacer(height: 10.0),
-
                       Expanded(
                         child: SingleChildScrollView(
                           child: Container(
@@ -57,41 +98,60 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-                                  child: Text(AppConstants.serviceCategories, style: AppStyles.blackSemiBold),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 0.0, horizontal: 20.0),
+                                  child: Text(AppConstants.serviceCategories,
+                                      style: AppStyles.blackSemiBold),
                                 ),
                                 verticalSpacer(height: 10.0),
                                 Container(
                                   color: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 10.0),
                                   child: MediaQuery.removePadding(
                                       context: context,
                                       removeTop: true,
                                       removeBottom: true,
                                       child: ListView.builder(
-                                          itemCount: widget.selectedServices.length,
+                                          itemCount:
+                                              widget.selectedServices.length,
                                           shrinkWrap: true,
-                                          physics: const NeverScrollableScrollPhysics(),
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, i) {
                                             return ExpansionTile(
                                               title: Text(
-                                                widget.selectedServices[i].title,
+                                                widget
+                                                    .selectedServices[i].title,
                                                 style: AppStyles.blackSemiBold,
                                               ),
                                               children: <Widget>[
-                                                _buildExpandableContent(widget.selectedServices[i]),
+                                                _buildExpandableContent(
+                                                    widget.selectedServices[i]),
                                               ],
                                             );
                                           })),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 20.0),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         children: [
-                                          Text(DateFormat('dd MMM, yyyy').format(widget.selectedDate), style: AppStyles.blackSemiBold),
+                                          Text(
+                                              DateFormat('dd MMM, yyyy')
+                                                  .format(widget.selectedDate),
+                                              style: AppStyles.blackSemiBold),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            "," + widget.selectedTime!,
+                                            style: AppStyles.blackSemiBold,
+                                          ),
                                           horizontalSpacer(width: 10.0),
                                           Text(
                                             "- Booking Date",
@@ -109,7 +169,8 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                                 ),
                                 Container(
                                   color: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 40.0, vertical: 20.0),
                                   child: Column(
                                     children: [
                                       MediaQuery.removePadding(
@@ -117,22 +178,70 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                                           removeTop: true,
                                           removeBottom: true,
                                           child: ListView.builder(
-                                              itemCount: widget.selectedServices.length,
+                                              itemCount: widget
+                                                  .selectedServices.length,
                                               shrinkWrap: true,
-                                              physics: const NeverScrollableScrollPhysics(),
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
                                               itemBuilder: (context, i) {
                                                 return Padding(
-                                                  padding: const EdgeInsets.only(top: 8.0),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8.0),
                                                   child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
-                                                      Text(
-                                                        widget.selectedServices[i].title,
-                                                        style: AppStyles.lightText,
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            widget
+                                                                .selectedServices[
+                                                                    i]
+                                                                .title,
+                                                            style: AppStyles
+                                                                .lightText,
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 10.0,
+                                                          ),
+                                                          Text(
+                                                            "GST",
+                                                            style: AppStyles
+                                                                .lightText,
+                                                          ),
+                                                        ],
                                                       ),
-                                                      Text(
-                                                        r"$" + widget.selectedServices[i].price.toString(),
-                                                        style: AppStyles.blackSemiBold,
+                                                      Column(
+                                                        children: [
+                                                          Text(
+                                                            r"$" +
+                                                                widget
+                                                                    .selectedServices[
+                                                                        i]
+                                                                    .price
+                                                                    .toString(),
+                                                            style: AppStyles
+                                                                .blackSemiBold,
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 10.0,
+                                                          ),
+                                                          Text(
+                                                            r"$" +
+                                                                widget
+                                                                    .selectedServices[
+                                                                        i]
+                                                                    .gstRate
+                                                                    .toString(),
+                                                            style: AppStyles
+                                                                .blackSemiBold,
+                                                          )
+                                                        ],
                                                       ),
                                                     ],
                                                   ),
@@ -140,7 +249,8 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                                               })),
                                       verticalSpacer(),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             "Total",
@@ -152,30 +262,118 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                                           ),
                                         ],
                                       ),
+                                      verticalSpacer(),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Total GST",
+                                            style: AppStyles.blackSemiW400_1,
+                                          ),
+                                          Text(
+                                            r"$" + getTotalGST().toString(),
+                                            style: AppStyles.textBlueBold,
+                                          ),
+                                        ],
+                                      ),
                                       verticalSpacer(height: 50.0),
-                                      GestureDetector(
-                                          behavior: HitTestBehavior.translucent,
-                                          onTap: () {
-                                            Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-                                                builder: (context) => PaymentOptions(
-                                                  totalPayment: getTotal(),
-                                                )));
-                                          },
-                                          child: appButton(bkColor: Colours.blue.code, text: AppConstants.confirmBooking, height: 50.0)),
+                                      BlocListener<ServiceProviderBloc,
+                                          ServiceProviderState>(
+                                        listener: (context, state) {
+                                          if (state is BookingSuccessfully) {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .push(CupertinoPageRoute(
+                                                    builder: (context) =>
+                                                        PaymentOptions(
+                                                          totalPayment:
+                                                              getTotal(),
+                                                        )));
+                                          }
+                                          if (state is BookingFailed) {
+                                            CommonMethods().showTopFlash(
+                                                context: context,
+                                                message: state.error);
+                                          }
+                                        },
+                                        child: BlocBuilder<ServiceProviderBloc,
+                                                ServiceProviderState>(
+                                            builder: (context, state) {
+                                          if (state is BookServiceLoading) {
+                                            return Container(
+                                              width:
+                                                  CommonMethods.deviceWidth(),
+                                              height: 55,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0)),
+                                              child: const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            );
+                                          }
+                                          return GestureDetector(
+                                              behavior:
+                                                  HitTestBehavior.translucent,
+                                              onTap: () {
+                                                var data = {
+                                                  "amount": getTotal(),
+                                                  "date": widget.selectedDate,
+                                                  "service_cat_id":
+                                                      getSelectCatIds(),
+                                                  "address_lat":
+                                                      getAddressLAT(),
+                                                  "address_long":
+                                                      getAddressLONG(),
+                                                  "gst_amount": getTotalGST(),
+                                                  "time": widget.selectedTime
+                                                };
+                                                BlocProvider.of<
+                                                            ServiceProviderBloc>(
+                                                        context)
+                                                    .add(BookService(
+                                                        getTotal().toString(),
+                                                        widget.selectedDate
+                                                            .toString(),
+                                                        getAddressLAT(),
+                                                        getAddressLONG(),
+                                                        getTotalGST()
+                                                            .toString(),
+                                                        widget.selectedTime,
+                                                        getSelectCatIds()));
+
+                                                /*  Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .push(CupertinoPageRoute(
+                                                    builder: (context) =>
+                                                        PaymentOptions(
+                                                          totalPayment:
+                                                              getTotal(),
+                                                          bookingDetails: data,
+                                                        )));*/
+                                              },
+                                              child: appButton(
+                                                  bkColor: Colours.blue.code,
+                                                  text: AppConstants
+                                                      .confirmBooking,
+                                                  height: 50.0));
+                                        }),
+                                      ),
                                       verticalSpacer(height: 50.0),
                                     ],
                                   ),
                                 ),
 
-
-                               /*
+                                /*
                                */
                               ],
                             ),
                           ),
                         ),
                       ),
-
                     ],
                   ))),
         ],
@@ -187,6 +385,14 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
     double total = 0;
     for (var item in widget.selectedServices) {
       total = total + double.parse(item.price);
+    }
+    return total;
+  }
+
+  double getTotalGST() {
+    double total = 0;
+    for (var item in widget.selectedServices) {
+      total = total + double.parse(item.gstRate!);
     }
     return total;
   }
@@ -216,6 +422,19 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
               style: AppStyles.textBlueSemiBold,
             ),
             verticalSpacer(height: 10.0),
+            Row(
+              children: [
+                const Text(
+                  "GST: ",
+                  style: TextStyle(color: Colors.grey),
+                ),
+                Text(
+                  r"$" + vehicle.gstRate.toString(),
+                  style: AppStyles.textBlueSemiBold,
+                ),
+              ],
+            ),
+            verticalSpacer(height: 10.0),
             Text(
               vehicle.description,
               style: AppStyles.blackSemiW400,
@@ -237,16 +456,18 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                 borderRadius: BorderRadius.circular(10.0),
                 child: Stack(
                   children: [
-                    Image.asset(
-                      widget.item['image'],
+                    CachedNetworkImage(
                       fit: BoxFit.fill,
+                      imageUrl: widget.item['image'],
                     ),
                     Positioned(
                         right: 2.0,
                         bottom: 0.0,
                         child: Container(
                           padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(color: Colors.black.withOpacity(.5), shape: BoxShape.circle),
+                          decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(.5),
+                              shape: BoxShape.circle),
                           child: Text(
                             widget.item['rating'].toString(),
                             style: AppStyles.whiteTextW500,
@@ -263,7 +484,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  AppConstants.serviceType,
+                  widget.item['serviceType'] ?? "",
                   maxLines: 2,
                   textAlign: TextAlign.center,
                   style: AppStyles.blackSemiBold,
@@ -293,11 +514,13 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                       Icons.location_pin,
                       color: Colours.unSelectTab.code,
                     ),
-                    Text(
-                      "China town, Down street, \nCalifornia",
-                      maxLines: 2,
-                      textAlign: TextAlign.start,
-                      style: AppStyles.blackText,
+                    Expanded(
+                      child: Text(
+                        address,
+                        maxLines: 2,
+                        textAlign: TextAlign.start,
+                        style: AppStyles.blackText,
+                      ),
                     ),
                   ],
                 )
@@ -306,4 +529,44 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
           ],
         ),
       );
+
+  getSelectCatIds() {
+    List<String>? catIds = [];
+    if (widget.selectedServices.isNotEmpty) {
+      widget.selectedServices.forEach((element) {
+        catIds.add(element.id);
+      });
+    }
+    return catIds;
+  }
+
+  getAddressLAT() {
+    String? lat;
+    if (widget.selectedServices.isNotEmpty) {
+      List<ServiceTypes> list = widget.selectedServices
+          .where((element) => element.id == "6")
+          .toList();
+      if (list.isNotEmpty) {
+        lat = list[0].lat.toString();
+      } else {
+        lat = "";
+      }
+    }
+    return lat!;
+  }
+
+  getAddressLONG() {
+    String? long;
+    if (widget.selectedServices.isNotEmpty) {
+      List<ServiceTypes> list = widget.selectedServices
+          .where((element) => element.id == "6")
+          .toList();
+      if (list.isNotEmpty) {
+        long = list[0].long.toString();
+      } else {
+        long = "";
+      }
+    }
+    return long!;
+  }
 }

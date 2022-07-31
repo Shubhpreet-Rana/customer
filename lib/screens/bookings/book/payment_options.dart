@@ -13,13 +13,22 @@ import '../../../common/ui/headers.dart';
 class PaymentOptions extends StatefulWidget {
   final double totalPayment;
 
-  const PaymentOptions({Key? key, required this.totalPayment}) : super(key: key);
+  PaymentOptions({Key? key, required this.totalPayment})
+      : super(key: key);
 
   @override
   State<PaymentOptions> createState() => _PaymentOptionsState();
 }
 
 class _PaymentOptionsState extends State<PaymentOptions> {
+  String totalPayment="";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,15 +38,19 @@ class _PaymentOptionsState extends State<PaymentOptions> {
         children: [
           SafeArea(
               bottom: false,
-              child: AppHeaders()
-                  .collapsedHeader(text: AppConstants.payOptions, context: context, backNavigation: true, onFilterClick: () {})),
+              child: AppHeaders().collapsedHeader(
+                  text: AppConstants.payOptions,
+                  context: context,
+                  backNavigation: true,
+                  onFilterClick: () {})),
           verticalSpacer(),
           Expanded(
               child: SingleChildScrollView(
             child: Container(
               width: CommonMethods.deviceWidth(),
               height: CommonMethods.deviceHeight(),
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 5.0, top: 20.0),
+              padding: const EdgeInsets.only(
+                  left: 20.0, right: 20.0, bottom: 5.0, top: 20.0),
               decoration: const BoxDecoration(
                 color: Colors.white,
               ),
@@ -46,18 +59,24 @@ class _PaymentOptionsState extends State<PaymentOptions> {
                 children: [
                   Container(
                     width: CommonMethods.deviceWidth(),
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-                    decoration: BoxDecoration(color: Colours.lightGray.code, borderRadius: BorderRadius.circular(10.0)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 15.0),
+                    decoration: BoxDecoration(
+                        color: Colours.lightGray.code,
+                        borderRadius: BorderRadius.circular(10.0)),
                     child: Text(
-                      r"$" + widget.totalPayment.toString(),
+                      r"$" + totalPayment.toString(),
                       style: AppStyles.darkText14,
                     ),
                   ),
                   verticalSpacer(),
                   Container(
                     width: CommonMethods.deviceWidth(),
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-                    decoration: BoxDecoration(color: Colours.blue.code, borderRadius: BorderRadius.circular(10.0)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 15.0),
+                    decoration: BoxDecoration(
+                        color: Colours.blue.code,
+                        borderRadius: BorderRadius.circular(10.0)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -124,17 +143,23 @@ class _PaymentOptionsState extends State<PaymentOptions> {
                   verticalSpacer(height: 30.0),
                   Text(AppConstants.newPayment, style: AppStyles.blackSemiBold),
                   verticalSpacer(height: 30.0),
-                  paymentOptions(icon: Assets.card.name, text: AppConstants.paymentItems[2]),
+                  paymentOptions(
+                      icon: Assets.card.name,
+                      text: AppConstants.paymentItems[2]),
                   Container(
                     height: 1.5,
                     color: Colours.hintColor.code,
                   ),
-                  paymentOptions(icon: Assets.card.name, text: AppConstants.paymentItems[1]),
+                  paymentOptions(
+                      icon: Assets.card.name,
+                      text: AppConstants.paymentItems[1]),
                   Container(
                     height: 1.5,
                     color: Colours.hintColor.code,
                   ),
-                  paymentOptions(icon: Assets.bank.name, text: AppConstants.paymentItems[0]),
+                  paymentOptions(
+                      icon: Assets.bank.name,
+                      text: AppConstants.paymentItems[0]),
                   Container(
                     height: 1.5,
                     color: Colours.hintColor.code,
@@ -148,7 +173,10 @@ class _PaymentOptionsState extends State<PaymentOptions> {
                               totalPayment: getTotal(),
                             )));*/
                       },
-                      child: appButton(bkColor: Colours.blue.code, text: AppConstants.payNow, height: 50.0)),
+                      child: appButton(
+                          bkColor: Colours.blue.code,
+                          text: AppConstants.payNow,
+                          height: 50.0)),
                   verticalSpacer(height: 5.0),
                 ],
               ),
@@ -159,7 +187,8 @@ class _PaymentOptionsState extends State<PaymentOptions> {
     );
   }
 
-  Widget paymentOptions({required String icon, required String text}) => Padding(
+  Widget paymentOptions({required String icon, required String text}) =>
+      Padding(
         padding: const EdgeInsets.only(bottom: 15.0, top: 15.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
