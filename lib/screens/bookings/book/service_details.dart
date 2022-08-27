@@ -55,12 +55,6 @@ class _ServiceDetailsState extends State<ServiceDetails> {
               value['gst_rate'].toString());
         }
         serviceType!.add(serviceTypes!);
-        var data = ServiceTypes("2", false, "Gasoline", "service", "subService",
-            "248", "Nice gasoline oil", "30");
-        var data2 = ServiceTypes("5", false, "cholestrol", "service",
-            "subService", "100", "Nice cholestrol oil", "5");
-        serviceType!.add(data);
-        serviceType!.add(data2);
       });
     }
     //selectedServices.add(serviceType![0]);

@@ -1,7 +1,9 @@
+import 'package:app/bloc/home/home_bloc.dart';
 import 'package:app/bloc/serviceProvider/service_provider_bloc.dart';
 import 'package:app/bloc/vehicle/add/add_vehicle_bloc.dart';
 import 'package:app/common/methods/common.dart';
 import 'package:app/data/repository/add_vehicle_repository.dart';
+import 'package:app/data/repository/home_repository.dart';
 import 'package:app/data/repository/profile_repository.dart';
 import 'package:app/data/repository/service_provider_repository.dart';
 import 'package:app/screens/registration/profile_setup.dart';
@@ -48,6 +50,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<ServiceProviderRepository>(
           create: (context) => ServiceProviderRepository(),
         ),
+        RepositoryProvider<HomeRepository>(
+          create: (context) => HomeRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -58,28 +63,39 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<CreateProfileBloc>(
             create: (context) => CreateProfileBloc(
-              profileRepository: RepositoryProvider.of<ProfileRepository>(context),
+              profileRepository:
+                  RepositoryProvider.of<ProfileRepository>(context),
             ),
           ),
           BlocProvider<AddVehicleBloc>(
             create: (context) => AddVehicleBloc(
-              addVehicleRepository: RepositoryProvider.of<VehicleRepository>(context),
+              addVehicleRepository:
+                  RepositoryProvider.of<VehicleRepository>(context),
             ),
           ),
           BlocProvider<ProfileBloc>(
             create: (context) => ProfileBloc(
-              profileRepository: RepositoryProvider.of<ProfileRepository>(context),
+              profileRepository:
+                  RepositoryProvider.of<ProfileRepository>(context),
             ),
           ),
           BlocProvider<VehicleBloc>(
             create: (context) => VehicleBloc(
-              vehicleRepository: RepositoryProvider.of<VehicleRepository>(context),
-            ),
-          ), BlocProvider<ServiceProviderBloc>(
-            create: (context) => ServiceProviderBloc(
-              serviceProviderRepository: RepositoryProvider.of<ServiceProviderRepository>(context),
+              vehicleRepository:
+                  RepositoryProvider.of<VehicleRepository>(context),
             ),
           ),
+          BlocProvider<ServiceProviderBloc>(
+              create: (context) => ServiceProviderBloc(
+                    serviceProviderRepository:
+                        RepositoryProvider.of<ServiceProviderRepository>(
+                            context),
+                  )),
+          BlocProvider<HomeBloc>(
+            create: (context) => HomeBloc(
+              homeRepository: RepositoryProvider.of<HomeRepository>(context),
+            ),
+          )
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

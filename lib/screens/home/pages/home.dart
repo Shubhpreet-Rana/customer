@@ -1,9 +1,13 @@
+import 'package:app/bloc/home/home_bloc.dart';
 import 'package:app/common/assets.dart';
 import 'package:app/common/colors.dart';
+import 'package:app/model/get_banner.dart';
 import 'package:app/screens/marketplace/view_cars.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../common/constants.dart';
@@ -17,13 +21,18 @@ import '../../marketplace/sell_car.dart';
 
 class HomeTab extends StatefulWidget {
   final Function changeTab;
-  const HomeTab({Key? key,required this.changeTab}) : super(key: key);
+
+  const HomeTab({Key? key, required this.changeTab}) : super(key: key);
 
   @override
   State<HomeTab> createState() => _HomeTabState();
 }
 
-final List<String> imgList = [Assets.banner.name, Assets.banner.name, Assets.banner.name];
+final List<String> imgList = [
+  Assets.banner.name,
+  Assets.banner.name,
+  Assets.banner.name
+];
 
 class _HomeTabState extends State<HomeTab> {
   TextEditingController searchController = TextEditingController();
@@ -31,6 +40,7 @@ class _HomeTabState extends State<HomeTab> {
   @override
   void initState() {
     // TODO: implement initState
+    BlocProvider.of<HomeBloc>(context).add(GetBanner());
     super.initState();
   }
 
@@ -83,27 +93,47 @@ class _HomeTabState extends State<HomeTab> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CarouselSlider.builder(
-                      options: CarouselOptions(
-                        height: 200,
-                        viewportFraction: 1,
-                        enableInfiniteScroll: true,
-                        autoPlay: false,
-                        autoPlayInterval: const Duration(seconds: 4),
-                        autoPlayAnimationDuration: const Duration(milliseconds: 1500),
-                        autoPlayCurve: Curves.fastOutSlowIn,
-                        enlargeCenterPage: true,
-                      ),
-                      itemCount: imgList.length,
-                      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-                        final data = imgList[itemIndex];
-                        return itemHomeSlider(data);
-                      },
-                    ),
+                    BlocListener<HomeBloc, HomeState>(
+                        listener: (context, state) {},
+                        child: BlocBuilder<HomeBloc, HomeState>(
+                            builder: (context, state) {
+                          if (state is Loading) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          if (state is GetBannerSuccessfully) {
+                            var data = state.props[0] as Map<String, dynamic>;
+                            Banners? banner = Banners.fromJson(data);
+
+                            return CarouselSlider.builder(
+                              options: CarouselOptions(
+                                height: 200,
+                                viewportFraction: 1,
+                                enableInfiniteScroll: true,
+                                autoPlay: false,
+                                autoPlayInterval: const Duration(seconds: 4),
+                                autoPlayAnimationDuration:
+                                    const Duration(milliseconds: 1500),
+                                autoPlayCurve: Curves.fastOutSlowIn,
+                                enlargeCenterPage: true,
+                              ),
+                              itemCount: 1,
+                              itemBuilder: (BuildContext context, int itemIndex,
+                                  int pageViewIndex) {
+                           //     final data = imgList[itemIndex];
+                                return itemHomeSlider(banner.data!.topImage!);
+                              },
+                            );
+                          }
+                          ;
+                          return SizedBox.shrink();
+                        })),
                     verticalSpacer(height: 10.0),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-                      child: Text(AppConstants.sProviderText, style: AppStyles.blackSemiBold),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0.0, horizontal: 20.0),
+                      child: Text(AppConstants.sProviderText,
+                          style: AppStyles.blackSemiBold),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -112,32 +142,56 @@ class _HomeTabState extends State<HomeTab> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Expanded(child: serviceProviders(icon: Assets.periodic.name, text: AppConstants.provider1)),
-                          Expanded(child: serviceProviders(icon: Assets.ac.name, text: AppConstants.provider2)),
-                          Expanded(child: serviceProviders(icon: Assets.tyre.name, text: AppConstants.provider3)),
-                          Expanded(child: serviceProviders(icon: Assets.battery.name, text: AppConstants.provider4)),
+                          Expanded(
+                              child: serviceProviders(
+                                  icon: Assets.periodic.name,
+                                  text: AppConstants.provider1)),
+                          Expanded(
+                              child: serviceProviders(
+                                  icon: Assets.ac.name,
+                                  text: AppConstants.provider2)),
+                          Expanded(
+                              child: serviceProviders(
+                                  icon: Assets.tyre.name,
+                                  text: AppConstants.provider3)),
+                          Expanded(
+                              child: serviceProviders(
+                                  icon: Assets.battery.name,
+                                  text: AppConstants.provider4)),
                         ],
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-                      child: Text(AppConstants.bookingText, style: AppStyles.blackSemiBold),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0.0, horizontal: 20.0),
+                      child: Text(AppConstants.bookingText,
+                          style: AppStyles.blackSemiBold),
                     ),
                     Container(
                       width: CommonMethods.deviceWidth(),
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 30.0),
                       margin: const EdgeInsets.symmetric(vertical: 10.0),
                       color: Colors.white,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          bookingHistory(icon: Assets.periodic.name, serviceText: AppConstants.provider1, status: 1, date: '25 Mar, 2022'),
-                          bookingHistory(icon: Assets.ac.name, serviceText: AppConstants.provider2, status: 2, date: '19 Mar, 2022'),
+                          bookingHistory(
+                              icon: Assets.periodic.name,
+                              serviceText: AppConstants.provider1,
+                              status: 1,
+                              date: '25 Mar, 2022'),
+                          bookingHistory(
+                              icon: Assets.ac.name,
+                              serviceText: AppConstants.provider2,
+                              status: 2,
+                              date: '19 Mar, 2022'),
                           verticalSpacer(),
                           Container(
                             height: 130.0,
                             width: CommonMethods.deviceWidth(),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0)),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20.0),
                               child: Image.asset(
@@ -153,16 +207,28 @@ class _HomeTabState extends State<HomeTab> {
                               GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
-                                    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const SellCar()));
+                                    Navigator.of(context, rootNavigator: false)
+                                        .push(CupertinoPageRoute(
+                                            builder: (context) =>
+                                                const SellCar()));
                                   },
-                                  child: rowButton(bkColor: Colours.textBlack.code, text: AppConstants.addToSell, paddingHorizontal: 8.0)),
+                                  child: rowButton(
+                                      bkColor: Colours.textBlack.code,
+                                      text: AppConstants.addToSell,
+                                      paddingHorizontal: 8.0)),
                               horizontalSpacer(),
                               GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
-                                    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const ViewCars()));
+                                    Navigator.of(context, rootNavigator: false)
+                                        .push(CupertinoPageRoute(
+                                            builder: (context) =>
+                                                const ViewCars()));
                                   },
-                                  child: rowButton(bkColor: Colours.blue.code, text: AppConstants.viewCars, paddingHorizontal: 8.0)),
+                                  child: rowButton(
+                                      bkColor: Colours.blue.code,
+                                      text: AppConstants.viewCars,
+                                      paddingHorizontal: 8.0)),
                             ],
                           ),
                           verticalSpacer(height: 100),
@@ -177,7 +243,12 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Widget bookingHistory({required String icon, required String serviceText, required String date, required int status}) => Padding(
+  Widget bookingHistory(
+          {required String icon,
+          required String serviceText,
+          required String date,
+          required int status}) =>
+      Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
           children: [
@@ -231,12 +302,13 @@ class _HomeTabState extends State<HomeTab> {
         ),
       );
 
-  Widget serviceProviders({required String icon, required String text}) => GestureDetector(
-    behavior: HitTestBehavior.translucent,
-    onTap: (){
-      widget.changeTab();
-    },
-    child: Column(
+  Widget serviceProviders({required String icon, required String text}) =>
+      GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          widget.changeTab();
+        },
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -254,12 +326,11 @@ class _HomeTabState extends State<HomeTab> {
             )
           ],
         ),
-  );
+      );
 
   Widget itemHomeSlider(String data) {
-    return Image.asset(
-      data,
-      fit: BoxFit.cover,
+    return CachedNetworkImage(
+      fit: BoxFit.cover, imageUrl: data,
     );
   }
 }
