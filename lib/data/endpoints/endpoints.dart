@@ -15,4 +15,5 @@ class EndPoints {
   static const String getCategoryList = '/boulou/public/api/category';
   static const String serviceBooking = '/boulou/public/api/booking';
   static const String banner = '/boulou/public/api/banner';
+  static const String mybooking = '/boulou/public/api/mybooking';
 }

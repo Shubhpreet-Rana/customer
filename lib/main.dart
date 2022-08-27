@@ -1,8 +1,10 @@
+import 'package:app/bloc/booking/booking_bloc.dart';
 import 'package:app/bloc/home/home_bloc.dart';
 import 'package:app/bloc/serviceProvider/service_provider_bloc.dart';
 import 'package:app/bloc/vehicle/add/add_vehicle_bloc.dart';
 import 'package:app/common/methods/common.dart';
 import 'package:app/data/repository/add_vehicle_repository.dart';
+import 'package:app/data/repository/booking_repository.dart';
 import 'package:app/data/repository/home_repository.dart';
 import 'package:app/data/repository/profile_repository.dart';
 import 'package:app/data/repository/service_provider_repository.dart';
@@ -53,6 +55,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<HomeRepository>(
           create: (context) => HomeRepository(),
         ),
+        RepositoryProvider<BookingRepository>(
+          create: (context) => BookingRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -94,6 +99,12 @@ class MyApp extends StatelessWidget {
           BlocProvider<HomeBloc>(
             create: (context) => HomeBloc(
               homeRepository: RepositoryProvider.of<HomeRepository>(context),
+            ),
+          ),
+          BlocProvider<BookingBloc>(
+            create: (context) => BookingBloc(
+              bookingRepository:
+                  RepositoryProvider.of<BookingRepository>(context),
             ),
           )
         ],

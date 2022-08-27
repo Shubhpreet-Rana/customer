@@ -1,8 +1,13 @@
+import 'package:app/bloc/booking/booking_bloc.dart';
 import 'package:app/common/constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 import '../../../common/assets.dart';
 import '../../../common/colors.dart';
@@ -11,6 +16,7 @@ import '../../../common/styles/styles.dart';
 import '../../../common/ui/background.dart';
 import '../../../common/ui/common_ui.dart';
 import '../../../common/ui/headers.dart';
+import '../../../model/my_bookings.dart';
 import '../../bookings/booking_details.dart';
 
 class CalenderTab extends StatefulWidget {
@@ -21,6 +27,15 @@ class CalenderTab extends StatefulWidget {
 }
 
 class _CalenderTabState extends State<CalenderTab> {
+  List<MyBookingData>? finalResultList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    BlocProvider.of<BookingBloc>(context).add(LoadBookings());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,43 +45,140 @@ class _CalenderTabState extends State<CalenderTab> {
         children: [
           SafeArea(
               bottom: false,
-              child: AppHeaders()
-                  .collapsedHeader(text: AppConstants.myBooking, context: context, backNavigation: false, onFilterClick: () {})),
+              child: AppHeaders().collapsedHeader(
+                  text: AppConstants.myBooking,
+                  context: context,
+                  backNavigation: false,
+                  onFilterClick: () {})),
           verticalSpacer(),
-          Expanded(
-              child: Container(
-            width: CommonMethods.deviceWidth(),
-            height: CommonMethods.deviceHeight(),
-            padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 5.0, top: 20.0),
-            decoration: BoxDecoration(
-              color: Colours.lightGray.code,
-            ),
-            child: MediaQuery.removePadding(
-              context: context,
-              removeTop: true,
-              child: ListView.builder(
-                  itemCount: 2,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return listItem(
-                          image: Assets.service.name,
-                          serviceType: "Transmission Service",
-                          joinDate: "15 Mar, 2021",
-                          services: ['AC Gas Change', 'Gasoline Delivery', 'Cooling Test'],
-                          rating: 5,
-                          status: 1);
-                    } else {
-                      return listItem(
-                          image: Assets.service1.name,
-                          serviceType: "AC Service",
-                          joinDate: "15 Mar, 2021",
-                          services: ['AC Gas Change', 'Gasoline Delivery', 'Cooling Test'],
-                          status: 2);
-                    }
-                  }),
-            ),
-          ))
+          BlocListener<BookingBloc, BookingState>(
+              listener: (context, state) {},
+              child: BlocBuilder<BookingBloc, BookingState>(
+                  builder: (context, bookingState) {
+                if (bookingState is Loading) {
+                  return const CircularProgressIndicator();
+                }else if (bookingState is MyBookingNoData && bookingState.currentPage==null
+                ) {
+                  return Expanded(
+                    child: Container(
+                      width: CommonMethods.deviceWidth(),
+                      height: CommonMethods.deviceHeight(),
+                      decoration: BoxDecoration(
+                        color: Colours.lightGray.code,
+                      ),
+                      child: Center(
+                          child: Text(
+                            "No bookings found",
+                            style: TextStyle(color: Colors.black),
+                          )),
+                    ),
+                  );
+                }
+
+                else {
+                  if (bookingState.myBookingList != null &&
+                      bookingState.myBookingList!.length > 0) {
+                    finalResultList!.addAll(bookingState.myBookingList ?? []);
+                  }
+
+                  return Expanded(
+                      child: Container(
+                    width: CommonMethods.deviceWidth(),
+                    height: CommonMethods.deviceHeight(),
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, bottom: 5.0, top: 20.0),
+                    decoration: BoxDecoration(
+                      color: Colours.lightGray.code,
+                    ),
+                    child: NotificationListener(
+                      onNotification: (ScrollNotification scrollInfo) {
+                        if (scrollInfo.metrics.pixels ==
+                            scrollInfo.metrics.maxScrollExtent) {
+                          if (!bookingState.isFetchingMore! &&
+                              bookingState.hasMoreData! &&
+                              !bookingState.isLoading!) {
+                            BlocProvider.of<BookingBloc>(context)
+                                .add(FetchMoreBookings(fetchingMore: true));
+                            BlocProvider.of<BookingBloc>(context).add(
+                                LoadBookings(
+                                    page:
+                                        bookingState.currentPage!.toString()));
+                          }
+                        }
+                        return false;
+                      },
+                      child: Stack(
+                        children: [
+                          SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                MediaQuery.removePadding(
+                                  context: context,
+                                  removeTop: true,
+                                  child: ListView.builder(
+                                      itemCount: finalResultList!.length,
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        MyBookingData myBookingData =
+                                            finalResultList![index];
+                                        List<String> services = [];
+                                        if (myBookingData.services!.length >
+                                            0) {
+                                          myBookingData.services!
+                                              .forEach((element) {
+                                            services
+                                                .add(element.serviceCategory!);
+                                          });
+                                        }
+                                        String formattedDate = DateFormat('yyyy-MM-dd').format(myBookingData.date!);
+                                        print(formattedDate);
+                                        return listItem(
+                                            image: myBookingData.image1!,
+                                            serviceType: myBookingData.businessName!,
+                                            joinDate: formattedDate,
+                                            services: services,
+                                            rating: 5,
+                                            status: myBookingData.bookingStatus!);
+                                        /* if (index == 0) {
+
+                                        } else {
+                                          return listItem(
+                                              image: Assets.service1.name,
+                                              serviceType: "AC Service",
+                                              joinDate: "15 Mar, 2021",
+                                              services: [
+                                                'AC Gas Change',
+                                                'Gasoline Delivery',
+                                                'Cooling Test'
+                                              ],
+                                              status: 2);
+                                        }*/
+                                      }),
+                                ),
+                                if (bookingState.isLoading!)
+                                  const CircularProgressIndicator()
+                              ],
+                            ),
+                          ),
+                          if (bookingState.isFetchingMore!)
+                            const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: SpinKitCircle(
+                                    color: Colors.black,
+                                    size: 60,
+                                  ),
+                                ),
+                              ),
+                            )
+                        ],
+                      ),
+                    ),
+                  ));
+                }
+              })),
         ],
       )),
     );
@@ -97,8 +209,8 @@ class _CalenderTabState extends State<CalenderTab> {
                   width: 100.0,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image.asset(
-                      image,
+                    child: CachedNetworkImage(
+                      imageUrl: image,
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -120,10 +232,14 @@ class _CalenderTabState extends State<CalenderTab> {
                             style: AppStyles.blackSemiBold,
                           ),
                           Text(
-                            status == 1 ? AppConstants.active : AppConstants.completed,
+                            status == 1
+                                ? AppConstants.active
+                                : AppConstants.completed,
                             maxLines: 2,
                             textAlign: TextAlign.center,
-                            style: status == 1 ? AppStyles.textGreen : AppStyles.textBlue,
+                            style: status == 1
+                                ? AppStyles.textGreen
+                                : AppStyles.textBlue,
                           )
                         ],
                       ),
@@ -199,10 +315,16 @@ class _CalenderTabState extends State<CalenderTab> {
                             "rating": rating,
                             "status": status
                           };
-                          Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) =>  BookingDetails(item:item)));
+                          Navigator.of(context, rootNavigator: false).push(
+                              CupertinoPageRoute(
+                                  builder: (context) =>
+                                      BookingDetails(item: item)));
                         },
                         child: rowButton(
-                            bkColor: Colours.blue.code, text: AppConstants.details, paddingHorizontal: 8.0, paddingVertical: 7.0)),
+                            bkColor: Colours.blue.code,
+                            text: AppConstants.details,
+                            paddingHorizontal: 8.0,
+                            paddingVertical: 7.0)),
                   ],
                 ),
               ],
