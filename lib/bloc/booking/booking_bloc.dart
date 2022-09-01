@@ -49,8 +49,9 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
       emit(GetBookingFailed(e.toString()));
     }
   }
-  Future<FutureOr<void>> _changeFetchValue(FetchMoreBookings event, Emitter<BookingState> emit) async {
+
+  Future<FutureOr<void>> _changeFetchValue(
+      FetchMoreBookings event, Emitter<BookingState> emit) async {
     emit(state.copyWith(isFetchingMore: event.fetchingMore));
   }
-
 }

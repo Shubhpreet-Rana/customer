@@ -16,4 +16,6 @@ class EndPoints {
   static const String serviceBooking = '/boulou/public/api/booking';
   static const String banner = '/boulou/public/api/banner';
   static const String mybooking = '/boulou/public/api/mybooking';
+  static const String marketvehicle = '/boulou/public/api/marketvehicle';
+  static const String marketallvehicle = '/boulou/public/api/marketallvehicle';
 }

@@ -56,9 +56,10 @@ class _CalenderTabState extends State<CalenderTab> {
               child: BlocBuilder<BookingBloc, BookingState>(
                   builder: (context, bookingState) {
                 if (bookingState is Loading) {
-                  return const CircularProgressIndicator();
-                }else if (bookingState is MyBookingNoData && bookingState.currentPage==null
-                ) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (bookingState is MyBookingNoData &&
+                    bookingState.currentPage == null) {
                   return Expanded(
                     child: Container(
                       width: CommonMethods.deviceWidth(),
@@ -66,81 +67,85 @@ class _CalenderTabState extends State<CalenderTab> {
                       decoration: BoxDecoration(
                         color: Colours.lightGray.code,
                       ),
-                      child: Center(
+                      child: const Center(
                           child: Text(
-                            "No bookings found",
-                            style: TextStyle(color: Colors.black),
-                          )),
+                        "No bookings found",
+                        style: TextStyle(color: Colors.black),
+                      )),
                     ),
                   );
                 }
+                if (bookingState.myBookingList != null &&
+                    bookingState.myBookingList!.isNotEmpty) {
+                  finalResultList!.addAll(bookingState.myBookingList ?? []);
+                }
 
-                else {
-                  if (bookingState.myBookingList != null &&
-                      bookingState.myBookingList!.length > 0) {
-                    finalResultList!.addAll(bookingState.myBookingList ?? []);
-                  }
-
-                  return Expanded(
-                      child: Container(
-                    width: CommonMethods.deviceWidth(),
-                    height: CommonMethods.deviceHeight(),
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15.0, bottom: 5.0, top: 20.0),
-                    decoration: BoxDecoration(
-                      color: Colours.lightGray.code,
-                    ),
-                    child: NotificationListener(
-                      onNotification: (ScrollNotification scrollInfo) {
-                        if (scrollInfo.metrics.pixels ==
-                            scrollInfo.metrics.maxScrollExtent) {
-                          if (!bookingState.isFetchingMore! &&
-                              bookingState.hasMoreData! &&
-                              !bookingState.isLoading!) {
-                            BlocProvider.of<BookingBloc>(context)
-                                .add(FetchMoreBookings(fetchingMore: true));
-                            BlocProvider.of<BookingBloc>(context).add(
-                                LoadBookings(
-                                    page:
-                                        bookingState.currentPage!.toString()));
-                          }
-                        }
-                        return false;
-                      },
-                      child: Stack(
-                        children: [
-                          SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                MediaQuery.removePadding(
-                                  context: context,
-                                  removeTop: true,
-                                  child: ListView.builder(
-                                      itemCount: finalResultList!.length,
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context, index) {
-                                        MyBookingData myBookingData =
-                                            finalResultList![index];
-                                        List<String> services = [];
-                                        if (myBookingData.services!.length >
-                                            0) {
-                                          myBookingData.services!
-                                              .forEach((element) {
-                                            services
-                                                .add(element.serviceCategory!);
-                                          });
-                                        }
-                                        String formattedDate = DateFormat('yyyy-MM-dd').format(myBookingData.date!);
-                                        print(formattedDate);
-                                        return listItem(
-                                            image: myBookingData.image1!,
-                                            serviceType: myBookingData.businessName!,
-                                            joinDate: formattedDate,
-                                            services: services,
-                                            rating: 5,
-                                            status: myBookingData.bookingStatus!);
-                                        /* if (index == 0) {
+                return finalResultList!.isNotEmpty
+                    ? Expanded(
+                        child: Container(
+                        width: CommonMethods.deviceWidth(),
+                        height: CommonMethods.deviceHeight(),
+                        padding: const EdgeInsets.only(
+                            left: 15.0, right: 15.0, bottom: 5.0, top: 20.0),
+                        decoration: BoxDecoration(
+                          color: Colours.lightGray.code,
+                        ),
+                        child: NotificationListener(
+                          onNotification: (ScrollNotification scrollInfo) {
+                            if (scrollInfo.metrics.pixels ==
+                                scrollInfo.metrics.maxScrollExtent) {
+                              if (!bookingState.isFetchingMore! &&
+                                  bookingState.hasMoreData! &&
+                                  !bookingState.isLoading!) {
+                                BlocProvider.of<BookingBloc>(context)
+                                    .add(FetchMoreBookings(fetchingMore: true));
+                                BlocProvider.of<BookingBloc>(context).add(
+                                    LoadBookings(
+                                        page: bookingState.currentPage!
+                                            .toString()));
+                              }
+                            }
+                            return false;
+                          },
+                          child: Stack(
+                            children: [
+                              SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    MediaQuery.removePadding(
+                                      context: context,
+                                      removeTop: true,
+                                      child: ListView.builder(
+                                          itemCount: finalResultList!.length,
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            MyBookingData myBookingData =
+                                                finalResultList![index];
+                                            List<String> services = [];
+                                            if (myBookingData.services!.length >
+                                                0) {
+                                              myBookingData.services!
+                                                  .forEach((element) {
+                                                services.add(
+                                                    element.serviceCategory!);
+                                              });
+                                            }
+                                            String formattedDate =
+                                                DateFormat('yyyy-MM-dd').format(
+                                                    myBookingData.date!);
+                                            print(formattedDate);
+                                            return listItem(
+                                                image: myBookingData.image1!,
+                                                serviceType:
+                                                    myBookingData.businessName!,
+                                                joinDate: formattedDate,
+                                                services: services,
+                                                rating: 5,
+                                                status: myBookingData
+                                                    .bookingStatus!);
+                                            /* if (index == 0) {
 
                                         } else {
                                           return listItem(
@@ -154,30 +159,43 @@ class _CalenderTabState extends State<CalenderTab> {
                                               ],
                                               status: 2);
                                         }*/
-                                      }),
-                                ),
-                                if (bookingState.isLoading!)
-                                  const CircularProgressIndicator()
-                              ],
-                            ),
-                          ),
-                          if (bookingState.isFetchingMore!)
-                            const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: SpinKitCircle(
-                                    color: Colors.black,
-                                    size: 60,
-                                  ),
+                                          }),
+                                    ),
+                                    if (bookingState.isLoading!)
+                                      const CircularProgressIndicator()
+                                  ],
                                 ),
                               ),
-                            )
-                        ],
-                      ),
-                    ),
-                  ));
-                }
+                              if (bookingState.isFetchingMore!)
+                                const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: SpinKitCircle(
+                                        color: Colors.black,
+                                        size: 60,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            ],
+                          ),
+                        ),
+                      ))
+                    : Expanded(
+                        child: Container(
+                          width: CommonMethods.deviceWidth(),
+                          height: CommonMethods.deviceHeight(),
+                          decoration: BoxDecoration(
+                            color: Colours.lightGray.code,
+                          ),
+                          child: const Center(
+                              child: Text(
+                            "No bookings found",
+                            style: TextStyle(color: Colors.black),
+                          )),
+                        ),
+                      );
               })),
         ],
       )),

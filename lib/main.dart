@@ -1,5 +1,6 @@
 import 'package:app/bloc/booking/booking_bloc.dart';
 import 'package:app/bloc/home/home_bloc.dart';
+import 'package:app/bloc/home/view_cars/view_car_bloc.dart';
 import 'package:app/bloc/serviceProvider/service_provider_bloc.dart';
 import 'package:app/bloc/vehicle/add/add_vehicle_bloc.dart';
 import 'package:app/common/methods/common.dart';
@@ -105,6 +106,11 @@ class MyApp extends StatelessWidget {
             create: (context) => BookingBloc(
               bookingRepository:
                   RepositoryProvider.of<BookingRepository>(context),
+            ),
+          ) ,BlocProvider<ViewCarBloc>(
+            create: (context) => ViewCarBloc(
+              homeRepository:
+                  RepositoryProvider.of<HomeRepository>(context),
             ),
           )
         ],

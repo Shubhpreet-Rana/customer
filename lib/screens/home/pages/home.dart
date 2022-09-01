@@ -120,12 +120,12 @@ class _HomeTabState extends State<HomeTab> {
                               itemCount: 1,
                               itemBuilder: (BuildContext context, int itemIndex,
                                   int pageViewIndex) {
-                           //     final data = imgList[itemIndex];
+                                //     final data = imgList[itemIndex];
                                 return itemHomeSlider(banner.data!.topImage!);
                               },
                             );
                           }
-                          ;
+
                           return SizedBox.shrink();
                         })),
                     verticalSpacer(height: 10.0),
@@ -187,19 +187,31 @@ class _HomeTabState extends State<HomeTab> {
                               status: 2,
                               date: '19 Mar, 2022'),
                           verticalSpacer(),
-                          Container(
-                            height: 130.0,
-                            width: CommonMethods.deviceWidth(),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.0)),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Image.asset(
-                                Assets.banner1.name,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
+                          BlocBuilder<HomeBloc, HomeState>(
+                              builder: (context, state) {
+                            if (state is Loading) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            if (state is GetBannerSuccessfully) {
+                              var data = state.props[0] as Map<String, dynamic>;
+                              Banners? banner = Banners.fromJson(data);
+                              return Container(
+                                height: 130.0,
+                                width: CommonMethods.deviceWidth(),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.0)),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: CachedNetworkImage(
+                                    imageUrl: banner.data!.bottomImage!,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              );
+                            }
+                            return SizedBox.shrink();
+                          }),
                           verticalSpacer(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -330,7 +342,8 @@ class _HomeTabState extends State<HomeTab> {
 
   Widget itemHomeSlider(String data) {
     return CachedNetworkImage(
-      fit: BoxFit.cover, imageUrl: data,
+      fit: BoxFit.cover,
+      imageUrl: data,
     );
   }
 }
