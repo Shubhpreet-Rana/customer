@@ -18,6 +18,7 @@ import '../../common/ui/common_ui.dart';
 import '../../common/ui/headers.dart';
 import '../../model/all_vehicle_model.dart';
 import '../../model/my_marketplace_vehicle.dart';
+import '../maps/maps_page.dart';
 
 class ViewCars extends StatefulWidget {
   const ViewCars({Key? key}) : super(key: key);
@@ -381,7 +382,7 @@ class _ViewCarsState extends State<ViewCars> {
                     ))
                   ],
                 )),
-         /*   selectedTab == 1
+            selectedTab == 1
                 ? Container(
                     margin: const EdgeInsets.only(bottom: 20.0, top: 2.0),
                     padding: const EdgeInsets.all(10.0),
@@ -397,14 +398,14 @@ class _ViewCarsState extends State<ViewCars> {
                         children: [
                           Row(
                             children: [
-                             *//* CircleAvatar(
+                              CircleAvatar(
                                 backgroundColor: Colours.darkGray.code,
                                 radius: 20.0,
-                                backgroundImage: AssetImage(car),
-                              ),*//*
+                                backgroundImage: AssetImage("car"),
+                              ),
                               horizontalSpacer(width: 5.0),
                               Text(
-                                car.sellerName,
+                                "car.sellerName",
                                 maxLines: 1,
                                 textAlign: TextAlign.start,
                                 style: AppStyles.blackSemiW400_1,
@@ -416,10 +417,10 @@ class _ViewCarsState extends State<ViewCars> {
                               GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
-                                    *//* Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
-                                    builder: (context) => const MyAppMap(
+                                     Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
+                                    builder: (context) =>  MyAppMap(
                                           showPickUp: false,
-                                        )));*//*
+                                        )));
                                   },
                                   child: rowButton(
                                       bkColor: Colours.lightWhite.code,
@@ -431,10 +432,10 @@ class _ViewCarsState extends State<ViewCars> {
                               GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
-                                    Navigator.of(context, rootNavigator: false)
+                                    /*Navigator.of(context, rootNavigator: false)
                                         .push(CupertinoPageRoute(
                                             builder: (context) =>
-                                                ViewCarDetails(car: car)));
+                                                ViewCarDetails(car: car)));*/
                                   },
                                   child: rowButton(
                                       bkColor: Colours.blue.code,
@@ -444,7 +445,7 @@ class _ViewCarsState extends State<ViewCars> {
                             ],
                           )
                         ]))
-                : const SizedBox.shrink()*/
+                : const SizedBox.shrink()
           ],
         ),
       );

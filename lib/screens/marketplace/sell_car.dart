@@ -1,4 +1,6 @@
+import 'package:app/bloc/home/add_car/add_car_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/colors.dart';
 import '../../common/constants.dart';
@@ -27,6 +29,8 @@ class _SellCarState extends State<SellCar> {
   TextEditingController dateController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   DateTime selectedDate = DateTime.now();
+  String selectedColor = "";
+  String mileage = "";
 
   @override
   void initState() {
@@ -35,7 +39,11 @@ class _SellCarState extends State<SellCar> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: DateTime.now().subtract(const Duration(days: 7305)), lastDate: DateTime.now());
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime.now().subtract(const Duration(days: 7305)),
+        lastDate: DateTime.now());
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
@@ -50,7 +58,10 @@ class _SellCarState extends State<SellCar> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SafeArea(bottom: false, child: AppHeaders().extendedHeader(text: AppConstants.vehicle, context: context)),
+            SafeArea(
+                bottom: false,
+                child: AppHeaders().extendedHeader(
+                    text: AppConstants.vehicle, context: context)),
             verticalSpacer(
               height: 10.0,
             ),
@@ -58,7 +69,8 @@ class _SellCarState extends State<SellCar> {
                 child: Container(
               width: CommonMethods.deviceWidth(),
               height: CommonMethods.deviceHeight(),
-              padding: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 5.0, top: 40.0),
+              padding: const EdgeInsets.only(
+                  left: 30.0, right: 30.0, bottom: 5.0, top: 40.0),
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(33),
@@ -73,15 +85,39 @@ class _SellCarState extends State<SellCar> {
                     verticalSpacer(height: 10.0),
                     headingText(text: AppConstants.brandText),
                     verticalSpacer(height: 10.0),
-                    MyEditText(AppConstants.brandText, false, TextInputType.text, TextCapitalization.none, 10.0, brandNameController, Colours.hintColor.code, true),
+                    MyEditText(
+                        AppConstants.brandText,
+                        false,
+                        TextInputType.text,
+                        TextCapitalization.none,
+                        10.0,
+                        brandNameController,
+                        Colours.hintColor.code,
+                        true),
                     verticalSpacer(),
                     headingText(text: AppConstants.modelText),
                     verticalSpacer(height: 10.0),
-                    MyEditText(AppConstants.modelText, false, TextInputType.text, TextCapitalization.none, 10.0, modelController, Colours.hintColor.code, true),
+                    MyEditText(
+                        AppConstants.modelText,
+                        false,
+                        TextInputType.text,
+                        TextCapitalization.none,
+                        10.0,
+                        modelController,
+                        Colours.hintColor.code,
+                        true),
                     verticalSpacer(),
                     headingText(text: AppConstants.engineText),
                     verticalSpacer(height: 10.0),
-                    MyEditText(AppConstants.engineText, false, TextInputType.text, TextCapitalization.none, 10.0, engineController, Colours.hintColor.code, true),
+                    MyEditText(
+                        AppConstants.engineText,
+                        false,
+                        TextInputType.text,
+                        TextCapitalization.none,
+                        10.0,
+                        engineController,
+                        Colours.hintColor.code,
+                        true),
                     verticalSpacer(),
                     headingText(text: AppConstants.colorText),
                     verticalSpacer(height: 10.0),
@@ -89,19 +125,34 @@ class _SellCarState extends State<SellCar> {
                       bgColor: Colours.blue.code,
                       items: AppConstants.colorItems,
                       selectedItem: AppConstants.colorItems[0],
+                      onChange: (String? val) {
+                        selectedColor = val!;
+                        setState(() {});
+                      },
                     ),
                     verticalSpacer(),
                     headingText(text: AppConstants.mileageText),
                     verticalSpacer(height: 10.0),
                     AppDropdown(
-                      bgColor: Colours.blue.code,
-                      items: AppConstants.mileageItems,
-                      selectedItem: AppConstants.mileageItems[0],
-                    ),
+                        bgColor: Colours.blue.code,
+                        items: AppConstants.mileageItems,
+                        selectedItem: AppConstants.mileageItems[0],
+                        onChange: (value) {
+                          mileage = value;
+                          setState(() {});
+                        }),
                     verticalSpacer(),
                     headingText(text: AppConstants.priceText),
                     verticalSpacer(height: 10.0),
-                    MyEditText(r"$", false, TextInputType.number, TextCapitalization.none, 10.0, priceController, Colours.hintColor.code, true),
+                    MyEditText(
+                        r"$",
+                        false,
+                        TextInputType.number,
+                        TextCapitalization.none,
+                        10.0,
+                        priceController,
+                        Colours.hintColor.code,
+                        true),
                     verticalSpacer(),
                     headingText(text: AppConstants.dateText),
                     verticalSpacer(height: 10.0),
@@ -154,18 +205,55 @@ class _SellCarState extends State<SellCar> {
                             ),
                             paddingHorizontal: 15.0,
                             paddingVertical: 15.0),
-                        grayContainer(text: AppConstants.imageText1, icon: Icon(Icons.add, color: Colours.blue.code), paddingHorizontal: 15.0, paddingVertical: 15.0),
-                        grayContainer(text: AppConstants.imageText1, icon: Icon(Icons.add, color: Colours.blue.code), paddingHorizontal: 15.0, paddingVertical: 15.0)
+                        grayContainer(
+                            text: AppConstants.imageText1,
+                            icon: Icon(Icons.add, color: Colours.blue.code),
+                            paddingHorizontal: 15.0,
+                            paddingVertical: 15.0),
+                        grayContainer(
+                            text: AppConstants.imageText1,
+                            icon: Icon(Icons.add, color: Colours.blue.code),
+                            paddingHorizontal: 15.0,
+                            paddingVertical: 15.0)
                       ],
                     ),
                     verticalSpacer(),
-                    GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          if (widget.fromEdit) Navigator.pop(context);
-                          //Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const HomeTabs()));
-                        },
-                        child: appButton(bkColor: Colours.blue.code, text: widget.fromEdit ? AppConstants.update : AppConstants.addCar)),
+                    BlocBuilder<SellCarBloc, AddCarToSellState>(
+                        builder: (context, state) {
+                      if (state is Loading) {
+                        return Container(
+                          width: CommonMethods.deviceWidth(),
+                          height: 55,
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                      return GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            if (!widget.fromEdit) {
+                              BlocProvider.of<SellCarBloc>(context).add(
+                                  AddCarToSell(
+                                      brand_name: brandNameController.text,
+                                      model_name: modelController.text,
+                                      capacity: engineController.text,
+                                      color: selectedColor,
+                                      description: descriptionController.text,
+                                      mileage: AppConstants.mileageText,
+                                      manufacturing_year: mileage,
+                                      address: "",
+                                  ));
+                            }
+                            if (widget.fromEdit) Navigator.pop(context);
+                            //Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const HomeTabs()));
+                          },
+                          child: appButton(
+                              bkColor: Colours.blue.code,
+                              text: widget.fromEdit
+                                  ? AppConstants.update
+                                  : AppConstants.addCar));
+                    }),
                     verticalSpacer(height: 120),
                   ],
                 ),

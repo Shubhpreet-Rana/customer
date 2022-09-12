@@ -16,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import 'bloc/auth/auth_bloc.dart';
+import 'bloc/home/add_car/add_car_bloc.dart';
 import 'bloc/profile/create/create_profile_bloc.dart';
 import 'bloc/profile/view/profile_bloc.dart';
 import 'bloc/vehicle/view/vehicle_bloc.dart';
@@ -107,10 +108,15 @@ class MyApp extends StatelessWidget {
               bookingRepository:
                   RepositoryProvider.of<BookingRepository>(context),
             ),
-          ) ,BlocProvider<ViewCarBloc>(
+          ),
+          BlocProvider<ViewCarBloc>(
             create: (context) => ViewCarBloc(
-              homeRepository:
-                  RepositoryProvider.of<HomeRepository>(context),
+              homeRepository: RepositoryProvider.of<HomeRepository>(context),
+            ),
+          ),
+          BlocProvider<SellCarBloc>(
+            create: (context) => SellCarBloc(
+              homeRepository: RepositoryProvider.of<HomeRepository>(context),
             ),
           )
         ],
