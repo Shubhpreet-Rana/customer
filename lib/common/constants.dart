@@ -53,6 +53,7 @@ class AppConstants {
   static String dateText = 'Date of Service';
   static String dateText1 = 'Select Date';
   static String descriptionText = 'Description';
+  static String manufacturingYearText = 'Manufacturing Year';
   static String imageText = 'Car Images';
   static String imageText1 = 'Upload\n Image';
   static String saveText = 'SAVE';
@@ -122,6 +123,7 @@ class AppConstants {
   static String serviceImages = "Service Images";
   static String yoe = "Total Years of Experience";
   static String addressExp = "H.no-26, Down Street, California";
+  static String address = "Address";
   static String selectCategory = "Select Service Category";
   static String oilChange = "Oil Change";
   static String gasoline = "Gasoline Delivery";
@@ -158,5 +160,4 @@ class AppConstants {
 
   static String rememberMe = "REMEMBER_USER";
   static String userInfo = "USER_DATA";
-
 }

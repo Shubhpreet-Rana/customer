@@ -32,10 +32,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController emailController =
-      TextEditingController(text: kDebugMode ? "gursewaksingh@gmail.com" : "");
-  TextEditingController passwordController =
-      TextEditingController(text: kDebugMode ? "12345678" : "");
+  TextEditingController emailController = TextEditingController(text: kDebugMode ? "gursewaksingh@gmail.com" : "");
+  TextEditingController passwordController = TextEditingController(text: kDebugMode ? "12345678" : "");
   bool show = true;
   bool rememberMe = false;
   bool isLoading = false;
@@ -52,18 +50,15 @@ class _LoginState extends State<Login> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is LoggedInSuccessfullyProfileSetup) {
-          Navigator.of(context, rootNavigator: true).push(
-              CupertinoPageRoute(builder: (context) => const ProfileSetUp()));
+          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const ProfileSetUp()));
         }
         if (state is LoggedInSuccessfullyAddVehicle) {
-          Navigator.of(context, rootNavigator: true).push(
-              CupertinoPageRoute(builder: (context) => const VehicleDetails()));
+          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
         }
         if (state is LoggedInSuccessfully) {
           PreferenceUtils.setBool(AppConstants.rememberMe, rememberMe);
           context.read<ProfileBloc>().add(ProfileFetchEvent());
-          Navigator.of(context, rootNavigator: true).pushReplacement(
-              CupertinoPageRoute(builder: (context) => const HomeTabs()));
+          Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const HomeTabs()));
         }
         if (state is LoggedInFailed) {
           CommonMethods().showTopFlash(context: context, message: state.error);
@@ -75,11 +70,7 @@ class _LoginState extends State<Login> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SafeArea(
-                    child: AppHeaders().extendedHeader(
-                        text: AppConstants.login,
-                        context: context,
-                        backNavigation: false)),
+                SafeArea(child: AppHeaders().extendedHeader(text: AppConstants.login, context: context, backNavigation: false)),
                 verticalSpacer(
                   height: 40.0,
                 ),
@@ -87,8 +78,7 @@ class _LoginState extends State<Login> {
                   child: Container(
                     width: CommonMethods.deviceWidth(),
                     height: CommonMethods.deviceHeight(),
-                    padding: const EdgeInsets.only(
-                        left: 30.0, right: 30.0, bottom: 5.0, top: 40.0),
+                    padding: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 5.0, top: 40.0),
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(33),
@@ -111,15 +101,7 @@ class _LoginState extends State<Login> {
                           verticalSpacer(
                             height: 30.0,
                           ),
-                          MyEditText(
-                              AppConstants.emailHint,
-                              false,
-                              TextInputType.emailAddress,
-                              TextCapitalization.none,
-                              10.0,
-                              emailController,
-                              Colours.hintColor.code,
-                              true),
+                          MyEditText(AppConstants.emailHint, false, TextInputType.emailAddress, TextCapitalization.none, 10.0, emailController, Colours.hintColor.code, true),
                           verticalSpacer(),
                           MyEditText(
                             AppConstants.passwordHint,
@@ -138,12 +120,7 @@ class _LoginState extends State<Login> {
                               SizedBox(
                                 width: 24.0,
                                 height: 24.0,
-                                child: Checkbox(
-                                    value: rememberMe,
-                                    checkColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(4)),
-                                    onChanged: _onRememberMeChanged),
+                                child: Checkbox(value: rememberMe, checkColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)), onChanged: _onRememberMeChanged),
                               ),
                               horizontalSpacer(
                                 width: 10.0,
@@ -164,18 +141,14 @@ class _LoginState extends State<Login> {
                                   onTap: () {
                                     validate();
                                   },
-                                  child: appButton(
-                                      bkColor: Colours.blue.code,
-                                      text: AppConstants.login1)),
+                                  child: appButton(bkColor: Colours.blue.code, text: AppConstants.login1)),
                           verticalSpacer(),
                           Center(
                             child: RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(
                                 children: [
-                                  TextSpan(
-                                      text: AppConstants.forgotPwd + " ",
-                                      style: AppStyles.blackText),
+                                  TextSpan(text: AppConstants.forgotPwd + " ", style: AppStyles.blackText),
                                   TextSpan(
                                     text: AppConstants.recover,
                                     style: AppStyles.textBlue,
@@ -184,11 +157,8 @@ class _LoginState extends State<Login> {
                                         context.read<AuthBloc>().add(
                                               RecoverEmailEvent(),
                                             );
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .push(CupertinoPageRoute(
-                                          builder: (context) =>
-                                              const ForgotPassword(),
+                                        Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+                                          builder: (context) => const ForgotPassword(),
                                         ));
                                       },
                                   ),
@@ -199,15 +169,9 @@ class _LoginState extends State<Login> {
                           verticalSpacer(
                             height: 40.0,
                           ),
-                          socialButton(
-                              bkColor: Colours.darkBlue.code,
-                              text: AppConstants.fb,
-                              icon: Assets.fb.name),
+                          socialButton(bkColor: Colours.darkBlue.code, text: AppConstants.fb, icon: Assets.fb.name),
                           verticalSpacer(),
-                          socialButton(
-                              bkColor: Colours.red.code,
-                              text: AppConstants.google,
-                              icon: Assets.google.name),
+                          socialButton(bkColor: Colours.red.code, text: AppConstants.google, icon: Assets.google.name),
                           verticalSpacer(
                             height: 30.0,
                           ),
@@ -216,9 +180,7 @@ class _LoginState extends State<Login> {
                               textAlign: TextAlign.center,
                               text: TextSpan(
                                 children: [
-                                  TextSpan(
-                                      text: AppConstants.dontAccount + " ",
-                                      style: AppStyles.blackText),
+                                  TextSpan(text: AppConstants.dontAccount + " ", style: AppStyles.blackText),
                                   TextSpan(
                                     text: AppConstants.signUp1,
                                     style: AppStyles.textBlue,
@@ -227,11 +189,7 @@ class _LoginState extends State<Login> {
                                         context.read<AuthBloc>().add(
                                               RegisterEvent(),
                                             );
-                                        await Navigator.of(context,
-                                                rootNavigator: true)
-                                            .push(CupertinoPageRoute(
-                                                builder: (context) =>
-                                                    const SignUp()));
+                                        await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const SignUp()));
                                         context.read<AuthBloc>().add(
                                               LogInEvent(),
                                             );
@@ -264,8 +222,7 @@ class _LoginState extends State<Login> {
 
   validate() {
     if (emailController.text == "") {
-      CommonMethods()
-          .showTopFlash(context: context, message: "Email is required.");
+      CommonMethods().showTopFlash(context: context, message: "Email is required.");
       return;
     }
     if (!EmailValidator.validate(emailController.text.trim())) {
@@ -273,8 +230,7 @@ class _LoginState extends State<Login> {
       return;
     }
     if (passwordController.text.length < 6) {
-      CommonMethods().showTopFlash(
-          context: context, message: "Enter minimum 6 characters for password");
+      CommonMethods().showTopFlash(context: context, message: "Enter minimum 6 characters for password");
       return;
     }
 
@@ -290,7 +246,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Future<void> getRememberMe()async {
-  rememberMe=  await PreferenceUtils.getBool(AppConstants.rememberMe);
+  Future<void> getRememberMe() async {
+    rememberMe = await PreferenceUtils.getBool(AppConstants.rememberMe);
   }
 }

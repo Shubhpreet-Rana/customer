@@ -126,7 +126,7 @@ class _HomeTabState extends State<HomeTab> {
                             );
                           }
 
-                          return SizedBox.shrink();
+                          return const SizedBox.shrink();
                         })),
                     verticalSpacer(height: 10.0),
                     Padding(
@@ -222,7 +222,7 @@ class _HomeTabState extends State<HomeTab> {
                                     Navigator.of(context, rootNavigator: false)
                                         .push(CupertinoPageRoute(
                                             builder: (context) =>
-                                                const SellCar()));
+                                                 SellCar()));
                                   },
                                   child: rowButton(
                                       bkColor: Colours.textBlack.code,

@@ -35,12 +35,7 @@ class CommonMethods {
   }
 
   void showTopFlash(
-      {required BuildContext context,
-      String title = "Error!",
-      required String message,
-      String btnText = "DISMISS",
-      bool isSuccess = false,
-      FlashBehavior style = FlashBehavior.floating}) {
+      {required BuildContext context, String title = "Error!", required String message, String btnText = "DISMISS", bool isSuccess = false, FlashBehavior style = FlashBehavior.floating}) {
     showFlash(
       context: context,
       duration: const Duration(seconds: 4),
@@ -57,8 +52,7 @@ class CommonMethods {
           behavior: style,
           position: FlashPosition.top,
           child: FlashBar(
-            title: Text(isSuccess ? "success!" : title,
-                style: TextStyle(color: isSuccess ? Colors.green : Colors.red, fontSize: 20.0)),
+            title: Text(isSuccess ? "success!" : title, style: TextStyle(color: isSuccess ? Colors.green : Colors.red, fontSize: 20.0)),
             content: Text(message, style: const TextStyle(color: Colors.black, fontSize: 16.0)),
             showProgressIndicator: false,
             primaryAction: TextButton(
@@ -83,6 +77,7 @@ class CommonMethods {
                     isDefaultAction: true,
                     onPressed: () async {
                       selectedImage = await pickOrCaptureImage(false, imageQuality: imageQuality);
+                      print(selectedImage);
                       Navigator.pop(context);
                     },
                     child: const Text("Gallery")),
@@ -91,6 +86,7 @@ class CommonMethods {
                     isDefaultAction: true,
                     onPressed: () async {
                       selectedImage = await pickOrCaptureImage(true, imageQuality: imageQuality);
+                      print(selectedImage);
                       Navigator.pop(context);
                     },
                     child: const Text("Camera")),

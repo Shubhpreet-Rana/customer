@@ -8,15 +8,18 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../methods/common.dart';
 import '../styles/styles.dart';
 
-Widget appButton(
-        {required Color? bkColor, String text = '', double height = 55.0,GestureTapCallback? onTapped,}) =>
+Widget appButton({
+  required Color? bkColor,
+  String text = '',
+  double height = 55.0,
+  GestureTapCallback? onTapped,
+}) =>
     GestureDetector(
-      onTap:onTapped,
+      onTap: onTapped,
       child: Container(
         width: CommonMethods.deviceWidth(),
         height: height,
-        decoration: BoxDecoration(
-            color: bkColor, borderRadius: BorderRadius.circular(10.0)),
+        decoration: BoxDecoration(color: bkColor, borderRadius: BorderRadius.circular(10.0)),
         child: Center(
           child: Text(
             text,
@@ -27,34 +30,22 @@ Widget appButton(
       ),
     );
 
-Widget rowButton(
-        {required Color? bkColor,
-        String text = '',
-        double paddingHorizontal = 10.0,
-        double paddingVertical = 15.0,
-        Color textColor = Colors.white}) =>
-    Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: paddingHorizontal, vertical: paddingVertical),
-      decoration: BoxDecoration(
-          color: bkColor, borderRadius: BorderRadius.circular(10.0)),
+Widget rowButton({required Color? bkColor, String text = '', double paddingHorizontal = 5.0, double paddingVertical = 15.0, Color textColor = Colors.white}) => Container(
+      padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
+      decoration: BoxDecoration(color: bkColor, borderRadius: BorderRadius.circular(10.0)),
       child: Center(
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: 14, color: textColor, fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 13, color: textColor, fontWeight: FontWeight.w500),
         ),
       ),
     );
 
-Widget socialButton(
-        {required Color? bkColor, required String? icon, String text = ''}) =>
-    Container(
+Widget socialButton({required Color? bkColor, required String? icon, String text = ''}) => Container(
       width: CommonMethods.deviceWidth(),
       height: 55.0,
-      decoration: BoxDecoration(
-          color: bkColor, borderRadius: BorderRadius.circular(10.0)),
+      decoration: BoxDecoration(color: bkColor, borderRadius: BorderRadius.circular(10.0)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -92,15 +83,18 @@ Widget grayContainer({
   double paddingVertical = 10.0,
   double bRadius = 10.0,
   Widget? child,
+  String? imagePath
 }) =>
     Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: child != null ? 0 : paddingHorizontal,
-          vertical: child != null ? 0 : paddingVertical),
-      decoration: BoxDecoration(
-          color: Colours.lightGray.code,
-          borderRadius: BorderRadius.circular(bRadius)),
-      child: child ??
+      height: 100,
+      width: 100,
+      padding: EdgeInsets.symmetric(horizontal:  child!=null || imagePath != null  ? 0 : paddingHorizontal, vertical: child!=null || imagePath != null ? 0 : paddingVertical),
+      decoration: BoxDecoration(color: Colours.lightGray.code, borderRadius: BorderRadius.circular(bRadius)),
+      child: imagePath!=null?
+          ClipRRect(
+             borderRadius:BorderRadius.circular(bRadius) ,
+            child: Image.file(File(imagePath)),
+          ):
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,11 +117,8 @@ Widget searchBox(
         bool isPrefix = false,
         Widget? prefixIcon}) =>
     Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: paddingHorizontal, vertical: paddingVertical),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(borderRadius)),
+      padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(borderRadius)),
       child: Row(
         children: [
           isPrefix
@@ -152,25 +143,19 @@ Widget searchBox(
 Widget ratingBar({int? currentRatingIndex, int? index}) => Container(
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
       margin: const EdgeInsets.all(5.0),
-      decoration: BoxDecoration(
-          color: currentRatingIndex == index ? Colours.blue.code : Colors.white,
-          borderRadius: BorderRadius.circular(20.0),
-          border: Border.all(color: Colors.black)),
+      decoration: BoxDecoration(color: currentRatingIndex == index ? Colours.blue.code : Colors.white, borderRadius: BorderRadius.circular(20.0), border: Border.all(color: Colors.black)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
             Icons.star,
-            color:
-                currentRatingIndex == index ? Colors.white : Colours.blue.code,
+            color: currentRatingIndex == index ? Colors.white : Colours.blue.code,
           ),
           horizontalSpacer(width: 2.0),
           Text(
             "${index! + 1}",
             textAlign: TextAlign.center,
-            style: TextStyle(
-                color:
-                    currentRatingIndex == index ? Colors.white : Colors.black),
+            style: TextStyle(color: currentRatingIndex == index ? Colors.white : Colors.black),
           )
         ],
       ),
