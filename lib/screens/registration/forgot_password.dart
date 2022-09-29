@@ -38,16 +38,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is ForgotPasswordOtpSent) {
-          CommonMethods().showTopFlash(context: context, message: state.message, isSuccess: true);
+          CommonMethods().showToast(context: context, message: state.message,/* isSuccess: true*/);
         }
         if (state is ForgotPasswordOtpSendFailed) {
-          CommonMethods().showTopFlash(context: context, message: state.error);
+          CommonMethods().showToast(context: context, message: state.error);
         }
         if (state is ForgotPasswordOtpVerificationFailed) {
-          CommonMethods().showTopFlash(context: context, message: state.error);
+          CommonMethods().showToast(context: context, message: state.error);
         }
         if (state is ForgotPasswordOtpVerified) {
-          CommonMethods().showTopFlash(context: context, message: state.message, isSuccess: true);
+          CommonMethods().showToast(context: context, message: state.message,/* isSuccess: true*/);
           Navigator.of(context).pop();
         }
       },
@@ -140,22 +140,22 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   validate(AuthState state) {
     if (emailController.text == "") {
-      CommonMethods().showTopFlash(context: context, message: "Email is required.");
+      CommonMethods().showToast(context: context, message: "Email is required.");
       return;
     }
     if (!EmailValidator.validate(emailController.text.trim())) {
-      CommonMethods().showTopFlash(context: context, message: "Invalid email.");
+      CommonMethods().showToast(context: context, message: "Invalid email.");
       return;
     }
     if (state is ForgotPasswordOtpNotSend) {
       _requestOtp(context);
     } else {
       if (passwordController.text.length < 6) {
-        CommonMethods().showTopFlash(context: context, message: "Enter minimum 6 characters for password");
+        CommonMethods().showToast(context: context, message: "Enter minimum 6 characters for password");
         return;
       }
       if (otpController.text == "") {
-        CommonMethods().showTopFlash(context: context, message: "OTP is required.");
+        CommonMethods().showToast(context: context, message: "OTP is required.");
         return;
       }
       _verifyOtp(context);

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app/common/methods/common.dart';
 import 'package:app/data/repository/home_repository.dart';
@@ -57,22 +58,22 @@ class SellCarBloc extends Bloc<SellCarEvent, AddCarToSellState> {
   }
 
   Future<FutureOr<void>> _selected1Image(Select1Image event, Emitter<AddCarToSellState> emit) async {
-    XFile? selectedImage = await CommonMethods().showAlertDialog(event.context);
-    if (selectedImage!.path.isNotEmpty) {
+    File? selectedImage = await CommonMethods().showAlertDialog(event.context);
+    if (selectedImage != null && selectedImage.path.isNotEmpty) {
       emit(ImageSelected1Successfully(imagePath: selectedImage.path));
     }
   }
 
   Future<FutureOr<void>> _selected2Image(Select2Image event, Emitter<AddCarToSellState> emit) async {
-    XFile? selectedImage = await CommonMethods().showAlertDialog(event.context);
-    if (selectedImage!.path.isNotEmpty) {
+    File? selectedImage = await CommonMethods().showAlertDialog(event.context);
+    if (selectedImage != null && selectedImage.path.isNotEmpty) {
       emit(ImageSelected2Successfully(imagePath: selectedImage.path));
     }
   }
 
   Future<FutureOr<void>> _selected3Image(Select3Image event, Emitter<AddCarToSellState> emit) async {
-    XFile? selectedImage = await CommonMethods().showAlertDialog(event.context);
-    if (selectedImage!.path.isNotEmpty) {
+    File? selectedImage = await CommonMethods().showAlertDialog(event.context);
+    if (selectedImage != null && selectedImage.path.isNotEmpty) {
       emit(ImageSelected3Successfully(imagePath: selectedImage.path));
     }
   }
@@ -98,12 +99,12 @@ class SellCarBloc extends Bloc<SellCarEvent, AddCarToSellState> {
         price: event.price,
       );
       if (res['status'] == 1) {
-        emit(AddCarSuccessfully());
+        emit(UpdateCarSuccessFully());
       } else {
-        emit(SellCarFailed(res['message']));
+        emit(UpdateSellCarFailed(res['message']));
       }
     } catch (e) {
-      emit(SellCarFailed(e.toString()));
+      emit(UpdateSellCarFailed(e.toString()));
     }
   }
 }

@@ -55,7 +55,7 @@ class _SignUpState extends State<SignUp> {
             .pushReplacement(CupertinoPageRoute(builder: (context) => const ProfileSetUp()));
       }
       if (state is RegisteredFailed) {
-        CommonMethods().showTopFlash(context: context, message: state.error);
+        CommonMethods().showToast(context: context, message: state.error);
       }
     }, child: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
       return Scaffold(
@@ -167,15 +167,15 @@ class _SignUpState extends State<SignUp> {
 
   validate() {
     if (emailController.text == "") {
-      CommonMethods().showTopFlash(context: context, message: "Email is required.");
+      CommonMethods().showToast(context: context, message: "Email is required.");
       return;
     }
     if (!EmailValidator.validate(emailController.text.trim())) {
-      CommonMethods().showTopFlash(context: context, message: "Invalid email.");
+      CommonMethods().showToast(context: context, message: "Invalid email.");
       return;
     }
     if (passwordController.text.length < 6) {
-      CommonMethods().showTopFlash(context: context, message: "Enter minimum 6 characters for password");
+      CommonMethods().showToast(context: context, message: "Enter minimum 6 characters for password");
       return;
     }
 

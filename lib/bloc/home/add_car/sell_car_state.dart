@@ -7,6 +7,7 @@ class AddCarToSellState extends Equatable {
 }
 
 class Loading extends AddCarToSellState {}
+class UpdateLoading extends AddCarToSellState {}
 
 class initialState extends AddCarToSellState {}
 

@@ -66,9 +66,9 @@ class MyEditText extends StatelessWidget {
                 textInputAction: textInputAction,
                 textCapitalization: textCapital,
                 maxLines: maxLine ?? 1,
-                enabled: isEditable,
+               // enabled: isEditable,
                 controller: controllerName,
-                style: const TextStyle(color: Colors.black, fontSize: 18.0),
+                style: const TextStyle(color: Colors.black, fontSize: 14.0,fontWeight: FontWeight.w400),
                 cursorColor: Colours.blue.code,
                 decoration: InputDecoration.collapsed(
                   border: InputBorder.none,

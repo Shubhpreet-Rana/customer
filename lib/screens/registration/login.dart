@@ -40,9 +40,10 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getRememberMe();
     super.initState();
+    // TODO: implement initState
+
   }
 
   @override
@@ -53,7 +54,9 @@ class _LoginState extends State<Login> {
           Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const ProfileSetUp()));
         }
         if (state is LoggedInSuccessfullyAddVehicle) {
-          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
+          // Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
+          Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const HomeTabs()));
+
         }
         if (state is LoggedInSuccessfully) {
           PreferenceUtils.setBool(AppConstants.rememberMe, rememberMe);
@@ -61,7 +64,7 @@ class _LoginState extends State<Login> {
           Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const HomeTabs()));
         }
         if (state is LoggedInFailed) {
-          CommonMethods().showTopFlash(context: context, message: state.error);
+          CommonMethods().showToast(context: context, message: state.error);
         }
       },
       child: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
@@ -222,15 +225,15 @@ class _LoginState extends State<Login> {
 
   validate() {
     if (emailController.text == "") {
-      CommonMethods().showTopFlash(context: context, message: "Email is required.");
+      CommonMethods().showToast(context: context, message: "Email is required.");
       return;
     }
     if (!EmailValidator.validate(emailController.text.trim())) {
-      CommonMethods().showTopFlash(context: context, message: "Invalid email.");
+      CommonMethods().showToast(context: context, message: "Invalid email.");
       return;
     }
     if (passwordController.text.length < 6) {
-      CommonMethods().showTopFlash(context: context, message: "Enter minimum 6 characters for password");
+      CommonMethods().showToast(context: context, message: "Enter minimum 6 characters for password");
       return;
     }
 

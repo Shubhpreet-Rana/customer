@@ -33,9 +33,9 @@ class _VehicleDetailsState extends State<VehicleDetails> {
   TextEditingController priceController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  XFile? selectedImageA;
-  XFile? selectedImageB;
-  XFile? selectedImageC;
+  File? selectedImageA;
+  File? selectedImageB;
+  File? selectedImageC;
   String selectedColor = AppConstants.colorItems[0];
   String selectedMileage = AppConstants.mileageItems[0];
 
@@ -45,9 +45,9 @@ class _VehicleDetailsState extends State<VehicleDetails> {
   TextEditingController priceController1 = TextEditingController();
   TextEditingController dateController1 = TextEditingController();
   TextEditingController descriptionController1 = TextEditingController();
-  XFile? selectedImageA1;
-  XFile? selectedImageB1;
-  XFile? selectedImageC1;
+  File? selectedImageA1;
+  File? selectedImageB1;
+  File? selectedImageC1;
   String selectedColor1 = AppConstants.colorItems[0];
   String selectedMileage1 = AppConstants.mileageItems[0];
 
@@ -57,9 +57,9 @@ class _VehicleDetailsState extends State<VehicleDetails> {
   TextEditingController priceController2 = TextEditingController();
   TextEditingController dateController2 = TextEditingController();
   TextEditingController descriptionController2 = TextEditingController();
-  XFile? selectedImageA2;
-  XFile? selectedImageB2;
-  XFile? selectedImageC2;
+  File? selectedImageA2;
+  File? selectedImageB2;
+  File? selectedImageC2;
   String selectedColor2 = AppConstants.colorItems[0];
   String selectedMileage2 = AppConstants.mileageItems[0];
 
@@ -99,12 +99,12 @@ class _VehicleDetailsState extends State<VehicleDetails> {
     return BlocListener<AddVehicleBloc, AddVehicleState>(
       listener: (context, state) {
         if (state is AddedSuccessfully) {
-          CommonMethods().showTopFlash(context: context, message: state.success, isSuccess: true);
+          CommonMethods().showToast(context: context, message: state.success/*, isSuccess: true*/);
           context.read<ProfileBloc>().add(ProfileFetchEvent());
           Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const HomeTabs()));
         }
         if (state is AddVehicleFailed) {
-          CommonMethods().showTopFlash(context: context, message: state.error);
+          CommonMethods().showToast(context: context, message: state.error);
         }
       },
       child: BlocBuilder<AddVehicleBloc, AddVehicleState>(builder: (context, state) {
@@ -515,7 +515,7 @@ class _VehicleDetailsState extends State<VehicleDetails> {
           selectedImageA == null ||
           selectedImageB == null ||
           selectedImageC == null) {
-        CommonMethods().showTopFlash(context: context, message: "All fields are required for car1");
+        CommonMethods().showToast(context: context, message: "All fields are required for car1");
         return;
       } else {
         cars.add(Car(
@@ -542,7 +542,7 @@ class _VehicleDetailsState extends State<VehicleDetails> {
           selectedImageA1 == null ||
           selectedImageB1 == null ||
           selectedImageC1 == null) {
-        CommonMethods().showTopFlash(context: context, message: "All fields are required for car2");
+        CommonMethods().showToast(context: context, message: "All fields are required for car2");
         return;
       } else {
         cars.add(Car(
@@ -569,7 +569,7 @@ class _VehicleDetailsState extends State<VehicleDetails> {
           selectedImageA2 == null ||
           selectedImageB2 == null ||
           selectedImageC2 == null) {
-        CommonMethods().showTopFlash(context: context, message: "All fields are required for car3");
+        CommonMethods().showToast(context: context, message: "All fields are required for car3");
         return;
       } else {
         cars.add(Car(

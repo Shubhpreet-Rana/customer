@@ -1,3 +1,4 @@
+import 'package:app/model/all_vehicle_model.dart';
 import 'package:app/screens/marketplace/view_cars.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,7 @@ import '../../common/ui/common_ui.dart';
 import '../../common/ui/headers.dart';
 
 class ViewCarDetails extends StatefulWidget {
-  final CarsForSell car;
+  final AllVehicleData car;
 
   const ViewCarDetails({Key? key, required this.car}) : super(key: key);
 
@@ -44,7 +45,7 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
     );
   }
 
-  Widget listItem(CarsForSell car) => Column(
+  Widget listItem(AllVehicleData car) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
@@ -63,8 +64,8 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                     width: 100.0,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Image.asset(
-                        car.image,
+                      child: Image.network(
+                        car.carImage1!,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -80,13 +81,13 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            car.title,
+                            car.brandName!,
                             maxLines: 2,
                             textAlign: TextAlign.center,
                             style: AppStyles.blackSemiBold,
                           ),
                           Text(
-                            car.year,
+                            car.manufacturingYear!,
                             maxLines: 2,
                             textAlign: TextAlign.center,
                             style: AppStyles.lightText,
@@ -94,14 +95,14 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                         ],
                       ),
                       Text(
-                        "Posted on " + car.postedDate,
+                        "Posted on " + car.createdAt!.toString(),
                         maxLines: 2,
                         textAlign: TextAlign.center,
                         style: AppStyles.lightText12,
                       ),
                       verticalSpacer(height: 5.0),
                       Text(
-                        car.price,
+                        car.price!,
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.textBlueBold,
@@ -123,7 +124,7 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                           Expanded(
                             flex: 7,
                             child: Text(
-                              car.color,
+                              car.color!,
                               maxLines: 1,
                               textAlign: TextAlign.start,
                               style: AppStyles.blackText,
@@ -148,7 +149,7 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                           Expanded(
                             flex: 7,
                             child: Text(
-                              car.mileage,
+                              car.mileage!,
                               maxLines: 1,
                               textAlign: TextAlign.start,
                               style: AppStyles.blackText,
@@ -173,7 +174,7 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                           Expanded(
                             flex: 7,
                             child: Text(
-                              car.capacity,
+                              car.capacity!.toString(),
                               maxLines: 1,
                               textAlign: TextAlign.start,
                               style: AppStyles.blackText,
@@ -201,14 +202,14 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                   CircleAvatar(
                     backgroundColor: Colours.darkGray.code,
                     radius: 20.0,
-                    backgroundImage: AssetImage(car.sellerImage),
+                    backgroundImage: AssetImage(car.carImage1!),
                   ),
                   horizontalSpacer(width: 10.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        car.sellerName,
+                        car.brandName!,
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.blackSemiW400_1,

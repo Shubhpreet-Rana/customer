@@ -37,9 +37,9 @@ class _EditVehicleState extends State<EditVehicle> {
   TextEditingController priceController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  XFile? selectedImageA;
-  XFile? selectedImageB;
-  XFile? selectedImageC;
+  File? selectedImageA;
+  File? selectedImageB;
+  File? selectedImageC;
   String? fileUrlA;
   String? fileUrlB;
   String? fileUrlC;
@@ -53,9 +53,9 @@ class _EditVehicleState extends State<EditVehicle> {
   TextEditingController priceController1 = TextEditingController();
   TextEditingController dateController1 = TextEditingController();
   TextEditingController descriptionController1 = TextEditingController();
-  XFile? selectedImageA1;
-  XFile? selectedImageB1;
-  XFile? selectedImageC1;
+  File? selectedImageA1;
+  File? selectedImageB1;
+  File? selectedImageC1;
   String? fileUrlA1;
   String? fileUrlB1;
   String? fileUrlC1;
@@ -69,9 +69,9 @@ class _EditVehicleState extends State<EditVehicle> {
   TextEditingController priceController2 = TextEditingController();
   TextEditingController dateController2 = TextEditingController();
   TextEditingController descriptionController2 = TextEditingController();
-  XFile? selectedImageA2;
-  XFile? selectedImageB2;
-  XFile? selectedImageC2;
+  File? selectedImageA2;
+  File? selectedImageB2;
+  File? selectedImageC2;
   String? fileUrlA2;
   String? fileUrlB2;
   String? fileUrlC2;
@@ -163,11 +163,11 @@ class _EditVehicleState extends State<EditVehicle> {
     return BlocListener<VehicleBloc, VehicleState>(
       listener: (context, editState) {
         if (editState is EditedSuccessfully) {
-          CommonMethods().showTopFlash(context: context, message: editState.success, isSuccess: true);
+          CommonMethods().showToast(context: context, message: editState.success/*, isSuccess: true*/);
           context.read<VehicleBloc>().add(VehicleFetchEvent());
         }
         if (editState is EditVehicleFailed) {
-          CommonMethods().showTopFlash(context: context, message: editState.error);
+          CommonMethods().showToast(context: context, message: editState.error);
         }
       },
       child: BlocBuilder<VehicleBloc, VehicleState>(builder: (context, editState) {
@@ -624,7 +624,7 @@ class _EditVehicleState extends State<EditVehicle> {
           priceController.text.isEmpty ||
           dateController.text.isEmpty ||
           descriptionController.text.isEmpty) {
-        CommonMethods().showTopFlash(context: context, message: "All fields are required for car1");
+        CommonMethods().showToast(context: context, message: "All fields are required for car1");
         return;
       } else {
         cars.add(EditCar(
@@ -649,7 +649,7 @@ class _EditVehicleState extends State<EditVehicle> {
           priceController1.text.isEmpty ||
           dateController1.text.isEmpty ||
           descriptionController1.text.isEmpty) {
-        CommonMethods().showTopFlash(context: context, message: "All fields are required for car2");
+        CommonMethods().showToast(context: context, message: "All fields are required for car2");
         return;
       } else {
         cars.add(EditCar(
@@ -674,7 +674,7 @@ class _EditVehicleState extends State<EditVehicle> {
           priceController2.text.isEmpty ||
           dateController2.text.isEmpty ||
           descriptionController2.text.isEmpty) {
-        CommonMethods().showTopFlash(context: context, message: "All fields are required for car3");
+        CommonMethods().showToast(context: context, message: "All fields are required for car3");
         return;
       } else {
         cars.add(EditCar(

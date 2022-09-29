@@ -76,36 +76,33 @@ Widget headingText({String text = ""}) => Text(
       style: AppStyles.blackText,
     );
 
-Widget grayContainer({
-  String text = '',
-  required Widget icon,
-  double paddingHorizontal = 10.0,
-  double paddingVertical = 10.0,
-  double bRadius = 10.0,
-  Widget? child,
-  String? imagePath
-}) =>
+Widget grayContainer(
+        {String text = '', required Widget icon, double paddingHorizontal = 10.0, double paddingVertical = 10.0, double bRadius = 10.0, Widget? child, String? imagePath, bool fromEdit = false}) =>
     Container(
-      height: 100,
-      width: 100,
-      padding: EdgeInsets.symmetric(horizontal:  child!=null || imagePath != null  ? 0 : paddingHorizontal, vertical: child!=null || imagePath != null ? 0 : paddingVertical),
+      padding: EdgeInsets.symmetric(horizontal: child != null || imagePath != null ? 0 : paddingHorizontal, vertical: child != null || imagePath != null ? 0 : paddingVertical),
       decoration: BoxDecoration(color: Colours.lightGray.code, borderRadius: BorderRadius.circular(bRadius)),
-      child: imagePath!=null?
-          ClipRRect(
-             borderRadius:BorderRadius.circular(bRadius) ,
-            child: Image.file(File(imagePath)),
-          ):
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              icon,
-              Text(
-                text,
-                style: AppStyles.lightText,
-              )
-            ],
-          ),
+      child: child??/*imagePath != null
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(bRadius),
+              child: fromEdit
+                  ? Image.network(
+                      imagePath,
+                      height: 100,
+                      width: 100,
+                    )
+                  : Image.file(File(imagePath)),
+            )*/
+           Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                icon,
+                Text(
+                  text,
+                  style: AppStyles.lightText,
+                )
+              ],
+            ),
     );
 
 Widget searchBox(

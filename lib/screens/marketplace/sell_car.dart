@@ -4,6 +4,7 @@ import 'package:app/bloc/home/add_car/add_car_bloc.dart';
 import 'package:app/common/location_util.dart';
 import 'package:app/model/all_vehicle_model.dart';
 import 'package:app/model/my_marketplace_vehicle.dart';
+import 'package:app/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -47,13 +48,15 @@ class _SellCarState extends State<SellCar> {
   String image1 = "";
   String image2 = '';
   String image3 = "";
+  String updatedImage1 = "";
+  String updatedImage2 = "";
+  String updatedImage3 = "";
   double locationLat = 0.0;
   double locationLang = 0.0;
 
   @override
   void initState() {
     // TODO: implement initState
-    print(widget.myVehicleMarketPlace);
     getVehicleData();
     super.initState();
   }
@@ -75,7 +78,10 @@ class _SellCarState extends State<SellCar> {
           listener: (context, state) {
             if (state is AddCarSuccessfully) {
               Navigator.of(context).pop();
-              CommonMethods().showTopFlash(context: context, message: "Car added successfully");
+              CommonMethods().showToast(context: context, message: "Car added successfully"/*, isSuccess: true, title: "Success"*/);
+            }
+            if (state is UpdateCarSuccessFully) {
+              Navigator.of(context).pop();
             }
           },
           child: Column(
@@ -104,18 +110,15 @@ class _SellCarState extends State<SellCar> {
                       verticalSpacer(height: 10.0),
                       headingText(text: AppConstants.brandText),
                       verticalSpacer(height: 10.0),
-                      MyEditText(widget.myVehicleMarketPlace!.brandName!.isNotEmpty ? widget.myVehicleMarketPlace!.brandName! : AppConstants.brandText, false, TextInputType.text,
-                          TextCapitalization.none, 10.0, brandNameController, Colours.hintColor.code, true),
+                      MyEditText(AppConstants.brandText, false, TextInputType.text, TextCapitalization.none, 10.0, brandNameController, Colours.hintColor.code, true),
                       verticalSpacer(),
                       headingText(text: AppConstants.modelText),
                       verticalSpacer(height: 10.0),
-                      MyEditText(widget.myVehicleMarketPlace!.modelName!.isNotEmpty ? widget.myVehicleMarketPlace!.brandName! : AppConstants.modelText, false, TextInputType.text,
-                          TextCapitalization.none, 10.0, modelController, Colours.hintColor.code, true),
+                      MyEditText(AppConstants.modelText, false, TextInputType.text, TextCapitalization.none, 10.0, modelController, Colours.hintColor.code, true),
                       verticalSpacer(),
                       headingText(text: AppConstants.engineText),
                       verticalSpacer(height: 10.0),
-                      MyEditText(widget.myVehicleMarketPlace!.capacity != null ? widget.myVehicleMarketPlace!.capacity!.toString() : AppConstants.engineText, false, TextInputType.text,
-                          TextCapitalization.none, 10.0, engineController, Colours.hintColor.code, true),
+                      MyEditText(AppConstants.engineText, false, TextInputType.text, TextCapitalization.none, 10.0, engineController, Colours.hintColor.code, true),
                       verticalSpacer(),
                       headingText(text: AppConstants.colorText),
                       verticalSpacer(height: 10.0),
@@ -142,8 +145,7 @@ class _SellCarState extends State<SellCar> {
                       verticalSpacer(),
                       headingText(text: AppConstants.priceText),
                       verticalSpacer(height: 10.0),
-                      MyEditText(widget.myVehicleMarketPlace!.price!.isNotEmpty ? widget.myVehicleMarketPlace!.price! : r"$", false, TextInputType.number, TextCapitalization.none, 10.0,
-                          priceController, Colours.hintColor.code, true),
+                      MyEditText(r"$", false, TextInputType.number, TextCapitalization.none, 10.0, priceController, Colours.hintColor.code, true),
                       verticalSpacer(),
                       headingText(text: AppConstants.dateText),
                       verticalSpacer(height: 10.0),
@@ -171,13 +173,12 @@ class _SellCarState extends State<SellCar> {
                       verticalSpacer(),
                       headingText(text: AppConstants.manufacturingYearText),
                       verticalSpacer(height: 10.0),
-                      MyEditText(widget.myVehicleMarketPlace!.manufacturingYear!.isNotEmpty ? widget.myVehicleMarketPlace!.manufacturingYear! : AppConstants.manufacturingYearText, false,
-                          TextInputType.number, TextCapitalization.none, 10.0, manufacturingController, Colours.hintColor.code, true),
+                      MyEditText(AppConstants.manufacturingYearText, false, TextInputType.number, TextCapitalization.none, 10.0, manufacturingController, Colours.hintColor.code, true),
                       verticalSpacer(),
                       headingText(text: AppConstants.descriptionText),
                       verticalSpacer(height: 10.0),
                       MyEditText(
-                        widget.myVehicleMarketPlace!.description!.isNotEmpty ? widget.myVehicleMarketPlace!.description! : AppConstants.descriptionText,
+                        AppConstants.descriptionText,
                         false,
                         TextInputType.text,
                         TextCapitalization.none,
@@ -215,7 +216,7 @@ class _SellCarState extends State<SellCar> {
                           }
                         },
                         child: MyEditText(
-                          widget.myVehicleMarketPlace!.address!.isNotEmpty ? widget.myVehicleMarketPlace!.address! : AppConstants.address,
+                          AppConstants.address,
                           false,
                           TextInputType.streetAddress,
                           TextCapitalization.none,
@@ -236,114 +237,245 @@ class _SellCarState extends State<SellCar> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          BlocListener<SellCarBloc, AddCarToSellState>(
-                            listener: (context, state) {
-                              if (state is ImageSelected1Successfully) {
-                                if (state.imagePath!.isNotEmpty) {
-                                  image1 = state.imagePath!;
-                                  if (mounted) {
-                                    setState(() {});
+                          Expanded(
+                            child: BlocListener<SellCarBloc, AddCarToSellState>(
+                              listener: (context, state) {
+                                if (state is ImageSelected1Successfully) {
+                                  if (state.imagePath!.isNotEmpty) {
+                                    if (!widget.fromEdit) {
+                                      image1 = state.imagePath!;
+                                    } else {
+                                      updatedImage1 = "";
+                                      image1 = state.imagePath!;
+                                    }
+                                    if (mounted) {
+                                      setState(() {});
+                                    }
                                   }
                                 }
-                              }
-                            },
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () async {
-                                BlocProvider.of<SellCarBloc>(context).add(Select1Image(context));
                               },
-                              child: image1 != ""
-                                  ? grayContainer(
-                                      text: AppConstants.imageText1,
-                                      icon: Icon(
-                                        Icons.add,
-                                        color: Colours.blue.code,
-                                      ),
-                                      paddingHorizontal: 15.0,
-                                      paddingVertical: 15.0,
-                                      imagePath: image1)
-                                  : grayContainer(
-                                      text: AppConstants.imageText1,
-                                      icon: Icon(
-                                        Icons.add,
-                                        color: Colours.blue.code,
-                                      ),
-                                      paddingHorizontal: 15.0,
-                                      paddingVertical: 15.0,
+                              child: updatedImage1 != ""
+                                  ? GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTap: () async {
+                                        BlocProvider.of<SellCarBloc>(context).add(Select1Image(context));
+                                      },
+                                      child: grayContainer(
+                                          fromEdit: widget.fromEdit,
+                                          text: AppConstants.imageText1,
+                                          icon: Icon(
+                                            Icons.add,
+                                            color: Colours.blue.code,
+                                          ),
+                                          paddingHorizontal: 15.0,
+                                          paddingVertical: 15.0,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            child: Image.network(
+                                              updatedImage1,
+                                              height: 100,
+                                              width: 100,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          )),
+                                    )
+                                  : GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTap: () async {
+                                        BlocProvider.of<SellCarBloc>(context).add(Select1Image(context));
+                                      },
+                                      child: image1 != ""
+                                          ? SizedBox(
+                                              height: 100,
+                                              width: 100,
+                                              child: grayContainer(
+                                                  fromEdit: widget.fromEdit,
+                                                  text: AppConstants.imageText1,
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    color: Colours.blue.code,
+                                                  ),
+                                                  paddingHorizontal: 15.0,
+                                                  paddingVertical: 15.0,
+                                                  child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(10.0),
+                                                    child: Image.file(
+                                                      File(image1),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )),
+                                            )
+                                          : grayContainer(
+                                              text: AppConstants.imageText1,
+                                              icon: Icon(
+                                                Icons.add,
+                                                color: Colours.blue.code,
+                                              ),
+                                              paddingHorizontal: 15.0,
+                                              paddingVertical: 15.0,
+                                            ),
                                     ),
                             ),
                           ),
-                          BlocListener<SellCarBloc, AddCarToSellState>(
-                            listener: (context, state) {
-                              if (state is ImageSelected2Successfully) {
-                                if (state.imagePath!.isNotEmpty) {
-                                  image2 = state.imagePath!;
-                                  if (mounted) {
-                                    setState(() {});
+                          horizontalSpacer(width: 5.0),
+                          Expanded(
+                            child: BlocListener<SellCarBloc, AddCarToSellState>(
+                              listener: (context, state) {
+                                if (state is ImageSelected2Successfully) {
+                                  if (state.imagePath!.isNotEmpty) {
+                                    if (!widget.fromEdit) {
+                                      image2 = state.imagePath!;
+                                    } else {
+                                      updatedImage2 = "";
+                                      image2 = state.imagePath!;
+                                    }
+                                    if (mounted) {
+                                      setState(() {});
+                                    }
                                   }
                                 }
-                              }
-                            },
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () async {
-                                BlocProvider.of<SellCarBloc>(context).add(Select2Image(context));
                               },
-                              child: image2 != ""
-                                  ? grayContainer(
-                                      text: AppConstants.imageText1,
-                                      icon: Icon(
-                                        Icons.add,
-                                        color: Colours.blue.code,
-                                      ),
-                                      paddingHorizontal: 15.0,
-                                      paddingVertical: 15.0,
-                                      imagePath: image2)
-                                  : grayContainer(
-                                      text: AppConstants.imageText1,
-                                      icon: Icon(
-                                        Icons.add,
-                                        color: Colours.blue.code,
-                                      ),
-                                      paddingHorizontal: 15.0,
-                                      paddingVertical: 15.0,
+                              child: updatedImage2 != ""
+                                  ? GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTap: () async {
+                                        BlocProvider.of<SellCarBloc>(context).add(Select2Image(context));
+                                      },
+                                      child: grayContainer(
+                                          fromEdit: widget.fromEdit,
+                                          text: AppConstants.imageText1,
+                                          icon: Icon(
+                                            Icons.add,
+                                            color: Colours.blue.code,
+                                          ),
+                                          paddingHorizontal: 15.0,
+                                          paddingVertical: 15.0,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            child: Image.network(
+                                              updatedImage2,
+                                              height: 100,
+                                              width: 100,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          )),
+                                    )
+                                  : GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTap: () async {
+                                        BlocProvider.of<SellCarBloc>(context).add(Select2Image(context));
+                                      },
+                                      child: image2 != ""
+                                          ? SizedBox(
+                                              height: 100,
+                                              width: 100,
+                                              child: grayContainer(
+                                                  fromEdit: widget.fromEdit,
+                                                  text: AppConstants.imageText1,
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    color: Colours.blue.code,
+                                                  ),
+                                                  paddingHorizontal: 15.0,
+                                                  paddingVertical: 15.0,
+                                                  child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(10.0),
+                                                    child: Image.file(
+                                                      File(image2),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )),
+                                            )
+                                          : grayContainer(
+                                              text: AppConstants.imageText1,
+                                              icon: Icon(
+                                                Icons.add,
+                                                color: Colours.blue.code,
+                                              ),
+                                              paddingHorizontal: 15.0,
+                                              paddingVertical: 15.0,
+                                            ),
                                     ),
                             ),
                           ),
-                          BlocListener<SellCarBloc, AddCarToSellState>(
-                            listener: (context, state) {
-                              if (state is ImageSelected3Successfully) {
-                                if (state.imagePath!.isNotEmpty) {
-                                  image3 = state.imagePath!;
-                                  if (mounted) {
-                                    setState(() {});
+                          horizontalSpacer(width: 5.0),
+                          Expanded(
+                            child: BlocListener<SellCarBloc, AddCarToSellState>(
+                              listener: (context, state) {
+                                if (state is ImageSelected3Successfully) {
+                                  if (state.imagePath!.isNotEmpty) {
+                                    if (!widget.fromEdit) {
+                                      image3 = state.imagePath!;
+                                    } else {
+                                      updatedImage3 = "";
+                                      image3 = state.imagePath!;
+                                    }
+                                    if (mounted) {
+                                      setState(() {});
+                                    }
                                   }
                                 }
-                              }
-                            },
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () async {
-                                BlocProvider.of<SellCarBloc>(context).add(Select3Image(context));
                               },
-                              child: image3 != ""
-                                  ? grayContainer(
-                                      text: AppConstants.imageText1,
-                                      icon: Icon(
-                                        Icons.add,
-                                        color: Colours.blue.code,
-                                      ),
-                                      paddingHorizontal: 15.0,
-                                      paddingVertical: 15.0,
-                                      imagePath: image3)
-                                  : grayContainer(
-                                      text: AppConstants.imageText1,
-                                      icon: Icon(
-                                        Icons.add,
-                                        color: Colours.blue.code,
-                                      ),
-                                      paddingHorizontal: 15.0,
-                                      paddingVertical: 15.0,
+                              child: updatedImage3 != ""
+                                  ? GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTap: () async {
+                                        BlocProvider.of<SellCarBloc>(context).add(Select3Image(context));
+                                      },
+                                      child: grayContainer(
+                                          fromEdit: widget.fromEdit,
+                                          text: AppConstants.imageText1,
+                                          icon: Icon(
+                                            Icons.add,
+                                            color: Colours.blue.code,
+                                          ),
+                                          paddingHorizontal: 15.0,
+                                          paddingVertical: 15.0,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            child: Image.network(
+                                              updatedImage3,
+                                              height: 100,
+                                              width: 100,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          )),
+                                    )
+                                  : GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTap: () async {
+                                        BlocProvider.of<SellCarBloc>(context).add(Select3Image(context));
+                                      },
+                                      child: image3 != ""
+                                          ? SizedBox(
+                                              height: 100,
+                                              width: 100,
+                                              child: grayContainer(
+                                                  fromEdit: widget.fromEdit,
+                                                  text: AppConstants.imageText1,
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    color: Colours.blue.code,
+                                                  ),
+                                                  paddingHorizontal: 15.0,
+                                                  paddingVertical: 15.0,
+                                                  child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(10.0),
+                                                    child: Image.file(
+                                                      File(image3),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )),
+                                            )
+                                          : grayContainer(
+                                              text: AppConstants.imageText1,
+                                              icon: Icon(
+                                                Icons.add,
+                                                color: Colours.blue.code,
+                                              ),
+                                              paddingHorizontal: 15.0,
+                                              paddingVertical: 15.0,
+                                            ),
                                     ),
                             ),
                           ),
@@ -361,7 +493,7 @@ class _SellCarState extends State<SellCar> {
                           );
                         }
                         return BlocBuilder<SellCarBloc, AddCarToSellState>(builder: (context, state) {
-                          return state is Loading
+                          return state is Loading || state is UpdateLoading
                               ? const Center(
                                   child: CircularProgressIndicator(),
                                 )
@@ -369,7 +501,7 @@ class _SellCarState extends State<SellCar> {
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
                                     if (!widget.fromEdit) {
-                                      validateData();
+                                      validateData(context);
                                     }
                                     if (widget.fromEdit) {
                                       updateVehicleDetail();
@@ -391,29 +523,29 @@ class _SellCarState extends State<SellCar> {
     );
   }
 
-  validateData() {
+  validateData(BuildContext context) {
     if (brandNameController.text.isEmpty) {
-      CommonMethods().showTopFlash(context: context, message: "Brand name is required");
+      return CommonMethods().showToast(context: context, message: "Brand name is required");
     } else if (modelController.text.isEmpty) {
-      CommonMethods().showTopFlash(context: context, message: "Model is required");
+      return  CommonMethods().showToast(context:context, message: "Model is required");
     } else if (engineController.text.isEmpty) {
-      CommonMethods().showTopFlash(context: context, message: "Capacity is required");
+      return CommonMethods().showToast(context:context, message: "Capacity is required");
     } else if (selectedColor.isEmpty) {
-      CommonMethods().showTopFlash(context: context, message: "Color is required");
+      return  CommonMethods().showToast(context:context, message: "Color is required");
     } else if (selectedColor.isEmpty) {
-      CommonMethods().showTopFlash(context: context, message: "Color is required");
+      return  CommonMethods().showToast(context:context, message: "Color is required");
     } else if (descriptionController.text.isEmpty) {
-      CommonMethods().showTopFlash(context: context, message: "Description is required");
+      CommonMethods().showToast(context:context, message: "Description is required");
     } else if (mileage.isEmpty) {
-      CommonMethods().showTopFlash(context: context, message: "Mileage is required");
+      return  CommonMethods().showToast(context:context, message: "Mileage is required");
     } else if (manufacturingController.text.isEmpty) {
-      CommonMethods().showTopFlash(context: context, message: "Manufacturing year is required");
+      CommonMethods().showToast(context:context, message: "Manufacturing year is required");
     } else if (dateController.text.isEmpty) {
-      CommonMethods().showTopFlash(context: context, message: "Date is required");
+      return CommonMethods().showToast(context:context, message: "Date is required");
     } else if (priceController.text.isEmpty) {
-      CommonMethods().showTopFlash(context: context, message: "Price is required");
+      CommonMethods().showToast(context:context, message: "Price is required");
     } else if (addressController.text.isEmpty) {
-      CommonMethods().showTopFlash(context: context, message: "Address is required");
+      return CommonMethods().showToast(context:context, message: "Address is required");
     } else {
       BlocProvider.of<SellCarBloc>(context).add(AddCarToSell(
           brand_name: brandNameController.text,
@@ -434,17 +566,40 @@ class _SellCarState extends State<SellCar> {
   }
 
   void updateVehicleDetail() {
- BlocProvider.of<SellCarBloc>(context).add(UpdateCarToSell(
-   id: widget.myVehicleMarketPlace!.id
- ));
-
+    BlocProvider.of<SellCarBloc>(context).add(UpdateCarToSell(
+        id: widget.myVehicleMarketPlace!.id,
+        brand_name: brandNameController.text,
+        model_name: modelController.text,
+        price: priceController.text,
+        address_long: locationLang,
+        address_lat: locationLat,
+        color: selectedColor,
+        address: addressController.text,
+        capacity: engineController.text,
+        car_image_3: image3,
+        car_image_2: image2,
+        car_image_1: image1,
+        description: descriptionController.text,
+        manufacturing_year: manufacturingController.text,
+        mileage: mileage));
   }
 
   void getVehicleData() {
     if (widget.fromEdit) {
-      if (widget.myVehicleMarketPlace!.color!.isNotEmpty) {
-        selectedColor = widget.myVehicleMarketPlace!.color!;
+      if (widget.myVehicleMarketPlace != null) {
+        brandNameController.text = widget.myVehicleMarketPlace!.brandName!;
+        modelController.text = widget.myVehicleMarketPlace!.modelName!;
+        priceController.text = widget.myVehicleMarketPlace!.price!;
+        engineController.text = widget.myVehicleMarketPlace!.capacity!.toString();
         mileage = widget.myVehicleMarketPlace!.mileage!;
+        dateController.text = widget.myVehicleMarketPlace!.createdAt!.toString();
+        selectedColor = widget.myVehicleMarketPlace!.color!;
+        manufacturingController.text = widget.myVehicleMarketPlace!.manufacturingYear!;
+        descriptionController.text = widget.myVehicleMarketPlace!.description!;
+        addressController.text = widget.myVehicleMarketPlace!.address!;
+        updatedImage1 = widget.myVehicleMarketPlace!.carImage1!;
+        updatedImage2 = widget.myVehicleMarketPlace!.carImage2!;
+        updatedImage3 = widget.myVehicleMarketPlace!.carImage3!;
         if (mounted) {
           setState(() {});
         }

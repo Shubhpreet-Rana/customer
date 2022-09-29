@@ -282,17 +282,18 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                                           ServiceProviderState>(
                                         listener: (context, state) {
                                           if (state is BookingSuccessfully) {
-                                            Navigator.of(context,
+                                         /*   Navigator.of(context,
                                                     rootNavigator: true)
                                                 .push(CupertinoPageRoute(
                                                     builder: (context) =>
                                                         PaymentOptions(
                                                           totalPayment:
                                                               getTotal(),
-                                                        )));
+                                                        )));*/
+                                            Navigator.pop(context);
                                           }
                                           if (state is BookingFailed) {
-                                            CommonMethods().showTopFlash(
+                                            CommonMethods().showToast(
                                                 context: context,
                                                 message: state.error);
                                           }

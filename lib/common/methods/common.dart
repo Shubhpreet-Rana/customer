@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:app/common/services/NavigationService.dart';
+import 'package:app/permission_handler.dart';
 import 'package:app/screens/notifications/notifications.dart';
-import 'package:flash/flash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:images_picker/images_picker.dart';
+// import 'package:permission_handler/permission_handler.dart';
 
 import '../../screens/filters/filters.dart';
 import '../colors.dart';
@@ -34,7 +39,7 @@ class CommonMethods {
     Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const Notifications()));
   }
 
-  void showTopFlash(
+  /* void showTopFlash(
       {required BuildContext context, String title = "Error!", required String message, String btnText = "DISMISS", bool isSuccess = false, FlashBehavior style = FlashBehavior.floating}) {
     showFlash(
       context: context,
@@ -64,9 +69,9 @@ class CommonMethods {
       },
     );
   }
-
-  Future<XFile?> showAlertDialog(BuildContext context, {int imageQuality = 85}) async {
-    XFile? selectedImage;
+*/
+  Future<File?> showAlertDialog(BuildContext context, {int imageQuality = 85}) async {
+    File? selectedImage;
     await showDialog(
         context: context,
         builder: (BuildContext context) => CupertinoAlertDialog(
@@ -77,7 +82,14 @@ class CommonMethods {
                     isDefaultAction: true,
                     onPressed: () async {
                       selectedImage = await pickOrCaptureImage(false, imageQuality: imageQuality);
-                      print(selectedImage);
+
+                      /*var status = await PermissionHandler.requestGalleryPermission();
+                      if (status.isGranted) {
+                        selectedImage = await pickOrCaptureImage(false, imageQuality: imageQuality);
+                        print(selectedImage);
+                      } else {
+                        openAppSettings();
+                      }*/
                       Navigator.pop(context);
                     },
                     child: const Text("Gallery")),
@@ -86,7 +98,15 @@ class CommonMethods {
                     isDefaultAction: true,
                     onPressed: () async {
                       selectedImage = await pickOrCaptureImage(true, imageQuality: imageQuality);
-                      print(selectedImage);
+/*
+
+                      var status = await PermissionHandler.requestCameraPermission();
+                      if (status.isGranted) {
+                      } else {
+                        openAppSettings();
+                      }
+*/
+
                       Navigator.pop(context);
                     },
                     child: const Text("Camera")),
@@ -95,17 +115,24 @@ class CommonMethods {
     return selectedImage;
   }
 
-  Future<XFile?> pickOrCaptureImage(bool isCamera, {int imageQuality = 85}) async {
+  Future<File?> pickOrCaptureImage(bool isCamera, {int imageQuality = 85}) async {
     // Pick an image
     if (!isCamera) {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: imageQuality);
-      return image;
+      var image = await ImagesPicker.pick(pickType: PickType.image,
+      count: 1,
+      maxSize: imageQuality); /*_picker.getImage(source: ImageSource.gallery, imageQuality: imageQuality);*/
+      return File(image!.first.path);
     }
     // Capture a photo
     if (isCamera) {
-      final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
-      return photo;
+      var photo = await ImagesPicker.openCamera(pickType: PickType.image,maxSize: imageQuality) /*_picker.getImage(source: ImageSource.camera)*/;
+      return File(photo!.first.path);
     }
     return null;
+  }
+
+  showToast({required BuildContext context, String? message}) {
+    return Fluttertoast.showToast(
+        msg: message!, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.TOP, timeInSecForIosWeb: 1, backgroundColor: Colors.red, textColor: Colors.white, fontSize: 16.0);
   }
 }

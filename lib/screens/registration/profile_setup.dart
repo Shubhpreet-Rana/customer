@@ -45,7 +45,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
   String genderText = AppConstants.genderItems[0];
   String? selectedPaymentOption;
   bool showAddCard = false;
-  XFile? selectedImage;
+  File? selectedImage;
   String? imageUrl;
   double locationLat = 0.0;
   double locationLang = 0.0;
@@ -72,12 +72,12 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
     return BlocListener<CreateProfileBloc, CreateProfileState>(
       listener: (context, state) {
         if (state is CreatedSuccessfully) {
-          CommonMethods().showTopFlash(context: context, message: state.success, isSuccess: true);
+          CommonMethods().showToast(context: context, message: state.success/*, isSuccess: true*/);
           Navigator.of(context, rootNavigator: true)
               .pushReplacement(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
         }
         if (state is CreatedFailed) {
-          CommonMethods().showTopFlash(context: context, message: state.error);
+          CommonMethods().showToast(context: context, message: state.error);
         }
       },
       child: BlocBuilder<CreateProfileBloc, CreateProfileState>(builder: (context, state) {
@@ -311,11 +311,11 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                                 true,
                               ),
                               verticalSpacer(),
-                              state is LoadingUpdate
+                             /* state is LoadingUpdate
                                   ? const Center(
                                       child: CircularProgressIndicator(),
                                     )
-                                  : submitButton(),
+                                  :*/ submitButton(),
                               verticalSpacer(height: 50),
                             ],
                           )
@@ -333,31 +333,31 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
 
   validate() {
     if (fNameController.text == "") {
-      CommonMethods().showTopFlash(context: context, message: "First name is required.");
+      CommonMethods().showToast(context: context, message: "First name is required.");
       return;
     }
     if (lNameController.text == "") {
-      CommonMethods().showTopFlash(context: context, message: "Last name is required.");
+      CommonMethods().showToast(context: context, message: "Last name is required.");
       return;
     }
     if (mobileController.text == "") {
-      CommonMethods().showTopFlash(context: context, message: "Phone number is required.");
+      CommonMethods().showToast(context: context, message: "Phone number is required.");
       return;
     }
     if (mobileController.text.length < 10) {
-      CommonMethods().showTopFlash(context: context, message: "Invalid Phone number.");
+      CommonMethods().showToast(context: context, message: "Invalid Phone number.");
       return;
     }
     if (addressController.text == "") {
-      CommonMethods().showTopFlash(context: context, message: "Address is required.");
+      CommonMethods().showToast(context: context, message: "Address is required.");
       return;
     }
     if (mobileController.text.length < 8) {
-      CommonMethods().showTopFlash(context: context, message: "Please enter full address or select from map.");
+      CommonMethods().showToast(context: context, message: "Please enter full address or select from map.");
       return;
     }
     if (selectedImage == null) {
-      CommonMethods().showTopFlash(context: context, message: "Please select avatar image.");
+      CommonMethods().showToast(context: context, message: "Please select avatar image.");
       return;
     }
     _createUpdateProfile(context);
@@ -373,11 +373,12 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
   Widget submitButton() => GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        if (widget.fromEdit) {
+        validate();
+       /* if (widget.fromEdit) {
           Navigator.of(context).pop();
         } else {
-          validate();
-        }
+
+        }*/
       },
       child: appButton(bkColor: Colours.blue.code, text: widget.fromEdit ? AppConstants.update : AppConstants.submitText));
 }
