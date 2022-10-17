@@ -26,6 +26,13 @@ class ProfileTab extends StatefulWidget {
 
 class _ProfileTabState extends State<ProfileTab> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    BlocProvider.of<ProfileBloc>(context).add(ProfileFetchEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
@@ -40,13 +47,8 @@ class _ProfileTabState extends State<ProfileTab> {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SafeArea(
-                  bottom: false,
-                  child: AppHeaders().collapsedHeader(
-                      text: AppConstants.myProfile, context: context, backNavigation: false, onFilterClick: () {})),
-              Padding(
-                  padding: const EdgeInsets.only(left: 45.0, top: 2.0),
-                  child: Text(("Joined on 30 Jan, 2021"), style: AppStyles.whiteText)),
+              SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: AppConstants.myProfile, context: context, backNavigation: false, onFilterClick: () {})),
+              Padding(padding: const EdgeInsets.only(left: 45.0, top: 2.0), child: Text(("Joined on 30 Jan, 2021"), style: AppStyles.whiteText)),
               verticalSpacer(
                 height: 10.0,
               ),
@@ -64,7 +66,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       radius: 50.0,
                       isCamera: false,
                       fromUrl: true,
-                      imagePath:state.userProfile.user!.userImage!,
+                      imagePath: state.userProfile.user!.userImage!,
                       onSelect: () {},
                     ),
                     verticalSpacer(height: 30.0),
@@ -222,15 +224,14 @@ class _ProfileTabState extends State<ProfileTab> {
                     GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
-                          Navigator.of(context, rootNavigator: false)
-                              .push(CupertinoPageRoute(builder: (context) => const EditOptions()));
+                          Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const EditOptions()));
                         },
                         child: appButton(bkColor: Colours.blue.code, text: AppConstants.edit, height: 50.0)),
                     verticalSpacer(),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         PreferenceUtils().clearAllPreferences();
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Login()));
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login()));
                       },
                       child: Text(
                         AppConstants.logout,

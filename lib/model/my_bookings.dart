@@ -50,6 +50,7 @@ class MyBookingData {
     this.bookingStatus,
     this.serviceCatId,
     this.services,
+    this.rating
   });
 
   int? id;
@@ -63,6 +64,7 @@ class MyBookingData {
   String? time;
   int? bookingStatus;
   String? serviceCatId;
+  String?rating;
   List<Service>? services;
 
   factory MyBookingData.fromJson(Map<String, dynamic> json) => MyBookingData(
@@ -75,6 +77,7 @@ class MyBookingData {
     addressLong: json["address_long"] == null ? null : json["address_long"],
     date: DateTime.parse(json["date"]),
     time: json["time"],
+    rating: json["rating"],
     bookingStatus: json["booking_status"],
     serviceCatId: json["service_cat_id"],
     services: List<Service>.from(json["services"].map((x) => Service.fromJson(x))),
@@ -85,6 +88,7 @@ class MyBookingData {
     "business_name": businessName,
     "image1": image1,
     "amount": amount,
+    "rating": rating,
     "gst_amount": gstAmount,
     "address_lat": addressLat == null ? null : addressLat,
     "address_long": addressLong == null ? null : addressLong,

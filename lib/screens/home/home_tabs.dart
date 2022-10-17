@@ -62,7 +62,7 @@ class _HomeTabsState extends State<HomeTabs> with TickerProviderStateMixin<HomeT
             key: _carScreen,
             onGenerateRoute: (route) => CupertinoPageRoute(
               settings: route,
-              builder: (context) =>  CarTab(),
+              builder: (context) =>const  CarTab(),
             ),
           ),
           Navigator(

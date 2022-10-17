@@ -43,23 +43,15 @@ class _CalenderTabState extends State<CalenderTab> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SafeArea(
-              bottom: false,
-              child: AppHeaders().collapsedHeader(
-                  text: AppConstants.myBooking,
-                  context: context,
-                  backNavigation: false,
-                  onFilterClick: () {})),
+          SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: AppConstants.myBooking, context: context, backNavigation: false, onFilterClick: () {})),
           verticalSpacer(),
           BlocListener<BookingBloc, BookingState>(
               listener: (context, state) {},
-              child: BlocBuilder<BookingBloc, BookingState>(
-                  builder: (context, bookingState) {
+              child: BlocBuilder<BookingBloc, BookingState>(builder: (context, bookingState) {
                 if (bookingState is Loading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (bookingState is MyBookingNoData &&
-                    bookingState.currentPage == null) {
+                if (bookingState is MyBookingNoData && bookingState.currentPage == null) {
                   return Expanded(
                     child: Container(
                       width: CommonMethods.deviceWidth(),
@@ -75,8 +67,8 @@ class _CalenderTabState extends State<CalenderTab> {
                     ),
                   );
                 }
-                if (bookingState.myBookingList != null &&
-                    bookingState.myBookingList!.isNotEmpty) {
+                if (bookingState.myBookingList != null && bookingState.myBookingList!.isNotEmpty) {
+                  finalResultList!.clear();
                   finalResultList!.addAll(bookingState.myBookingList ?? []);
                 }
 
@@ -85,24 +77,16 @@ class _CalenderTabState extends State<CalenderTab> {
                         child: Container(
                         width: CommonMethods.deviceWidth(),
                         height: CommonMethods.deviceHeight(),
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15.0, bottom: 5.0, top: 20.0),
+                        padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 5.0, top: 20.0),
                         decoration: BoxDecoration(
                           color: Colours.lightGray.code,
                         ),
                         child: NotificationListener(
                           onNotification: (ScrollNotification scrollInfo) {
-                            if (scrollInfo.metrics.pixels ==
-                                scrollInfo.metrics.maxScrollExtent) {
-                              if (!bookingState.isFetchingMore! &&
-                                  bookingState.hasMoreData! &&
-                                  !bookingState.isLoading!) {
-                                BlocProvider.of<BookingBloc>(context)
-                                    .add(FetchMoreBookings(fetchingMore: true));
-                                BlocProvider.of<BookingBloc>(context).add(
-                                    LoadBookings(
-                                        page: bookingState.currentPage!
-                                            .toString()));
+                            if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+                              if (!bookingState.isFetchingMore! && bookingState.hasMoreData! && !bookingState.isLoading!) {
+                                BlocProvider.of<BookingBloc>(context).add(FetchMoreBookings(fetchingMore: true));
+                                BlocProvider.of<BookingBloc>(context).add(LoadBookings(page: bookingState.currentPage!.toString()));
                               }
                             }
                             return false;
@@ -118,51 +102,23 @@ class _CalenderTabState extends State<CalenderTab> {
                                       child: ListView.builder(
                                           itemCount: finalResultList!.length,
                                           shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
+                                          physics: const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
-                                            MyBookingData myBookingData =
-                                                finalResultList![index];
+                                            MyBookingData myBookingData = finalResultList![index];
                                             List<String> services = [];
-                                            if (myBookingData.services!.length >
-                                                0) {
-                                              myBookingData.services!
-                                                  .forEach((element) {
-                                                services.add(
-                                                    element.serviceCategory!);
-                                              });
+                                            if (myBookingData.services!.isNotEmpty) {
+                                              for (var element in myBookingData.services!) {
+                                                services.add(element.serviceCategory!);
+                                              }
                                             }
-                                            String formattedDate =
-                                                DateFormat('yyyy-MM-dd').format(
-                                                    myBookingData.date!);
+                                            String formattedDate = DateFormat('yyyy-MM-dd').format(myBookingData.date!);
                                             print(formattedDate);
                                             return listItem(
-                                                image: myBookingData.image1!,
-                                                serviceType:
-                                                    myBookingData.businessName!,
-                                                joinDate: formattedDate,
-                                                services: services,
-                                                rating: 5,
-                                                status: myBookingData
-                                                    .bookingStatus!);
-                                            /* if (index == 0) {
+                                                finalResultList![index]);
 
-                                        } else {
-                                          return listItem(
-                                              image: Assets.service1.name,
-                                              serviceType: "AC Service",
-                                              joinDate: "15 Mar, 2021",
-                                              services: [
-                                                'AC Gas Change',
-                                                'Gasoline Delivery',
-                                                'Cooling Test'
-                                              ],
-                                              status: 2);
-                                        }*/
                                           }),
                                     ),
-                                    if (bookingState.isLoading!)
-                                      const CircularProgressIndicator()
+                                    // if (bookingState.isLoading!) const CircularProgressIndicator()
                                   ],
                                 ),
                               ),
@@ -202,14 +158,7 @@ class _CalenderTabState extends State<CalenderTab> {
     );
   }
 
-  Widget listItem(
-          {required String image,
-          required String serviceType,
-          required String joinDate,
-          required List<String> services,
-          double rating = 4,
-          required int status}) =>
-      Column(
+  Widget listItem(MyBookingData myBookingData) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
@@ -228,7 +177,7 @@ class _CalenderTabState extends State<CalenderTab> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child: CachedNetworkImage(
-                      imageUrl: image,
+                      imageUrl: myBookingData.image1!,
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -244,31 +193,27 @@ class _CalenderTabState extends State<CalenderTab> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            serviceType,
+                            myBookingData.businessName!,
                             maxLines: 2,
                             textAlign: TextAlign.center,
                             style: AppStyles.blackSemiBold,
                           ),
                           Text(
-                            status == 1
-                                ? AppConstants.active
-                                : AppConstants.completed,
+                            myBookingData.bookingStatus! == 1 ? AppConstants.active : AppConstants.completed,
                             maxLines: 2,
                             textAlign: TextAlign.center,
-                            style: status == 1
-                                ? AppStyles.textGreen
-                                : AppStyles.textBlue,
+                            style: myBookingData.bookingStatus!  == 1 ? AppStyles.textGreen : AppStyles.textBlue,
                           )
                         ],
                       ),
                       Text(
-                        "Joined " + joinDate,
+                        "Joined " + DateFormat('yyyy-MM-dd').format(myBookingData.date!),
                         maxLines: 2,
                         textAlign: TextAlign.center,
                         style: AppStyles.lightText12,
                       ),
                       ListView.builder(
-                          itemCount: services.length,
+                          itemCount: myBookingData.services?.length,
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
@@ -281,7 +226,7 @@ class _CalenderTabState extends State<CalenderTab> {
                                 ),
                                 horizontalSpacer(width: 8.0),
                                 Text(
-                                  services[index],
+                                  myBookingData.services![index].serviceCategory!,
                                   maxLines: 2,
                                   textAlign: TextAlign.center,
                                   style: AppStyles.blackText,
@@ -315,9 +260,9 @@ class _CalenderTabState extends State<CalenderTab> {
                               Icons.star,
                               color: Color(0xFFF1C21C),
                             ),
-                        rating: rating,
+                        rating: 5,
                         itemSize: 18.0),
-                    Text(rating.toString())
+                    Text(5.toString())
                   ],
                 ),
                 Row(
@@ -325,24 +270,9 @@ class _CalenderTabState extends State<CalenderTab> {
                     GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
-                          Map<String, dynamic> item = {
-                            "image": image,
-                            "serviceType": serviceType,
-                            "joinDate": joinDate,
-                            "services": services,
-                            "rating": rating,
-                            "status": status
-                          };
-                          Navigator.of(context, rootNavigator: false).push(
-                              CupertinoPageRoute(
-                                  builder: (context) =>
-                                      BookingDetails(item: item)));
+                          Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => BookingDetails( myBookingData: myBookingData,)));
                         },
-                        child: rowButton(
-                            bkColor: Colours.blue.code,
-                            text: AppConstants.details,
-                            paddingHorizontal: 8.0,
-                            paddingVertical: 7.0)),
+                        child: rowButton(bkColor: Colours.blue.code, text: AppConstants.details, paddingHorizontal: 8.0, paddingVertical: 7.0)),
                   ],
                 ),
               ],

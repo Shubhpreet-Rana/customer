@@ -1,7 +1,16 @@
+import 'dart:io';
+
+import 'package:app/bloc/booking/booking_bloc.dart';
+import 'package:app/bloc/payment/payment_bloc.dart';
+import 'package:app/bloc/payment/payment_sheets/payment_sheets.dart';
 import 'package:app/common/assets.dart';
 import 'package:app/common/ui/background.dart';
+import 'package:app/model/my_bookings.dart';
+import 'package:app/screens/bookings/book/payment_options.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../common/colors.dart';
@@ -13,9 +22,9 @@ import '../../common/ui/edit_text.dart';
 import '../../common/ui/headers.dart';
 
 class BookingDetails extends StatefulWidget {
-  final Map<String, dynamic> item;
+  final MyBookingData myBookingData;
 
-  const BookingDetails({Key? key, required this.item}) : super(key: key);
+  const BookingDetails({Key? key, required this.myBookingData}) : super(key: key);
 
   @override
   State<BookingDetails> createState() => _BookingDetailsState();
@@ -23,11 +32,13 @@ class BookingDetails extends StatefulWidget {
 
 class _BookingDetailsState extends State<BookingDetails> {
   TextEditingController descriptionController = TextEditingController();
+  var paymentIntent;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
   }
 
   @override
@@ -40,13 +51,13 @@ class _BookingDetailsState extends State<BookingDetails> {
           SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: AppConstants.serviceDetails, context: context, backNavigation: true, onFilterClick: () {})),
           Padding(
               padding: const EdgeInsets.only(left: 70.0, top: 2.0),
-              child: Text((widget.item['status'] == 2 ? AppConstants.completedOn : AppConstants.bookingOn) + " 20 Mar, 2021", style: AppStyles.whiteText)),
+              child: Text((widget.myBookingData.bookingStatus == 2 ? AppConstants.completedOn : AppConstants.bookingOn) + widget.myBookingData.date.toString(), style: AppStyles.whiteText)),
           verticalSpacer(),
           Expanded(
               child: SingleChildScrollView(
             child: Container(
               width: CommonMethods.deviceWidth(),
-              height: CommonMethods.deviceHeight() + CommonMethods.deviceHeight()*.42,
+              height: CommonMethods.deviceHeight() + CommonMethods.deviceHeight() * .42,
               decoration: BoxDecoration(
                 color: Colours.lightGray.code,
               ),
@@ -166,7 +177,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                   style: AppStyles.lightText,
                 ),
                 Text(
-                  r"$250",
+                  r"$" + "${widget.myBookingData.amount}",
                   style: AppStyles.blackSemiBold,
                 ),
               ],
@@ -180,7 +191,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                   style: AppStyles.lightText,
                 ),
                 Text(
-                  r"$30",
+                  r"$" + "${widget.myBookingData.gstAmount}",
                   style: AppStyles.blackSemiBold,
                 ),
               ],
@@ -194,13 +205,15 @@ class _BookingDetailsState extends State<BookingDetails> {
                   style: AppStyles.blackSemiW400_1,
                 ),
                 Text(
-                  r"$280",
+                  r"$" + ((int.parse(widget.myBookingData.amount!)+int.parse(widget.myBookingData.gstAmount!))).toString(),
                   style: AppStyles.textBlueSemiBold,
                 ),
               ],
             ),
+            verticalSpacer(height: 20.0),
+            if (widget.myBookingData.bookingStatus == 1) paymentWidget(),
             verticalSpacer(height: 50.0),
-            if (widget.item['status'] == 2)
+            if (widget.myBookingData.bookingStatus == 2)
               Column(
                 children: [
                   SvgPicture.asset(Assets.thumb.name),
@@ -210,12 +223,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                     style: AppStyles.textBlueBold,
                   ),
                   verticalSpacer(height: 10.0),
-                  Text((widget.item['status'] == 2 ? AppConstants.completedOn : AppConstants.bookingOn) + " 20 Mar, 2021", style: AppStyles.blackText),
+                  Text((widget.myBookingData.bookingStatus == 2 ? AppConstants.completedOn : AppConstants.bookingOn) + " 20 Mar, 2021", style: AppStyles.blackText),
                 ],
               ),
             // const Spacer(),
             verticalSpacer(height: 30.0),
-            if (widget.item['status'] == 2) reviewWidget(),
+            if (widget.myBookingData.bookingStatus == 2) reviewWidget(),
             const Spacer(),
             verticalSpacer(height: 10.0),
           ],
@@ -271,7 +284,7 @@ class _BookingDetailsState extends State<BookingDetails> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
                 child: Image.asset(
-                  widget.item['image'],
+                  widget.myBookingData.image1!,
                   fit: BoxFit.fill,
                 ),
               ),
@@ -286,16 +299,16 @@ class _BookingDetailsState extends State<BookingDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.item['serviceType'],
+                      widget.myBookingData.businessName!,
                       maxLines: 2,
                       textAlign: TextAlign.center,
                       style: AppStyles.blackSemiBold,
                     ),
                     Text(
-                      widget.item['status'] == 1 ? AppConstants.active : AppConstants.completed,
+                      widget.myBookingData.bookingStatus == 1 ? AppConstants.active : AppConstants.completed,
                       maxLines: 2,
                       textAlign: TextAlign.center,
-                      style: widget.item['status'] == 1 ? AppStyles.textGreen : AppStyles.textBlue,
+                      style: widget.myBookingData.bookingStatus == 1 ? AppStyles.textGreen : AppStyles.textBlue,
                     )
                   ],
                 ),
@@ -306,13 +319,13 @@ class _BookingDetailsState extends State<BookingDetails> {
                               Icons.star,
                               color: Color(0xFFF1C21C),
                             ),
-                        rating: widget.item['rating'],
+                        rating: double.parse(widget.myBookingData.rating!),
                         itemSize: 18.0),
-                    Text(widget.item['rating'].toString())
+                    Text(widget.myBookingData.rating.toString())
                   ],
                 ),
                 Text(
-                  "Joined " + widget.item['joinDate'],
+                  "Joined " + widget.myBookingData.date.toString(),
                   maxLines: 2,
                   textAlign: TextAlign.center,
                   style: AppStyles.lightText12,
@@ -337,4 +350,40 @@ class _BookingDetailsState extends State<BookingDetails> {
           ],
         ),
       );
+
+  paymentWidget() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _requestedUserProfile(),
+   _requestedPayment()
+      ],
+    );
+  }
+
+  _requestedUserProfile() {
+    return Row(
+      children: const [
+       CircleAvatar(),
+        SizedBox(width: 10.0,),
+        Text("Thomas")
+      ],
+    );
+  }
+
+  _requestedPayment() {
+    return Row(
+      children:  [
+       ElevatedButton(onPressed: (){}, child: const Text("Cancel")),
+        const SizedBox(width: 10.0,),
+        ElevatedButton(onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentOptions(totalPayment: ((int.parse(widget.myBookingData.amount!)+int.parse(widget.myBookingData.gstAmount!))).toDouble(),
+          bookingId: widget.myBookingData.id.toString(),)));
+        }, child: const Text("Completed")),
+      ],
+    );
+  }
+
+
 }

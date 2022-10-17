@@ -1,13 +1,18 @@
 import 'package:app/bloc/booking/booking_bloc.dart';
+import 'package:app/bloc/card%20/add_card/add_card_bloc.dart';
+import 'package:app/bloc/card%20/get_card/get_card_bloc.dart';
+import 'package:app/bloc/charge_user/charge_user_bloc.dart';
 import 'package:app/bloc/home/home_bloc.dart';
 import 'package:app/bloc/home/view_cars/view_car_bloc.dart';
 import 'package:app/bloc/payment/payment_bloc.dart';
-import 'package:app/bloc/payment/payment_repository/payment_repository.dart';
 import 'package:app/bloc/serviceProvider/service_provider_bloc.dart';
 import 'package:app/bloc/vehicle/add/add_vehicle_bloc.dart';
 import 'package:app/common/methods/common.dart';
+import 'package:app/data/repository/add_card_repository.dart';
 import 'package:app/data/repository/add_vehicle_repository.dart';
 import 'package:app/data/repository/booking_repository.dart';
+import 'package:app/data/repository/charge_user_repository.dart';
+import 'package:app/data/repository/get_cards_repository.dart';
 import 'package:app/data/repository/home_repository.dart';
 import 'package:app/data/repository/profile_repository.dart';
 import 'package:app/data/repository/service_provider_repository.dart';
@@ -28,12 +33,16 @@ import 'common/services/getit.dart';
 import 'data/repository/auth_repository.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
-void main() async {
+import 'data/repository/payment_repository.dart';
+
+Future<void> main() async {
   setup();
   WidgetsFlutterBinding.ensureInitialized();
-  Stripe.publishableKey = "pk_test_IeMh5jJQLbz2oSewCue5ig4M00heVbG5tF";
+  Stripe.publishableKey = "pk_test_51L8Ss2Ih6nYkk6h8IbIjjTuoPTiFm8kdd470XPEtZuk7vQLLy06OaAerv8ZO7LQRhxNn8kCDFjdU4PDJRDZI7mj300TIhd4RZZ";
+  Stripe.merchantIdentifier = "IN";
   CommonMethods.init();
   PreferenceUtils.init();
+  await Stripe.instance.applySettings();
   runApp(MyApp());
 }
 
@@ -65,6 +74,15 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<PaymentRepository>(
           create: (context) => PaymentRepository(),
+        ),
+        RepositoryProvider<GetCardRepository>(
+          create: (context) => GetCardRepository(),
+        ),
+        RepositoryProvider<ChargeUserRepository>(
+          create: (context) => ChargeUserRepository(),
+        ),
+        RepositoryProvider<AddCardRepository>(
+          create: (context) => AddCardRepository(),
         ),
       ],
       child: MultiBlocProvider(
@@ -120,7 +138,22 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<PaymentBloc>(
             create: (context) => PaymentBloc(
-              paymentReository: RepositoryProvider.of<PaymentRepository>(context),
+              paymentRepository: RepositoryProvider.of<PaymentRepository>(context),
+            ),
+          ),
+          BlocProvider<GetCardBloc>(
+            create: (context) => GetCardBloc(
+              getCardRepository: RepositoryProvider.of<GetCardRepository>(context),
+            ),
+          ),
+          BlocProvider<ChargeUserBloc>(
+            create: (context) => ChargeUserBloc(
+              chargeUserRepository: RepositoryProvider.of<ChargeUserRepository>(context),
+            ),
+          ),
+          BlocProvider<AddCardBloc>(
+            create: (context) => AddCardBloc(
+              addCardRepository: RepositoryProvider.of<AddCardRepository>(context),
             ),
           )
         ],

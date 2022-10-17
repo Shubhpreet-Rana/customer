@@ -16,3 +16,14 @@ class MakePaymentEvent extends PaymentEvent {
   // TODO: implement props
   List<Object?> get props => [];
 }
+
+class MakeApplePayment extends PaymentEvent {
+  String? amount;
+  String? currency;
+
+  MakeApplePayment({this.amount, this.currency});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
