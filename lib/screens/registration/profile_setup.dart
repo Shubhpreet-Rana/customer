@@ -72,7 +72,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
     return BlocListener<CreateProfileBloc, CreateProfileState>(
       listener: (context, state) {
         if (state is CreatedSuccessfully) {
-          CommonMethods().showToast(context: context, message: state.success/*, isSuccess: true*/);
+          CommonMethods().showToast(context: context, message: state.success);
           Navigator.of(context, rootNavigator: true)
               .pushReplacement(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
         }
@@ -121,6 +121,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                           fromUrl: widget.fromEdit && selectedImage == null ? true : false,
                           onSelect: () async {
                             selectedImage = await CommonMethods().showAlertDialog(context);
+                            print(selectedImage);
                             if (mounted) setState(() {});
                           },
                         ),
@@ -374,11 +375,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
       behavior: HitTestBehavior.translucent,
       onTap: () {
         validate();
-       /* if (widget.fromEdit) {
-          Navigator.of(context).pop();
-        } else {
 
-        }*/
       },
       child: appButton(bkColor: Colours.blue.code, text: widget.fromEdit ? AppConstants.update : AppConstants.submitText));
 }

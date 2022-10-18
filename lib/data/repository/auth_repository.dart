@@ -31,23 +31,6 @@ class AuthRepository {
     } catch (e) {
       Map<String, dynamic> error = {"message": "failed", "status": 0};
       if (e is DioError) {
-        /*   if (e.type == DioErrorType.response) {
-          final response = e.response;
-          try {
-            if (response != null && response.data != null) {
-              completer.complete(response.data);
-            }
-          } catch (e) {
-            completer.complete(error);
-            if (kDebugMode) {
-              print(e);
-            }
-          }
-        }else{
-          final errorMessage = DioExceptions.fromDioError(e).toString();
-
-          completer.complete(error);
-        }*/
         final errorMessage = DioExceptions.fromDioError(e).toString();
         error.update("message", (value) => errorMessage);
         completer.complete(error);

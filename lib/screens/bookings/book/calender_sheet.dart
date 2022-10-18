@@ -182,86 +182,84 @@ class _SelectDateState extends State<SelectDate> {
     );
     return FractionallySizedBox(
         heightFactor: 0.75,
-        child: Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 5.0,
-                      width: 60.0,
-                      color: Colours.midGray.code,
-                    ),
-                    //
+        child: Container(
+          padding: const EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    height: 5.0,
+                    width: 60.0,
+                    color: Colours.midGray.code,
                   ),
-                  verticalSpacer(),
-                  Container(
-                    margin: const EdgeInsets.only(
-                      top: 30.0,
-                      bottom: 16.0,
-                      left: 16.0,
-                      right: 16.0,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          AppConstants.bookingText1,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24.0,
-                          ),
+                  //
+                ),
+                verticalSpacer(),
+                Container(
+                  margin: const EdgeInsets.only(
+                    top: 30.0,
+                    bottom: 16.0,
+                    left: 16.0,
+                    right: 16.0,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        AppConstants.bookingText1,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24.0,
                         ),
-                        Text(
-                          _currentMonth,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                      Text(
+                        _currentMonth,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                        ),
+                      )
+                    ],
                   ),
-                  verticalSpacer(),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: _calendarCarouselNoHeader,
-                  ),
-                  verticalSpacer(),
-                  GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () async {
-                        await _selectTime(context).then((String value) async {
-                          print(value);
-                          Navigator.of(context, rootNavigator: false)
-                              .push(CupertinoPageRoute(
-                                  builder: (context) => ConfirmBooking(
-                                        selectedServices: widget.selectedServices,
-                                        selectedDate: _currentDate2,
-                                        item: widget.item,
-                                        selectedTime: value,
-                                      )));
-                        });
-                        // Navigator.pop(context);
-                        /* await  showDialog(context: context, builder: (context){
-                          return
-                        }).whenComplete(() async {
-                        await Navigator.of(context, rootNavigator: false)
-                            .push(CupertinoPageRoute(builder: (context) => ConfirmBooking(selectedServices: widget.selectedServices,selectedDate: _currentDate2, item: widget.item,)));
-                      });*/
-                        /* await Navigator.of(context, rootNavigator: false)
-                            .push(CupertinoPageRoute(builder: (context) => TimePicker(selectedServices: widget.selectedServices,selectedDate: _currentDate2,)));*/
-                      },
-                      child: appButton(
-                          bkColor: Colours.blue.code,
-                          text: AppConstants.confirmDate,
-                          height: 50.0)),
-                ],
-              ),
+                ),
+                verticalSpacer(),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: _calendarCarouselNoHeader,
+                ),
+                verticalSpacer(),
+                GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () async {
+                      await _selectTime(context).then((String value) async {
+                        print(value);
+                        Navigator.of(context, rootNavigator: false)
+                            .push(CupertinoPageRoute(
+                                builder: (context) => ConfirmBooking(
+                                      selectedServices: widget.selectedServices,
+                                      selectedDate: _currentDate2,
+                                      item: widget.item,
+                                      selectedTime: value,
+                                    )));
+                      });
+                      // Navigator.pop(context);
+                      /* await  showDialog(context: context, builder: (context){
+                        return
+                      }).whenComplete(() async {
+                      await Navigator.of(context, rootNavigator: false)
+                          .push(CupertinoPageRoute(builder: (context) => ConfirmBooking(selectedServices: widget.selectedServices,selectedDate: _currentDate2, item: widget.item,)));
+                    });*/
+                      /* await Navigator.of(context, rootNavigator: false)
+                          .push(CupertinoPageRoute(builder: (context) => TimePicker(selectedServices: widget.selectedServices,selectedDate: _currentDate2,)));*/
+                    },
+                    child: appButton(
+                        bkColor: Colours.blue.code,
+                        text: AppConstants.confirmDate,
+                        height: 50.0)),
+              ],
             ),
           ),
         ));

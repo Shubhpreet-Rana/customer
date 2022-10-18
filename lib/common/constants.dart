@@ -116,6 +116,7 @@ class AppConstants {
   static String reviewHint = "Write Your Review";
   static String submitReview = "SUBMIT REVIEW";
   static String addCar = "ADD CAR";
+  static String addCard = "Add card";
   static String professionalProfile = "Professional Profile";
   static String businessName = "Business Name";
   static String linkHint = "Website Link";

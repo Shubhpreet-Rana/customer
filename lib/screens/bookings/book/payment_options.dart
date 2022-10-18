@@ -115,9 +115,9 @@ class _PaymentOptionsState extends State<PaymentOptions> {
                   GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                          _payNowButton(cardList[selectedCard!]["id"]);
+                        _payNowButton(cardList[selectedCard!]["id"]);
                       },
-                      child: appButton(bkColor:selectedCard!=null? Colours.blue.code:Colors.grey, text: AppConstants.payNow, height: 50.0)),
+                      child: appButton(bkColor: selectedCard != null ? Colours.blue.code : Colors.grey, text: AppConstants.payNow, height: 50.0)),
                   verticalSpacer(height: 5.0),
                 ],
               ),
@@ -348,7 +348,7 @@ class _NoWebhookPaymentCardFormScreenState extends State<NoWebhookPaymentCardFor
         onPressed: () {
           _getCardToken();
         },
-        child: const Text("Add card"));
+        child: Text(AppConstants.addCard));
   }
 
   _getCardToken() async {

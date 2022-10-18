@@ -97,7 +97,7 @@ class Profile {
       addressLat: json["address_lat"].toDouble(),
       addressLong: json["address_long"].toDouble(),
       joinDate: json['join_date'],
-      rating: json['rating']);
+      rating: json['rating']??"5");
 
   Map<String, dynamic> toJson() => {
         "user_image": userImage,
@@ -149,7 +149,7 @@ class ServiceCategory {
         autoParts: json["Auto Parts"] == null
             ? null
             : RoadSideAssistance.fromJson(json["Auto Parts"]),
-        roadSideAssistance:
+        roadSideAssistance:json["Road Side Assistance"]==null?null:
             RoadSideAssistance.fromJson(json["Road Side Assistance"]),
       );
 

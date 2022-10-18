@@ -143,7 +143,6 @@ class ServiceProviderRepository {
         "Authorization": "Bearer $token",
       };
       String url = "${EndPoints.baseUrl}${EndPoints.serviceBooking}";
-      print(url);
       final response = await netWorkLocator.dio.post(url,
           options: Options(
             headers: headers,

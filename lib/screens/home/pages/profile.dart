@@ -231,7 +231,8 @@ class _ProfileTabState extends State<ProfileTab> {
                     GestureDetector(
                       onTap: () {
                         PreferenceUtils().clearAllPreferences();
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login()));
+                        Navigator.of(context,rootNavigator: true
+                        ).pushReplacement(MaterialPageRoute(builder: (context) => const Login()));
                       },
                       child: Text(
                         AppConstants.logout,

@@ -56,6 +56,7 @@ class ServiceProviderBloc
       if (res['status'] == 1) {
         GetServiceProviderList getServiceProviderList =
             GetServiceProviderList.fromJson(res);
+        print(getServiceProviderList);
         providerData.addAll(getServiceProviderList.data!);
         emit(GetAllServiceProviderFetchSuccessfully(providerData));
       } else {

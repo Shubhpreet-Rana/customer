@@ -36,8 +36,7 @@ class _CarTabState extends State<CarTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    BlocProvider.of<ServiceProviderBloc>(context)
-        .add(AllServiceProviderList("", "", "", {}));
+    BlocProvider.of<ServiceProviderBloc>(context).add(AllServiceProviderList("", "", "", {}));
   }
 
   @override
@@ -64,9 +63,7 @@ class _CarTabState extends State<CarTab> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                    child: searchBox(
-                        controller: searchController, hintText: "service")),
+                Expanded(child: searchBox(controller: searchController, hintText: "service")),
                 horizontalSpacer(),
                 Expanded(
                   child: AppDropdown(
@@ -83,24 +80,19 @@ class _CarTabState extends State<CarTab> {
               child: Container(
                   width: CommonMethods.deviceWidth(),
                   height: CommonMethods.deviceHeight(),
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 20.0, horizontal: 15.0),
+                  padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
                   decoration: BoxDecoration(
                     color: Colours.lightGray.code,
                   ),
-                  child: BlocListener<ServiceProviderBloc,
-                          ServiceProviderState>(
+                  child: BlocListener<ServiceProviderBloc, ServiceProviderState>(
                       listener: (context, state) {},
-                      child: BlocBuilder<ServiceProviderBloc,
-                          ServiceProviderState>(builder: (context, state) {
+                      child: BlocBuilder<ServiceProviderBloc, ServiceProviderState>(builder: (context, state) {
                         if (state is CarScreenLoading) {
-                          return const Center(
-                              child: CircularProgressIndicator());
+                          return const Center(child: CircularProgressIndicator());
                         }
                         if (state is GetAllServiceProviderFetchSuccessfully) {
                           var data = state.props[0];
-                          List<ProviderData> providerData =
-                              data as List<ProviderData>;
+                          List<ProviderData> providerData = data as List<ProviderData>;
                           return MediaQuery.removePadding(
                             context: context,
                             removeTop: true,
@@ -110,48 +102,34 @@ class _CarTabState extends State<CarTab> {
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
                                       List<String> list = [];
-                                      List<Map<String, dynamic>>
-                                          serviceProviderList = [];
-                                      var serviceData =
-                                          providerData[index].serviceCategory;
-                                      var data = serviceData!.toJson();
-                                      data.forEach((key, value) {
-                                        if (value != null) {
-                                          list.add(key.toString());
-                                          serviceProviderList.add({key: value});
-                                        }
-                                      });
+                                      List<Map<String, dynamic>> serviceProviderList = [];
+                                      var serviceData = providerData[index].serviceCategory;
+                                      if (serviceData!.oilChange != null &&
+                                          serviceData.autoParts != null &&
+                                          serviceData.autoRepair != null &&
+                                          serviceData.carWash != null &&
+                                          serviceData.gasoline != null &&
+                                          serviceData.roadSideAssistance != null) {
+                                        var data = serviceData.toJson();
+                                        data.forEach((key, value) {
+                                          if (value != null) {
+                                            list.add(key.toString());
+                                            serviceProviderList.add({key: value});
+                                          }
+                                        });
+                                      }
 
                                       return listItem(
-                                          image: providerData[index]
-                                              .profile!
-                                              .userImage!,
-                                          serviceType: providerData[index]
-                                              .profile!
-                                              .businessName!,
-                                          joinDate: providerData[index]
-                                              .profile!
-                                              .joinDate!,
-                                          services:
-                                              List.generate(list.length, (i) {
+                                          image: providerData[index].profile!.userImage!,
+                                          serviceType: providerData[index].profile!.businessName!,
+                                          joinDate: providerData[index].profile!.joinDate!,
+                                          services: List.generate(list.length, (i) {
                                             return list[i];
                                           }),
-                                          lat: providerData[index]
-                                              .profile!
-                                              .addressLat!,
-                                          long: providerData[index]
-                                              .profile!
-                                              .addressLong!,
-                                          rating: providerData[index]
-                                                      .profile!
-                                                      .rating !=
-                                                  null
-                                              ? double.parse(providerData[index]
-                                                  .profile!
-                                                  .rating!)
-                                              : 4.0,
-                                          serviceProviderList:
-                                              serviceProviderList);
+                                          lat: providerData[index].profile!.addressLat!,
+                                          long: providerData[index].profile!.addressLong!,
+                                          rating: providerData[index].profile!.rating != null ? double.parse(providerData[index].profile!.rating!) : 4.0,
+                                          serviceProviderList: serviceProviderList);
                                     })
                                 : const Text("No data found"),
                           );
@@ -175,7 +153,6 @@ class _CarTabState extends State<CarTab> {
     double? long,
     List<Map<String, dynamic>>? serviceProviderList,
   }) {
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -248,8 +225,7 @@ class _CarTabState extends State<CarTab> {
         ),
         Container(
           margin: const EdgeInsets.only(bottom: 20.0, top: 2.0),
-          padding: const EdgeInsets.only(
-              top: 10.0, bottom: 10.0, left: 4.0, right: 4.0),
+          padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 4.0, right: 4.0),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -293,19 +269,9 @@ class _CarTabState extends State<CarTab> {
                   GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        Navigator.of(context, rootNavigator: false).push(
-                            CupertinoPageRoute(
-                                builder: (context) => MyAppMap(
-                                    showPickUp: false,
-                                    showMarker: true,
-                                    latLng: LatLng(lat!, long!))));
+                        Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => MyAppMap(showPickUp: false, showMarker: true, latLng: LatLng(lat!, long!))));
                       },
-                      child: rowButton(
-                          bkColor: Colours.lightWhite.code,
-                          textColor: Colours.blue.code,
-                          text: AppConstants.location,
-                          paddingHorizontal: 8.0,
-                          paddingVertical: 7.0)),
+                      child: rowButton(bkColor: Colours.lightWhite.code, textColor: Colours.blue.code, text: AppConstants.location, paddingHorizontal: 8.0, paddingVertical: 7.0)),
                   horizontalSpacer(),
                   GestureDetector(
                       behavior: HitTestBehavior.translucent,
@@ -316,20 +282,13 @@ class _CarTabState extends State<CarTab> {
                           "joinDate": joinDate,
                           "services": services,
                           "rating": rating,
-                          "lat":lat,
+                          "lat": lat,
                           "serviceProviderList": serviceProviderList,
-                          "long":long
+                          "long": long
                         };
-                        Navigator.of(context, rootNavigator: false).push(
-                            CupertinoPageRoute(
-                                builder: (context) =>
-                                    ServiceDetails(item: item)));
+                        Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => ServiceDetails(item: item)));
                       },
-                      child: rowButton(
-                          bkColor: Colours.blue.code,
-                          text: AppConstants.bookNow,
-                          paddingHorizontal: 8.0,
-                          paddingVertical: 7.0)),
+                      child: rowButton(bkColor: Colours.blue.code, text: AppConstants.bookNow, paddingHorizontal: 8.0, paddingVertical: 7.0)),
                 ],
               ),
             ],
@@ -340,18 +299,14 @@ class _CarTabState extends State<CarTab> {
   }
 
   getDefaultRefreshData() {
-    BlocProvider.of<ServiceProviderBloc>(context)
-        .add(AllServiceProviderList("", "", "", {}));
+    BlocProvider.of<ServiceProviderBloc>(context).add(AllServiceProviderList("", "", "", {}));
   }
 
-  Future<String> getAddressFromLatLong(
-      double latitude, double longitude) async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(latitude, longitude);
+  Future<String> getAddressFromLatLong(double latitude, double longitude) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
     print(placemarks);
     Placemark place = placemarks[0];
-    var address =
-        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    var address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     return address;
   }
 }

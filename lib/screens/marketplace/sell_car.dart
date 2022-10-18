@@ -506,7 +506,6 @@ class _SellCarState extends State<SellCar> {
                                     if (widget.fromEdit) {
                                       updateVehicleDetail();
                                     }
-                                    //Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const HomeTabs()));
                                   },
                                   child: appButton(bkColor: Colours.blue.code, text: widget.fromEdit ? AppConstants.update : AppConstants.addCar));
                         });

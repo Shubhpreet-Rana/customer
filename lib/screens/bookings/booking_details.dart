@@ -319,9 +319,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                               Icons.star,
                               color: Color(0xFFF1C21C),
                             ),
-                        rating: double.parse(widget.myBookingData.rating!),
+                        rating: double.parse(widget.myBookingData.rating!=null?widget.myBookingData.rating!:"5"),
                         itemSize: 18.0),
-                    Text(widget.myBookingData.rating.toString())
+                    Text(widget.myBookingData.rating!=null?widget.myBookingData.rating!:"5")
                   ],
                 ),
                 Text(
