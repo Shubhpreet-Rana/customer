@@ -17,9 +17,7 @@ class SelectDate extends StatefulWidget {
   final List<ServiceTypes> selectedServices;
   final Map<String, dynamic> item;
 
-  const SelectDate(
-      {Key? key, required this.selectedServices, required this.item})
-      : super(key: key);
+  const SelectDate({Key? key, required this.selectedServices, required this.item}) : super(key: key);
 
   @override
   State<SelectDate> createState() => _SelectDateState();
@@ -37,10 +35,7 @@ class _SelectDateState extends State<SelectDate> {
   late CalendarCarousel _calendarCarouselNoHeader;
 
   static final Widget _eventIcon = Container(
-    decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(1000)),
-        border: Border.all(color: Colors.blue, width: 2.0)),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: const BorderRadius.all(Radius.circular(1000)), border: Border.all(color: Colors.blue, width: 2.0)),
     child: const Icon(
       Icons.person,
       color: Colors.amber,
@@ -139,8 +134,7 @@ class _SelectDateState extends State<SelectDate> {
       selectedDateTime: _currentDate2,
       targetDateTime: _targetDateTime,
       customGridViewPhysics: const NeverScrollableScrollPhysics(),
-      markedDateCustomShapeBorder:
-          const CircleBorder(side: BorderSide(color: Colors.yellow)),
+      markedDateCustomShapeBorder: const CircleBorder(side: BorderSide(color: Colors.yellow)),
       markedDateCustomTextStyle: const TextStyle(
         fontSize: 18,
         color: Colors.blue,
@@ -236,14 +230,16 @@ class _SelectDateState extends State<SelectDate> {
                     onTap: () async {
                       await _selectTime(context).then((String value) async {
                         print(value);
-                        Navigator.of(context, rootNavigator: false)
-                            .push(CupertinoPageRoute(
-                                builder: (context) => ConfirmBooking(
-                                      selectedServices: widget.selectedServices,
-                                      selectedDate: _currentDate2,
-                                      item: widget.item,
-                                      selectedTime: value,
-                                    )));
+                        Navigator.of(context, rootNavigator: false).push(
+                          CupertinoPageRoute(
+                            builder: (context) => ConfirmBooking(
+                              selectedServices: widget.selectedServices,
+                              selectedDate: _currentDate2,
+                              item: widget.item,
+                              selectedTime: value,
+                            ),
+                          ),
+                        );
                       });
                       // Navigator.pop(context);
                       /* await  showDialog(context: context, builder: (context){
@@ -255,10 +251,7 @@ class _SelectDateState extends State<SelectDate> {
                       /* await Navigator.of(context, rootNavigator: false)
                           .push(CupertinoPageRoute(builder: (context) => TimePicker(selectedServices: widget.selectedServices,selectedDate: _currentDate2,)));*/
                     },
-                    child: appButton(
-                        bkColor: Colours.blue.code,
-                        text: AppConstants.confirmDate,
-                        height: 50.0)),
+                    child: appButton(bkColor: Colours.blue.code, text: AppConstants.confirmDate, height: 50.0)),
               ],
             ),
           ),
@@ -272,16 +265,16 @@ class _SelectDateState extends State<SelectDate> {
         initialEntryMode: TimePickerEntryMode.dial,
         builder: (context, child) {
           return MediaQuery(
-              data: MediaQuery.of(context).copyWith(
-                  // Using 12-Hour format
-                  alwaysUse24HourFormat: false),
-              // If you want 24-Hour format, just change alwaysUse24HourFormat to true
-              child: child!);
+            data: MediaQuery.of(context).copyWith(
+              alwaysUse24HourFormat: false,
+            ),
+            // If you want 24-Hour format, just change alwaysUse24HourFormat to true
+            child: child!,
+          );
         });
     if (timeOfDay != null) {
-      selectTime =
-          "${timeOfDay.hour}:${timeOfDay.minute} ${timeOfDay.period.name.toUpperCase()}";
+      selectTime = "${timeOfDay.hour}:${timeOfDay.minute} ${timeOfDay.period.name.toUpperCase()}";
     }
-    return selectTime!;
+    return selectTime ?? "";
   }
 }

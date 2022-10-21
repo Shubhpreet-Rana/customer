@@ -31,13 +31,12 @@ class _CalenderTabState extends State<CalenderTab> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    BlocProvider.of<BookingBloc>(context).add(LoadBookings());
+    // BlocProvider.of<BookingBloc>(context).add(LoadBookings());
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContextcontext) {
     return Scaffold(
       body: BackgroundImage(
           child: Column(
@@ -48,8 +47,16 @@ class _CalenderTabState extends State<CalenderTab> {
           BlocListener<BookingBloc, BookingState>(
               listener: (context, state) {},
               child: BlocBuilder<BookingBloc, BookingState>(builder: (context, bookingState) {
-                if (bookingState is Loading) {
-                  return const Center(child: CircularProgressIndicator());
+                if (bookingState.myBookingList != null && bookingState.myBookingList!.isNotEmpty) {
+                  finalResultList!.clear();
+                  finalResultList!.addAll(bookingState.myBookingList ?? []);
+                  print(bookingState.myBookingList);
+                  if (finalResultList?.length == 1) {
+                    BlocProvider.of<BookingBloc>(context).add(GetMostPopularBookingList());
+                  }
+                }
+                if (bookingState is BookingLoading) {
+                  return Expanded(child: Container(height: MediaQuery.of(context).size.height, color: Colors.white, alignment: Alignment.center, child: CircularProgressIndicator()));
                 }
                 if (bookingState is MyBookingNoData && bookingState.currentPage == null) {
                   return Expanded(
@@ -66,10 +73,6 @@ class _CalenderTabState extends State<CalenderTab> {
                       )),
                     ),
                   );
-                }
-                if (bookingState.myBookingList != null && bookingState.myBookingList!.isNotEmpty) {
-                  finalResultList!.clear();
-                  finalResultList!.addAll(bookingState.myBookingList ?? []);
                 }
 
                 return finalResultList!.isNotEmpty
@@ -113,9 +116,7 @@ class _CalenderTabState extends State<CalenderTab> {
                                             }
                                             String formattedDate = DateFormat('yyyy-MM-dd').format(myBookingData.date!);
                                             print(formattedDate);
-                                            return listItem(
-                                                finalResultList![index]);
-
+                                            return listItem(finalResultList![index]);
                                           }),
                                     ),
                                     // if (bookingState.isLoading!) const CircularProgressIndicator()
@@ -199,10 +200,10 @@ class _CalenderTabState extends State<CalenderTab> {
                             style: AppStyles.blackSemiBold,
                           ),
                           Text(
-                            myBookingData.bookingStatus! == 1 ? AppConstants.active : AppConstants.completed,
+                            myBookingData.bookingStatus == 0 ? AppConstants.active : AppConstants.completed,
                             maxLines: 2,
                             textAlign: TextAlign.center,
-                            style: myBookingData.bookingStatus!  == 1 ? AppStyles.textGreen : AppStyles.textBlue,
+                            style: myBookingData.bookingStatus == 0 ? AppStyles.textGreen : AppStyles.textBlue,
                           )
                         ],
                       ),
@@ -268,11 +269,20 @@ class _CalenderTabState extends State<CalenderTab> {
                 Row(
                   children: [
                     GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => BookingDetails( myBookingData: myBookingData,)));
-                        },
-                        child: rowButton(bkColor: Colours.blue.code, text: AppConstants.details, paddingHorizontal: 8.0, paddingVertical: 7.0)),
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
+                            builder: (context) => BookingDetails(
+                                  myBookingData: myBookingData,
+                                )));
+                      },
+                      child: rowButton(
+                        bkColor: Colours.blue.code,
+                        text: AppConstants.details,
+                        paddingHorizontal: 8.0,
+                        paddingVertical: 7.0,
+                      ),
+                    ),
                   ],
                 ),
               ],

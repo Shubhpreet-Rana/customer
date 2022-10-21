@@ -6,6 +6,7 @@ abstract class HomeEvent extends Equatable {
 }
 
 class GetBanner extends HomeEvent {
-
+  @override
+  List<Object> get props => [];
 }
 

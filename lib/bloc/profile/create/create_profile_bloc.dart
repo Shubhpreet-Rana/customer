@@ -32,9 +32,14 @@ class CreateProfileBloc extends Bloc<CreateEvent, CreateProfileState> {
           mobile: event.mobile,
           lat: event.lat,
           lang: event.lang);
-      if (res['status'] == 1) {
+      if (res['status'] == 1  && res['screen']!='add_vehicle') {
         emit(CreatedSuccessfully(res['message']));
-      } else {
+      }
+      else if(res['status'] == 1 && res['screen']=='home'){
+        emit(UpdateProfileSuccessfully(res['message']));
+      }
+
+      else {
         emit(CreatedFailed(res['message']));
         emit(NotCreated());
       }

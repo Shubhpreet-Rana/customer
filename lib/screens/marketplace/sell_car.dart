@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/bloc/home/add_car/add_car_bloc.dart';
+import 'package:app/bloc/home/view_cars/view_car_bloc.dart';
 import 'package:app/common/location_util.dart';
 import 'package:app/model/all_vehicle_model.dart';
 import 'package:app/model/my_marketplace_vehicle.dart';
@@ -26,8 +27,9 @@ import '../../common/ui/headers.dart';
 class SellCar extends StatefulWidget {
   final bool fromEdit;
   final AllVehicleData? myVehicleMarketPlace;
+  final MyVehicleMarketPlace ? myVehicle;
 
-  SellCar({Key? key, this.fromEdit = false, this.myVehicleMarketPlace}) : super(key: key);
+  SellCar({Key? key, this.fromEdit = false, this.myVehicleMarketPlace,this.myVehicle}) : super(key: key);
 
   @override
   State<SellCar> createState() => _SellCarState();
@@ -81,6 +83,7 @@ class _SellCarState extends State<SellCar> {
               CommonMethods().showToast(context: context, message: "Car added successfully"/*, isSuccess: true, title: "Success"*/);
             }
             if (state is UpdateCarSuccessFully) {
+              BlocProvider.of<ViewCarBloc>(context).add(GetMyMarketVehicle());
               Navigator.of(context).pop();
             }
           },
@@ -566,7 +569,7 @@ class _SellCarState extends State<SellCar> {
 
   void updateVehicleDetail() {
     BlocProvider.of<SellCarBloc>(context).add(UpdateCarToSell(
-        id: widget.myVehicleMarketPlace!.id,
+        id: widget.myVehicleMarketPlace!=null? widget.myVehicleMarketPlace!.id:widget.myVehicle!.id!,
         brand_name: brandNameController.text,
         model_name: modelController.text,
         price: priceController.text,
@@ -601,6 +604,26 @@ class _SellCarState extends State<SellCar> {
         updatedImage3 = widget.myVehicleMarketPlace!.carImage3!;
         if (mounted) {
           setState(() {});
+        }
+      }
+      else{
+        if (widget.myVehicle != null) {
+          brandNameController.text = widget.myVehicle!.brandName!;
+          modelController.text = widget.myVehicle!.modelName!;
+          priceController.text = widget.myVehicle!.price!;
+          engineController.text = widget.myVehicle!.capacity!.toString();
+          mileage = widget.myVehicle!.mileage!;
+          dateController.text = widget.myVehicle!.createdAt!.toString();
+          selectedColor = widget.myVehicle!.color!;
+          manufacturingController.text = widget.myVehicle!.manufacturingYear!;
+          descriptionController.text = widget.myVehicle!.description!;
+          addressController.text = widget.myVehicle!.address!;
+          updatedImage1 = widget.myVehicle!.carImage1!;
+          updatedImage2 = widget.myVehicle!.carImage2!;
+          updatedImage3 = widget.myVehicle!.carImage3!;
+          if (mounted) {
+            setState(() {});
+          }
         }
       }
     }

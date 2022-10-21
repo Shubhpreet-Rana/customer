@@ -53,8 +53,8 @@ class _LoginState extends State<Login> {
           Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const ProfileSetUp()));
         }
         if (state is LoggedInSuccessfullyAddVehicle) {
-          // Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
-          Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const HomeTabs()));
+          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
+          //  Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const HomeTabs()));
         }
         if (state is LoggedInSuccessfully) {
           PreferenceUtils.setBool(AppConstants.rememberMe, rememberMe);

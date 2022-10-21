@@ -4,11 +4,9 @@
 
 import 'dart:convert';
 
-GetServiceProviderList getServiceProviderListFromJson(String str) =>
-    GetServiceProviderList.fromJson(json.decode(str));
+GetServiceProviderList getServiceProviderListFromJson(String str) => GetServiceProviderList.fromJson(json.decode(str));
 
-String getServiceProviderListToJson(GetServiceProviderList data) =>
-    json.encode(data.toJson());
+String getServiceProviderListToJson(GetServiceProviderList data) => json.encode(data.toJson());
 
 class GetServiceProviderList {
   GetServiceProviderList({
@@ -17,23 +15,21 @@ class GetServiceProviderList {
     this.data,
   });
 
-  int? status;
-  String? message;
+  int ?status;
+  String ?message;
   List<ProviderData>? data;
 
-  factory GetServiceProviderList.fromJson(Map<String, dynamic> json) =>
-      GetServiceProviderList(
-        status: json["status"],
-        message: json["message"],
-        data: List<ProviderData>.from(
-            json["data"].map((x) => ProviderData.fromJson(x))),
-      );
+  factory GetServiceProviderList.fromJson(Map<String, dynamic> json) => GetServiceProviderList(
+    status: json["status"],
+    message: json["message"],
+    data: List<ProviderData>.from(json["data"].map((x) => ProviderData.fromJson(x))),
+  );
 
   Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "status": status,
+    "message": message,
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 }
 
 class ProviderData {
@@ -42,18 +38,18 @@ class ProviderData {
     this.serviceCategory,
   });
 
-  Profile? profile;
+  Profile ?profile;
   ServiceCategory? serviceCategory;
 
   factory ProviderData.fromJson(Map<String, dynamic> json) => ProviderData(
-        profile: Profile.fromJson(json["profile"]),
-        serviceCategory: ServiceCategory.fromJson(json["service_category"]),
-      );
+    profile: Profile.fromJson(json["profile"]),
+    serviceCategory: ServiceCategory.fromJson(json["service_category"]),
+  );
 
   Map<String, dynamic> toJson() => {
-        "profile": profile!.toJson(),
-        "service_category": serviceCategory!.toJson(),
-      };
+    "profile": profile?.toJson(),
+    "service_category": serviceCategory?.toJson(),
+  };
 }
 
 class Profile {
@@ -72,47 +68,48 @@ class Profile {
     this.rating,
   });
 
-  String? userImage;
-  String? businessName;
-  String? websiteLink;
+  String ?userImage;
+  String ?businessName;
+  String ?websiteLink;
   String? image1;
   String? image2;
   String? image3;
-  String? experience;
-  String? address;
+  String ?experience;
+  String ?address;
   double? addressLat;
-  double? addressLong;
+  double ?addressLong;
   String? joinDate;
   String? rating;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-      userImage: json["user_image"],
-      businessName: json["business_name"],
-      websiteLink: json["website_link"],
-      image1: json["image1"],
-      image2: json["image2"],
-      image3: json["image3"],
-      experience: json["experience"],
-      address: json["address"],
-      addressLat: json["address_lat"].toDouble(),
-      addressLong: json["address_long"].toDouble(),
-      joinDate: json['join_date'],
-      rating: json['rating']??"5");
+    userImage: json["user_image"],
+    businessName: json["business_name"],
+    websiteLink: json["website_link"] == null ? null : json["website_link"],
+    image1: json["image1"],
+    image2: json["image2"],
+    image3: json["image3"],
+    experience: json["experience"],
+    address: json["address"],
+    addressLat: json["address_lat"].toDouble(),
+    addressLong: json["address_long"].toDouble(),
+    joinDate: json["join_date"],
+    rating: json["rating"] == null ? null : json["rating"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "user_image": userImage,
-        "business_name": businessName,
-        "website_link": websiteLink,
-        "image1": image1,
-        "image2": image2,
-        "image3": image3,
-        "experience": experience,
-        "address": address,
-        "address_lat": addressLat,
-        "address_long": addressLong,
-        "join_date": joinDate,
-        "rating": rating,
-      };
+    "user_image": userImage,
+    "business_name": businessName,
+    "website_link": websiteLink == null ? null : websiteLink,
+    "image1": image1,
+    "image2": image2,
+    "image3": image3,
+    "experience": experience,
+    "address": address,
+    "address_lat": addressLat,
+    "address_long": addressLong,
+    "join_date": joinDate,
+    "rating": rating == null ? null : rating,
+  };
 }
 
 class ServiceCategory {
@@ -125,149 +122,68 @@ class ServiceCategory {
     this.roadSideAssistance,
   });
 
-  Gasoline? oilChange;
-  Gasoline? gasoline;
-  CarWash? carWash;
-  RoadSideAssistance? autoRepair;
-  RoadSideAssistance? autoParts;
-  RoadSideAssistance? roadSideAssistance;
+  AutoParts? oilChange;
+  AutoParts? gasoline;
+  AutoParts? carWash;
+  AutoParts? autoRepair;
+  AutoParts ?autoParts;
+  AutoParts ?roadSideAssistance;
 
-  factory ServiceCategory.fromJson(Map<String, dynamic> json) =>
-      ServiceCategory(
-        oilChange: json["Oil Change"] == null
-            ? null
-            : Gasoline.fromJson(json["Oil Change"]),
-        gasoline: json["Gasoline"] == null
-            ? null
-            : Gasoline.fromJson(json["Gasoline"]),
-        carWash: json["Car Wash"] == null
-            ? null
-            : CarWash.fromJson(json["Car Wash"]),
-        autoRepair: json["Auto Repair"] == null
-            ? null
-            : RoadSideAssistance.fromJson(json["Auto Repair"]),
-        autoParts: json["Auto Parts"] == null
-            ? null
-            : RoadSideAssistance.fromJson(json["Auto Parts"]),
-        roadSideAssistance:json["Road Side Assistance"]==null?null:
-            RoadSideAssistance.fromJson(json["Road Side Assistance"]),
-      );
+  factory ServiceCategory.fromJson(Map<String, dynamic> json) => ServiceCategory(
+    oilChange: json["Oil Change"] == null ? null : AutoParts.fromJson(json["Oil Change"]),
+    gasoline: json["Gasoline"] == null ? null : AutoParts.fromJson(json["Gasoline"]),
+    carWash: json["Car Wash"] == null ? null : AutoParts.fromJson(json["Car Wash"]),
+    autoRepair: json["Auto Repair"] == null ? null : AutoParts.fromJson(json["Auto Repair"]),
+    autoParts: json["Auto Parts"] == null ? null : AutoParts.fromJson(json["Auto Parts"]),
+    roadSideAssistance: json["Road Side Assistance"] == null ? null : AutoParts.fromJson(json["Road Side Assistance"]),
+  );
 
   Map<String, dynamic> toJson() => {
-        "Oil Change": oilChange == null ? null : oilChange!.toJson(),
-        "Gasoline": gasoline == null ? null : gasoline!.toJson(),
-        "Car Wash": carWash == null ? null : carWash!.toJson(),
-        "Auto Repair": autoRepair == null ? null : autoRepair!.toJson(),
-        "Auto Parts": autoParts == null ? null : autoParts!.toJson(),
-        "Road Side Assistance": roadSideAssistance!.toJson(),
-      };
+    "Oil Change": oilChange == null ? null : oilChange?.toJson(),
+    "Gasoline": gasoline == null ? null : gasoline?.toJson(),
+    "Car Wash": carWash == null ? null : carWash?.toJson(),
+    "Auto Repair": autoRepair == null ? null : autoRepair?.toJson(),
+    "Auto Parts": autoParts == null ? null : autoParts?.toJson(),
+    "Road Side Assistance": roadSideAssistance == null ? null : roadSideAssistance?.toJson(),
+  };
 }
 
-class RoadSideAssistance {
-  RoadSideAssistance({
+class AutoParts {
+  AutoParts({
     this.catId,
     this.description,
     this.price,
     this.availability,
     this.gstRate,
-  });
-
-  int? catId;
-  String? description;
-  String? price;
-  String? availability;
-  int? gstRate;
-
-  factory RoadSideAssistance.fromJson(Map<String, dynamic> json) =>
-      RoadSideAssistance(
-        catId: json["cat_id"],
-        description: json["description"],
-        price: json["price"],
-        availability: json["availability"],
-        gstRate: json["gst_rate"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "cat_id": catId,
-        "description": description,
-        "price": price,
-        "availability": availability,
-        "gst_rate": gstRate
-      };
-}
-
-class CarWash {
-  CarWash({
-    this.catId,
-    this.description,
-    this.type,
-    this.price,
-    this.availability,
-    this.gstRate,
-  });
-
-  int? catId;
-  String? description;
-  String? type;
-  String? price;
-  String? availability;
-  int? gstRate;
-
-  factory CarWash.fromJson(Map<String, dynamic> json) => CarWash(
-        catId: json["cat_id"],
-        description: json["description"],
-        type: json["type"],
-        price: json["price"],
-        availability: json["availability"],
-        gstRate: json["gst_rate"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "cat_id": catId,
-        "description": description,
-        "type": type,
-        "price": price,
-        "availability": availability,
-        "gst_rate": gstRate,
-      };
-}
-
-class Gasoline {
-  Gasoline({
-    this.catId,
-    this.description,
     this.type,
     this.brand,
-    this.price,
-    this.availability,
-    this.gstRate,
   });
 
-  int? catId;
-  String? description;
+  int ?catId;
+  String ?description;
+  String ?price;
+  String? availability;
+  int ?gstRate;
   String? type;
   String? brand;
-  String? price;
-  String? availability;
-  int? gstRate;
 
-  factory Gasoline.fromJson(Map<String, dynamic> json) => Gasoline(
-        catId: json["cat_id"],
-        description: json["description"],
-        type: json["type"],
-        brand: json["brand"],
-        price: json["price"],
-        availability: json["availability"],
-        gstRate: json["gst_rate"],
-      );
+  factory AutoParts.fromJson(Map<String, dynamic> json) => AutoParts(
+    catId: json["cat_id"],
+    description: json["description"],
+    price: json["price"],
+    availability: json["availability"],
+    gstRate: json["gst_rate"],
+    type: json["type"] == null ? null : json["type"],
+    brand: json["brand"] == null ? null : json["brand"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "cat_id": catId,
-        "description": description,
-        "type": type,
-        "brand": brand,
-        "price": price,
-        "availability": availability,
-        'gst_rate': gstRate
-      };
+    "cat_id": catId,
+    "description": description,
+    "price": price,
+    "availability": availability,
+    "gst_rate": gstRate,
+    "type": type == null ? null : type,
+    "brand": brand == null ? null : brand,
+  };
 }

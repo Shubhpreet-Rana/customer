@@ -12,8 +12,7 @@ class ServiceProviderRepository {
   final netWorkLocator = getIt.get<DioClient>();
 
   Future<Map<String, dynamic>> getCategoryList() async {
-    Completer<Map<String, dynamic>> completer =
-        Completer<Map<String, dynamic>>();
+    Completer<Map<String, dynamic>> completer = Completer<Map<String, dynamic>>();
     try {
       var userInfo = PreferenceUtils.getUserInfo(AppConstants.userInfo);
       String token = userInfo['token'];
@@ -45,13 +44,8 @@ class ServiceProviderRepository {
     return completer.future;
   }
 
-  Future<Map<String, dynamic>> getAllServiceProvider(
-      {String? categoryName,
-      String? catid,
-      String? rating,
-      Map<String, dynamic>? location}) async {
-    Completer<Map<String, dynamic>> completer =
-        Completer<Map<String, dynamic>>();
+  Future<Map<String, dynamic>> getAllServiceProvider({String? categoryName, String? catid, String? rating, Map<String, dynamic>? location}) async {
+    Completer<Map<String, dynamic>> completer = Completer<Map<String, dynamic>>();
     try {
       Map<String, dynamic> mapData = {};
       if (categoryName != null && categoryName != "") {
@@ -102,42 +96,27 @@ class ServiceProviderRepository {
     return completer.future;
   }
 
-  Future<Map<String, dynamic>> bookService(
-      {String? amount,
-      String? date,
-      String? address_lat,
-      String? address_long,
-      String? gst_amount,
-      String? time,
-      List<String>? service_cat_id}) async {
-    Completer<Map<String, dynamic>> completer =
-        Completer<Map<String, dynamic>>();
+  Future<Map<String, dynamic>> bookService({String? amount, String? date, String? address_lat, String? address_long, String? gst_amount, String? time, List<String>? service_cat_id}) async {
+    Completer<Map<String, dynamic>> completer = Completer<Map<String, dynamic>>();
     try {
       String serviceCatIds = "";
       var userInfo = PreferenceUtils.getUserInfo(AppConstants.userInfo);
       String token = userInfo['token'];
       String serviceProviderId = userInfo['user']['id'].toString();
-      if (service_cat_id!.length > 0) {
+      if (service_cat_id!.isNotEmpty) {
         if (service_cat_id.length == 1) {
           serviceCatIds = service_cat_id[0];
         } else {
           serviceCatIds = service_cat_id.join(',');
         }
       }
-      Map<String, dynamic> mapData = {
-        "service_provider_id": serviceProviderId,
-        "amount": amount,
-        "date": date,
-        "service_cat_id": serviceCatIds,
-        "gst_amount": gst_amount,
-        "time": time
-      };
-     if(address_lat!=null && address_lat!=""){
-       mapData.putIfAbsent("address_lat", () => address_lat);
-     }
-     if(address_long!=null && address_long!=""){
-       mapData.putIfAbsent("address_long", () => address_long);
-     }
+      Map<String, dynamic> mapData = {"service_provider_id": serviceProviderId, "amount": amount, "date": date, "service_cat_id": serviceCatIds, "gst_amount": gst_amount, "time": time};
+      if (address_lat != null && address_lat != "") {
+        mapData.putIfAbsent("address_lat", () => address_lat);
+      }
+      if (address_long != null && address_long != "") {
+        mapData.putIfAbsent("address_long", () => address_long);
+      }
       Map<String, String> headers = {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
@@ -151,6 +130,8 @@ class ServiceProviderRepository {
       if (response.statusCode != 200) {
         throw Exception('Failed to sign in');
       }
+
+      print(response.statusCode);
 
       completer.complete(response.data);
     } catch (e) {

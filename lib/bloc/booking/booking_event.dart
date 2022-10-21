@@ -5,7 +5,7 @@ abstract class BookingEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetBanner extends BookingEvent {
+class GetBookingBanner extends BookingEvent {
 
 }
 class LoadBookings extends BookingEvent {
@@ -20,4 +20,6 @@ class FetchMoreBookings extends BookingEvent {
   FetchMoreBookings({this.fetchingMore});
 
 }
+
+ class GetMostPopularBookingList  extends BookingEvent{}
 

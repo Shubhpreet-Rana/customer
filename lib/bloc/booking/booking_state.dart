@@ -8,13 +8,15 @@ class BookingState extends Equatable {
   bool? isLoading;
   bool? isFetchingMore;
   List<MyBookingData>? myBookingList;
+  List<MyBookingData>? getPopularList;
 
   BookingState({
     this.currentPage = 1,
     this.hasMoreData = true,
     this.isLoading = true,
     this.isFetchingMore = false,
-    this.myBookingList
+    this.myBookingList,
+    this.getPopularList
   });
 
   BookingState copyWith({
@@ -22,22 +24,24 @@ class BookingState extends Equatable {
     bool? hasMoreData,
     bool? isLoading,
     bool? isFetchingMore,
-    List<MyBookingData>? myBookingList
+    List<MyBookingData>? myBookingList,
+    List<MyBookingData>? getPopularList
   }) =>
       BookingState(
         currentPage: currentPage ?? this.currentPage,
         hasMoreData: hasMoreData ?? this.hasMoreData,
         isLoading: isLoading ?? this.isLoading,
         isFetchingMore: isFetchingMore ?? this.isFetchingMore,
-        myBookingList: myBookingList??this.myBookingList
+        myBookingList: myBookingList??this.myBookingList,
+        getPopularList: getPopularList??this.getPopularList
       );
 
   @override
   List<Object> get props =>
-      [currentPage!, hasMoreData!, isLoading!, isFetchingMore!,myBookingList??[]];
+      [currentPage!, hasMoreData!, isLoading!, isFetchingMore!,myBookingList??[],getPopularList??[]];
 }
 
-class Loading extends BookingState {
+class BookingLoading extends BookingState {
 }
 class MyBookingNoData extends BookingState {
   final String message;

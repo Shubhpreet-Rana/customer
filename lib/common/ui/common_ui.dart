@@ -112,7 +112,8 @@ Widget searchBox(
         required TextEditingController controller,
         String hintText = "search",
         bool isPrefix = false,
-        Widget? prefixIcon}) =>
+        Widget? prefixIcon,
+        var onSearchChanged}) =>
     Container(
       padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: paddingVertical),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(borderRadius)),
@@ -132,6 +133,7 @@ Widget searchBox(
               border: InputBorder.none,
               hintText: hintText,
             ),
+                onChanged: onSearchChanged,
           ))
         ],
       ),

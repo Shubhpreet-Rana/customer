@@ -1,5 +1,4 @@
 import 'package:app/model/all_vehicle_model.dart';
-import 'package:app/screens/marketplace/view_cars.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/colors.dart';

@@ -44,32 +44,27 @@ class _ServiceDetailsState extends State<ServiceDetails> {
         for (final mapEntry in element.entries) {
           final key = mapEntry.key;
           final value = mapEntry.value;
-          serviceTypes = ServiceTypes(
-              value['cat_id'].toString(),
-              false,
-              key ?? "",
-              "service",
-              "subService",
-              value['price'].toString(),
-              value['description'],
-              value['gst_rate'].toString());
+          serviceTypes = ServiceTypes(value['cat_id'].toString(), false, key ?? "", "service", "subService", value['price'].toString(), value['description'], value['gst_rate'].toString());
         }
         serviceType!.add(serviceTypes!);
       });
     }
-    //selectedServices.add(serviceType![0]);
+
     getAddressFromLatLong(widget.item['lat']!, widget.item['long']);
   }
 
   Future<void> getAddressFromLatLong(double latitude, double longitude) async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(latitude, longitude);
-    print(placemarks);
-    Placemark place = placemarks[0];
-    var data =
-        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    address = data;
-    setState(() {});
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+      print(placemarks);
+      Placemark place = placemarks[0];
+      var data = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+      address = data;
+      setState(() {});
+    } catch (e, s) {
+      print(e.toString());
+      print(s.toString());
+    }
   }
 
   @override
@@ -79,17 +74,8 @@ class _ServiceDetailsState extends State<ServiceDetails> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SafeArea(
-              bottom: false,
-              child: AppHeaders().collapsedHeader(
-                  text: widget.item['serviceType'],
-                  context: context,
-                  backNavigation: true,
-                  onFilterClick: () {})),
-          Padding(
-              padding: const EdgeInsets.only(left: 70.0, top: 2.0),
-              child: Text((AppConstants.servicePopularity),
-                  style: AppStyles.whiteText)),
+          SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: widget.item['serviceType'], context: context, backNavigation: true, onFilterClick: () {})),
+          Padding(padding: const EdgeInsets.only(left: 70.0, top: 2.0), child: Text((AppConstants.servicePopularity), style: AppStyles.whiteText)),
           verticalSpacer(),
           Expanded(
             child: Container(
@@ -98,145 +84,137 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                 decoration: BoxDecoration(
                   color: Colours.lightGray.code,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    header(),
-                    verticalSpacer(height: 10.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0.0, horizontal: 20.0),
-                      child: Text(AppConstants.serviceCategories,
-                          style: AppStyles.blackSemiBold),
-                    ),
-                    verticalSpacer(height: 10.0),
-                    SingleChildScrollView(
-                      child: Container(
-                          color: Colors.white,
-                          width: CommonMethods.deviceWidth(),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              MediaQuery.removePadding(
-                                context: context,
-                                removeTop: true,
-                                removeBottom: true,
-                                child: ListView.builder(
-                                  itemCount: serviceType!.length,
-                                  shrinkWrap: true,
-                                  physics:
-                                      const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, i) {
-                                    return ExpansionTile(
-                                      title: Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 24.0,
-                                            height: 24.0,
-                                            child: Checkbox(
-                                                value: serviceType![i]
-                                                    .isSelected,
-                                                checkColor: Colors.white,
-                                                shape:
-                                                    RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    4)),
-                                                onChanged: (val) {
-                                                  _onSelect(
-                                                      val, serviceType![i]);
-                                                }),
-                                          ),
-                                          horizontalSpacer(
-                                            width: 10.0,
-                                          ),
-                                          Text(
-                                            serviceType![i].title,
-                                            style: AppStyles.blackSemiBold,
-                                          ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      header(),
+                      verticalSpacer(height: 10.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                        child: Text(AppConstants.serviceCategories, style: AppStyles.blackSemiBold),
+                      ),
+                      verticalSpacer(height: 10.0),
+                      SingleChildScrollView(
+                        child: Container(
+                            color: Colors.white,
+                            width: CommonMethods.deviceWidth(),
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                MediaQuery.removePadding(
+                                  context: context,
+                                  removeTop: true,
+                                  removeBottom: true,
+                                  child: ListView.builder(
+                                    itemCount: serviceType!.length,
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, i) {
+                                      return ExpansionTile(
+                                        title: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 24.0,
+                                              height: 24.0,
+                                              child: Checkbox(
+                                                  value: serviceType![i].isSelected,
+                                                  checkColor: Colors.white,
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                                  onChanged: (val) {
+                                                    _onSelect(val, serviceType![i]);
+                                                  }),
+                                            ),
+                                            horizontalSpacer(
+                                              width: 10.0,
+                                            ),
+                                            Text(
+                                              serviceType![i].title,
+                                              style: AppStyles.blackSemiBold,
+                                            ),
+                                          ],
+                                        ),
+                                        children: <Widget>[
+                                          _buildExpandableContent(serviceType![i]),
                                         ],
-                                      ),
-                                      children: <Widget>[
-                                        _buildExpandableContent(
-                                            serviceType![i]),
-                                      ],
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                              verticalSpacer(),
-                              GestureDetector(
+                                verticalSpacer(),
+                                GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () async {
                                     bookNow();
 
                                     /*    if (getButtonColor() ==
-                                        Colours.blue.code) {
-                                      var list = selectedServices
-                                          .where((element) =>
-                                              element.id == "6")
-                                          .toList();
-                                      if (list.isNotEmpty) {
-                                        resetServices();
+                                          Colours.blue.code) {
+                                        var list = selectedServices
+                                            .where((element) =>
+                                                element.id == "6")
+                                            .toList();
+                                        if (list.isNotEmpty) {
+                                          resetServices();
 
-                                        var data = selectedServices;
-                                        latLng != null
-                                            ? await showModalBottomSheet(
-                                                context: context,
-                                                isScrollControlled: true,
-                                                useRootNavigator: true,
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.vertical(
-                                                    top:
-                                                        Radius.circular(20),
+                                          var data = selectedServices;
+                                          latLng != null
+                                              ? await showModalBottomSheet(
+                                                  context: context,
+                                                  isScrollControlled: true,
+                                                  useRootNavigator: true,
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.vertical(
+                                                      top:
+                                                          Radius.circular(20),
+                                                    ),
                                                   ),
-                                                ),
-                                                clipBehavior: Clip
-                                                    .antiAliasWithSaveLayer,
-                                                backgroundColor:
-                                                    Colors.white,
-                                                builder: (context) {
-                                                  //serviceType!.add(value)
-                                                  return SelectDate(
-                                                    selectedServices: data,
-                                                    item: widget.item,
-                                                  );
-                                                })
-                                            : Navigator.of(context,
-                                                    rootNavigator: false)
-                                                .push(CupertinoPageRoute(
-                                                    builder: (context) =>
-                                                        MyAppMap(
-                                                            isDetailPage:
-                                                                false,
-                                                            callback:
-                                                                (LatLng?
-                                                                    value) {
-                                                              latLng =
-                                                                  value;
-                                                              print(value);
-                                                            })));
-                                      } else {
-                                        var data = selectedServices;
+                                                  clipBehavior: Clip
+                                                      .antiAliasWithSaveLayer,
+                                                  backgroundColor:
+                                                      Colors.white,
+                                                  builder: (context) {
+                                                    //serviceType!.add(value)
+                                                    return SelectDate(
+                                                      selectedServices: data,
+                                                      item: widget.item,
+                                                    );
+                                                  })
+                                              : Navigator.of(context,
+                                                      rootNavigator: false)
+                                                  .push(CupertinoPageRoute(
+                                                      builder: (context) =>
+                                                          MyAppMap(
+                                                              isDetailPage:
+                                                                  false,
+                                                              callback:
+                                                                  (LatLng?
+                                                                      value) {
+                                                                latLng =
+                                                                    value;
+                                                                print(value);
+                                                              })));
+                                        } else {
+                                          var data = selectedServices;
 
-                                        resetServices();
-                                      }
-                                    }*/
+                                          resetServices();
+                                        }
+                                      }*/
                                   },
                                   child: appButton(
-                                      bkColor: getButtonColor(),
-                                      text: AppConstants.bookNow,
-                                      height: 50.0)),
-                              verticalSpacer(height: 100.0),
-                            ],
-                          )),
-                    ),
-                  ],
+                                    bkColor: getButtonColor(),
+                                    text: AppConstants.bookNow,
+                                    height: 50.0,
+                                  ),
+                                ),
+                                verticalSpacer(height: 100.0),
+                              ],
+                            )),
+                      ),
+                    ],
+                  ),
                 )),
           )
         ],
@@ -255,7 +233,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   }
 
   Color getButtonColor() {
-    if (selectedServices.length > 0) {
+    if (selectedServices.isNotEmpty) {
       return Colours.blue.code;
     } else {
       return Colours.gray.code;
@@ -269,20 +247,18 @@ class _ServiceDetailsState extends State<ServiceDetails> {
         type.isSelected = newValue!;
         selectedServices.remove(type);
       } else {
-        var data =
-            selectedServices.where((element) => element.id == "6").toList();
+        var data = selectedServices.where((element) => element.id == "6").toList();
         if (data.isNotEmpty) {
           CommonMethods().showToast(
-              context: context,
-              message:
-                  "You cannot select another service category with road side assistance",
-           /*   isSuccess: false*/);
+            context: context,
+            message: "You cannot select another service category with road side assistance", /*   isSuccess: false*/
+          );
         } else {
           if (type.id == "6") {
             CommonMethods().showToast(
-                context: context,
-                message: "You cannot select road side assistance",
-                /*isSuccess: false*/);
+              context: context,
+              message: "You cannot select road side assistance", /*isSuccess: false*/
+            );
           } else {
             type.isSelected = newValue!;
             selectedServices.add(type);
@@ -351,9 +327,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                         bottom: 0.0,
                         child: Container(
                           padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(.5),
-                              shape: BoxShape.circle),
+                          decoration: BoxDecoration(color: Colors.black.withOpacity(.5), shape: BoxShape.circle),
                           child: Text(
                             widget.item['rating'].toString(),
                             style: AppStyles.whiteTextW500,
@@ -418,16 +392,14 @@ class _ServiceDetailsState extends State<ServiceDetails> {
 
   bookNow() async {
     if (selectedServices.isNotEmpty) {
-      List<ServiceTypes> roadSideAssistanceExist =
-          selectedServices.where((element) => element.id == "6").toList();
+      List<ServiceTypes> roadSideAssistanceExist = selectedServices.where((element) => element.id == "6").toList();
       if (roadSideAssistanceExist.isNotEmpty) {
         Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
             builder: (context) => MyAppMap(
                   serviceTypes: roadSideAssistanceExist[0],
                   callback: (LatLng latLng) async {
                     if (latLng != null) {
-                      ServiceTypes roadSideAssistanceType =
-                          roadSideAssistanceExist[0];
+                      ServiceTypes roadSideAssistanceType = roadSideAssistanceExist[0];
                       roadSideAssistanceType.lat = latLng.latitude;
                       roadSideAssistanceType.long = latLng.latitude;
 
@@ -452,7 +424,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                   },
                 )));
       } else {
-        List<ServiceTypes> serviceCategories=selectedServices;
+        List<ServiceTypes> serviceCategories = selectedServices;
         await showModalBottomSheet(
             context: context,
             isScrollControlled: true,
@@ -488,7 +460,5 @@ class ServiceTypes {
   double? lat;
   double? long;
 
-  ServiceTypes(this.id, this.isSelected, this.title, this.service,
-      this.subService, this.price, this.description, this.gstRate,
-      {this.lat, this.long});
+  ServiceTypes(this.id, this.isSelected, this.title, this.service, this.subService, this.price, this.description, this.gstRate, {this.lat, this.long});
 }

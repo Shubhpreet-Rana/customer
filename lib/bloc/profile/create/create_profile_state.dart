@@ -26,3 +26,21 @@ class CreatedFailed extends CreateProfileState {
   @override
   List<Object?> get props => [error];
 }
+
+class UpdateProfileSuccessfully extends CreateProfileState {
+  var response;
+
+  UpdateProfileSuccessfully(this.response);
+
+  @override
+  List<Object?> get props => [];
+}
+
+class UpdateProfileFailed extends CreateProfileState {
+  final String error;
+
+  UpdateProfileFailed(this.error);
+
+  @override
+  List<Object?> get props => [error];
+}

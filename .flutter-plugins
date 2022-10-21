@@ -1,6 +1,6 @@
 # This is a generated file; do not edit or check into version control.
 flutter_plugin_android_lifecycle=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.7/
-flutter_stripe=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_stripe-3.3.0/
+flutter_stripe=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_stripe-4.0.0/
 fluttertoast=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-8.0.9/
 geocoding=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/geocoding-2.0.5/
 geolocator=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-9.0.2/
@@ -30,5 +30,5 @@ shared_preferences_macos=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub
 shared_preferences_web=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.4/
 shared_preferences_windows=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.1.1/
 sqflite=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-2.0.3+1/
-stripe_android=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/stripe_android-3.3.0/
-stripe_ios=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/stripe_ios-3.3.0/
+stripe_android=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/stripe_android-4.0.0/
+stripe_ios=/Users/shilpyrana/Library/flutter/.pub-cache/hosted/pub.dartlang.org/stripe_ios-4.0.0/

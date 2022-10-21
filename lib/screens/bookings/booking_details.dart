@@ -54,54 +54,52 @@ class _BookingDetailsState extends State<BookingDetails> {
               child: Text((widget.myBookingData.bookingStatus == 2 ? AppConstants.completedOn : AppConstants.bookingOn) + widget.myBookingData.date.toString(), style: AppStyles.whiteText)),
           verticalSpacer(),
           Expanded(
-              child: SingleChildScrollView(
-            child: Container(
-              width: CommonMethods.deviceWidth(),
-              height: CommonMethods.deviceHeight() + CommonMethods.deviceHeight() * .42,
-              decoration: BoxDecoration(
-                color: Colours.lightGray.code,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  header(),
-                  verticalSpacer(height: 10.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-                    child: Text(AppConstants.serviceCategories, style: AppStyles.blackSemiBold),
-                  ),
-                  verticalSpacer(height: 10.0),
-                  centerWidget(),
-                  verticalSpacer(height: 10.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text("28 Mar, 2022", style: AppStyles.blackSemiBold),
-                            horizontalSpacer(width: 10.0),
-                            Text(
-                              "- Booking Date",
-                              style: AppStyles.lightText,
-                            ),
-                          ],
-                        ),
-                        Icon(
-                          Icons.calendar_month,
-                          color: Colours.blue.code,
-                          size: 30.0,
-                        )
-                      ],
+              child: Container(
+                width: CommonMethods.deviceWidth(),
+                height: CommonMethods.deviceHeight() + CommonMethods.deviceHeight() * .42,
+                decoration: BoxDecoration(
+                  color: Colours.lightGray.code,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    header(),
+                    verticalSpacer(height: 10.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                      child: Text(AppConstants.serviceCategories, style: AppStyles.blackSemiBold),
                     ),
-                  ),
-                  verticalSpacer(height: 10.0),
-                  Expanded(child: bottomWidget()),
-                ],
-              ),
-            ),
-          ))
+                    verticalSpacer(height: 10.0),
+                    centerWidget(),
+                    verticalSpacer(height: 10.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text("28 Mar, 2022", style: AppStyles.blackSemiBold),
+                              horizontalSpacer(width: 10.0),
+                              Text(
+                                "- Booking Date",
+                                style: AppStyles.lightText,
+                              ),
+                            ],
+                          ),
+                          Icon(
+                            Icons.calendar_month,
+                            color: Colours.blue.code,
+                            size: 30.0,
+                          )
+                        ],
+                      ),
+                    ),
+                    verticalSpacer(height: 10.0),
+                    Expanded(child: bottomWidget()),
+                  ],
+                ),
+              ))
         ],
       )),
     );
@@ -211,7 +209,7 @@ class _BookingDetailsState extends State<BookingDetails> {
               ],
             ),
             verticalSpacer(height: 20.0),
-            if (widget.myBookingData.bookingStatus == 1) paymentWidget(),
+            if (widget.myBookingData.bookingStatus == 0) paymentWidget(),
             verticalSpacer(height: 50.0),
             if (widget.myBookingData.bookingStatus == 2)
               Column(
@@ -305,10 +303,10 @@ class _BookingDetailsState extends State<BookingDetails> {
                       style: AppStyles.blackSemiBold,
                     ),
                     Text(
-                      widget.myBookingData.bookingStatus == 1 ? AppConstants.active : AppConstants.completed,
+                      widget.myBookingData.bookingStatus == 0 ? AppConstants.active : AppConstants.completed,
                       maxLines: 2,
                       textAlign: TextAlign.center,
-                      style: widget.myBookingData.bookingStatus == 1 ? AppStyles.textGreen : AppStyles.textBlue,
+                      style: widget.myBookingData.bookingStatus == 0 ? AppStyles.textGreen : AppStyles.textBlue,
                     )
                   ],
                 ),

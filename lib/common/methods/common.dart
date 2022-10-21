@@ -39,37 +39,6 @@ class CommonMethods {
     Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const Notifications()));
   }
 
-  /* void showTopFlash(
-      {required BuildContext context, String title = "Error!", required String message, String btnText = "DISMISS", bool isSuccess = false, FlashBehavior style = FlashBehavior.floating}) {
-    showFlash(
-      context: context,
-      duration: const Duration(seconds: 4),
-      persistent: true,
-      builder: (_, controller) {
-        return Flash(
-          controller: controller,
-          backgroundColor: Colors.white,
-          brightness: Brightness.light,
-          boxShadows: const [BoxShadow(blurRadius: 4)],
-          barrierBlur: 3.0,
-          barrierColor: Colors.black38,
-          barrierDismissible: true,
-          behavior: style,
-          position: FlashPosition.top,
-          child: FlashBar(
-            title: Text(isSuccess ? "success!" : title, style: TextStyle(color: isSuccess ? Colors.green : Colors.red, fontSize: 20.0)),
-            content: Text(message, style: const TextStyle(color: Colors.black, fontSize: 16.0)),
-            showProgressIndicator: false,
-            primaryAction: TextButton(
-              onPressed: () => controller.dismiss(),
-              child: Text(btnText, style: TextStyle(color: Colours.red.code)),
-            ),
-          ),
-        );
-      },
-    );
-  }
-*/
   Future<File?> showAlertDialog(BuildContext context, {int imageQuality = 85}) async {
     File? selectedImage;
     await showDialog(

@@ -2,6 +2,8 @@ import 'package:app/bloc/booking/booking_bloc.dart';
 import 'package:app/bloc/card%20/add_card/add_card_bloc.dart';
 import 'package:app/bloc/card%20/get_card/get_card_bloc.dart';
 import 'package:app/bloc/charge_user/charge_user_bloc.dart';
+import 'package:app/bloc/delete_my_marketplace_vehicle/delete_my_marketplace_vehicle_bloc.dart';
+import 'package:app/bloc/home/get_category_list/get_category_list_bloc.dart';
 import 'package:app/bloc/home/home_bloc.dart';
 import 'package:app/bloc/home/view_cars/view_car_bloc.dart';
 import 'package:app/bloc/payment/payment_bloc.dart';
@@ -12,7 +14,9 @@ import 'package:app/data/repository/add_card_repository.dart';
 import 'package:app/data/repository/add_vehicle_repository.dart';
 import 'package:app/data/repository/booking_repository.dart';
 import 'package:app/data/repository/charge_user_repository.dart';
+import 'package:app/data/repository/delete_my_markertplace_vehicle_repository.dart';
 import 'package:app/data/repository/get_cards_repository.dart';
+import 'package:app/data/repository/get_categoryList_repository.dart';
 import 'package:app/data/repository/home_repository.dart';
 import 'package:app/data/repository/profile_repository.dart';
 import 'package:app/data/repository/service_provider_repository.dart';
@@ -34,7 +38,7 @@ import 'data/repository/auth_repository.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'data/repository/payment_repository.dart';
-
+final GetIt locator = GetIt.instance;
 Future<void> main() async {
   setup();
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +52,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
-  final GetIt locator = GetIt.instance;
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +87,11 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<AddCardRepository>(
           create: (context) => AddCardRepository(),
+        ),
+        RepositoryProvider<GetCategoryListRepository>(
+          create: (context) => GetCategoryListRepository(),
+        ),    RepositoryProvider<DeleteMyMarketPlaceVehicleRepository>(
+          create: (context) => DeleteMyMarketPlaceVehicleRepository(),
         ),
       ],
       child: MultiBlocProvider(
@@ -155,7 +164,17 @@ class MyApp extends StatelessWidget {
             create: (context) => AddCardBloc(
               addCardRepository: RepositoryProvider.of<AddCardRepository>(context),
             ),
-          )
+          ),
+          BlocProvider<GetCategoryListBloc>(
+            create: (context) => GetCategoryListBloc(
+              getCategoryListRepository: RepositoryProvider.of<GetCategoryListRepository>(context),
+            ),
+          ),
+          BlocProvider<DeleteMarketPlaceVehicleBloc>(
+            create: (context) => DeleteMarketPlaceVehicleBloc(
+              deleteMyMarketPlaceVehicleRepository: RepositoryProvider.of<DeleteMyMarketPlaceVehicleRepository>(context),
+            ),
+          ),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

@@ -75,6 +75,9 @@ class AppConstants {
     'Basic Service',
     'Test',
   ];
+
+
+
   static String sProviderText = 'Service Providers';
   static String provider1 = "Periodic Services";
   static String provider2 = "AC Service & Repair";

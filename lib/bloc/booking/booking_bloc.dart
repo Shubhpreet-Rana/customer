@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:app/data/repository/booking_repository.dart';
-import 'package:app/data/repository/home_repository.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -15,16 +13,17 @@ part 'booking_state.dart';
 class BookingBloc extends Bloc<BookingEvent, BookingState> {
   final BookingRepository bookingRepository;
 
-  BookingBloc({required this.bookingRepository}) : super(Loading()) {
+  BookingBloc({required this.bookingRepository}) : super(BookingLoading()) {
     on<LoadBookings>(_getAllMyBookings);
     on<FetchMoreBookings>((_changeFetchValue));
+    on<GetMostPopularBookingList>((_getMostPopularBookingList));
   }
 
   Future<FutureOr<void>> _getAllMyBookings(
     LoadBookings event,
     Emitter<BookingState> emit,
   ) async {
-    if (event.page == null) emit(Loading());
+    if (event.page == null) emit(BookingLoading());
     try {
       final res = await bookingRepository.getAllMyBookings(event.page ?? "1");
       if (res['status'] == 1) {
@@ -33,7 +32,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
           emit(MyBookingNoData("No bookings found"));
         } else {
           emit(state.copyWith(myBookingList: myBooking.data));
-          if (myBooking.data!.length == 0) {
+          if (myBooking.data!.isEmpty) {
             emit(state.copyWith(hasMoreData: false));
           }
           int currentPage = state.currentPage!;
@@ -52,6 +51,10 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   Future<FutureOr<void>> _changeFetchValue(FetchMoreBookings event, Emitter<BookingState> emit) async {
     emit(state.copyWith(isFetchingMore: event.fetchingMore));
+  }
+
+  Future<FutureOr<void>> _getMostPopularBookingList(GetMostPopularBookingList event, Emitter<BookingState> emit) async {
+    emit(state.copyWith());
   }
 
 }

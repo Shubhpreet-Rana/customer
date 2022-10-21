@@ -1,5 +1,7 @@
+import 'package:app/bloc/delete_my_marketplace_vehicle/delete_my_marketplace_vehicle_bloc.dart';
 import 'package:app/bloc/home/add_car/add_car_bloc.dart';
 import 'package:app/bloc/home/view_cars/view_car_bloc.dart';
+import 'package:app/common/methods/custom_storage.dart';
 import 'package:app/screens/marketplace/sell_car.dart';
 import 'package:app/screens/marketplace/view_details.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -192,11 +194,216 @@ class _ViewCarsState extends State<ViewCars> {
     ));
   }
 
-  Widget listItem(AllVehicleData car) => SwipeActionCell(
+  Widget listItem(AllVehicleData car) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+              padding: const EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topRight: const Radius.circular(10),
+                  topLeft: const Radius.circular(10),
+                  bottomRight: Radius.circular(selectedTab == 2 ? 10 : 0),
+                  bottomLeft: Radius.circular(selectedTab == 2 ? 10 : 0),
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 100.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: CachedNetworkImage(
+                        imageUrl: car.carImage1!,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                  horizontalSpacer(width: 10.0),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    // mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            car.brandName!,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style: AppStyles.blackSemiBold,
+                          ),
+                          Text(
+                            car.manufacturingYear ?? "",
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style: AppStyles.lightText,
+                          )
+                        ],
+                      ),
+                      Text(
+                        "Posted on " + "  ${DateFormat('yyyy-MM-dd ').format(car.createdAt!)}",
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        style: AppStyles.lightText12,
+                      ),
+                      verticalSpacer(height: 5.0),
+                      Text(
+                        car.price!,
+                        maxLines: 1,
+                        textAlign: TextAlign.start,
+                        style: AppStyles.textBlueBold,
+                      ),
+                      verticalSpacer(height: 10.0),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              "Color:",
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.lightText,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 7,
+                            child: Text(
+                              car.color!,
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.blackText,
+                            ),
+                          )
+                        ],
+                      ),
+                      verticalSpacer(height: 5.0),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              "Mileage:",
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.lightText,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 7,
+                            child: Text(
+                              car.mileage!,
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.blackText,
+                            ),
+                          )
+                        ],
+                      ),
+                      verticalSpacer(height: 5.0),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              "Capacity:",
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.lightText,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 7,
+                            child: Text(
+                              car.capacity.toString(),
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.blackText,
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ))
+                ],
+              )),
+          selectedTab == 1
+              ? Container(
+                  margin: const EdgeInsets.only(bottom: 20.0, top: 2.0),
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                    ),
+                  ),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    Expanded(
+                      flex: 1,
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colours.darkGray.code,
+                            radius: 20.0,
+                            backgroundImage: AssetImage("car"),
+                          ),
+                          horizontalSpacer(width: 5.0),
+                          Text(
+                            "car.sellerName",
+                            maxLines: 1,
+                            textAlign: TextAlign.start,
+                            style: AppStyles.blackSemiW400_1,
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Wrap(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2.0),
+                            child: GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
+                                      builder: (context) => MyAppMap(
+                                            showPickUp: false,
+                                          )));
+                                },
+                                child: rowButton(bkColor: Colours.lightWhite.code, textColor: Colours.blue.code, text: AppConstants.location1, paddingHorizontal: 8.0, paddingVertical: 7.0)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2.0),
+                            child: GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => ViewCarDetails(car: car)));
+                                },
+                                child: rowButton(bkColor: Colours.blue.code, text: AppConstants.details, paddingHorizontal: 8.0, paddingVertical: 7.0)),
+                          )
+                        ],
+                      ),
+                    )
+                  ]))
+              : const SizedBox.shrink()
+        ],
+      ) /*SwipeActionCell(
         key: ObjectKey(car.id),
-        trailingActions: /*selectedTab == 1
+        trailingActions: */ /*selectedTab == 1
             ? null
-            :*/
+            :*/ /*
             <SwipeAction>[
           SwipeAction(
               title: "",
@@ -225,213 +432,9 @@ class _ViewCarsState extends State<ViewCars> {
               },
               color: Colors.black),
         ],
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topRight: const Radius.circular(10),
-                    topLeft: const Radius.circular(10),
-                    bottomRight: Radius.circular(selectedTab == 2 ? 10 : 0),
-                    bottomLeft: Radius.circular(selectedTab == 2 ? 10 : 0),
-                  ),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 100.0,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: CachedNetworkImage(
-                          imageUrl: car.carImage1!,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                    horizontalSpacer(width: 10.0),
-                    Expanded(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      // mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              car.brandName!,
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              style: AppStyles.blackSemiBold,
-                            ),
-                            Text(
-                              car.manufacturingYear ?? "",
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              style: AppStyles.lightText,
-                            )
-                          ],
-                        ),
-                        Text(
-                          "Posted on " + "  ${DateFormat('yyyy-MM-dd ').format(car.createdAt!)}",
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          style: AppStyles.lightText12,
-                        ),
-                        verticalSpacer(height: 5.0),
-                        Text(
-                          car.price!,
-                          maxLines: 1,
-                          textAlign: TextAlign.start,
-                          style: AppStyles.textBlueBold,
-                        ),
-                        verticalSpacer(height: 10.0),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Text(
-                                "Color:",
-                                maxLines: 1,
-                                textAlign: TextAlign.start,
-                                style: AppStyles.lightText,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 7,
-                              child: Text(
-                                car.color!,
-                                maxLines: 1,
-                                textAlign: TextAlign.start,
-                                style: AppStyles.blackText,
-                              ),
-                            )
-                          ],
-                        ),
-                        verticalSpacer(height: 5.0),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Text(
-                                "Mileage:",
-                                maxLines: 1,
-                                textAlign: TextAlign.start,
-                                style: AppStyles.lightText,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 7,
-                              child: Text(
-                                car.mileage!,
-                                maxLines: 1,
-                                textAlign: TextAlign.start,
-                                style: AppStyles.blackText,
-                              ),
-                            )
-                          ],
-                        ),
-                        verticalSpacer(height: 5.0),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Text(
-                                "Capacity:",
-                                maxLines: 1,
-                                textAlign: TextAlign.start,
-                                style: AppStyles.lightText,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 7,
-                              child: Text(
-                                car.capacity.toString(),
-                                maxLines: 1,
-                                textAlign: TextAlign.start,
-                                style: AppStyles.blackText,
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ))
-                  ],
-                )),
-            selectedTab == 1
-                ? Container(
-                    margin: const EdgeInsets.only(bottom: 20.0, top: 2.0),
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                      ),
-                    ),
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      Expanded(
-                        flex: 1,
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colours.darkGray.code,
-                              radius: 20.0,
-                              backgroundImage: AssetImage("car"),
-                            ),
-                            horizontalSpacer(width: 5.0),
-                            Text(
-                              "car.sellerName",
-                              maxLines: 1,
-                              textAlign: TextAlign.start,
-                              style: AppStyles.blackSemiW400_1,
-                            )
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Wrap(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2.0),
-                              child: GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: () {
-                                    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
-                                        builder: (context) => MyAppMap(
-                                              showPickUp: false,
-                                            )));
-                                  },
-                                  child: rowButton(bkColor: Colours.lightWhite.code, textColor: Colours.blue.code, text: AppConstants.location1, paddingHorizontal: 8.0, paddingVertical: 7.0)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2.0),
-                              child: GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: () {
-                                    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => ViewCarDetails(car: car)));
-                                  },
-                                  child: rowButton(bkColor: Colours.blue.code, text: AppConstants.details, paddingHorizontal: 8.0, paddingVertical: 7.0)),
-                            )
-                          ],
-                        ),
-                      )
-                    ]))
-                : const SizedBox.shrink()
-          ],
-        ),
-      );
+        child:,
+      )*/
+      ;
 
   Widget myListItem(MyVehicleMarketPlace car) => SwipeActionCell(
         key: ObjectKey(car.id),
@@ -446,7 +449,7 @@ class _ViewCarsState extends State<ViewCars> {
                       color: Colors.white,
                     ),
                     onTap: (CompletionHandler handler) async {
-                      setState(() {});
+                      BlocProvider.of<DeleteMarketPlaceVehicleBloc>(context).add(DeleteMyVehicleRequested(id: car.id.toString()));
                     },
                     color: Colors.red),
                 SwipeAction(
@@ -460,6 +463,7 @@ class _ViewCarsState extends State<ViewCars> {
                       Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
                           builder: (context) => SellCar(
                                 fromEdit: true,
+                                myVehicle: car,
                               )));
                     },
                     color: Colors.black),
@@ -653,13 +657,20 @@ class _ViewCarsState extends State<ViewCars> {
                           MediaQuery.removePadding(
                             context: context,
                             removeTop: true,
-                            child: ListView.builder(
-                                itemCount: myMarketPlaceVehicle!.length,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return myListItem(myMarketPlaceVehicle![index]);
-                                }),
+                            child: BlocListener<DeleteMarketPlaceVehicleBloc, DeleteMarketPlaceVehicleState>(
+                              listener: (ctx, state) {
+                                if (state is DeletedMyVehicleSuccessfully) {
+                                  BlocProvider.of<ViewCarBloc>(context).add(GetMyMarketVehicle());
+                                }
+                              },
+                              child: ListView.builder(
+                                  itemCount: myMarketPlaceVehicle!.length,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return myListItem(myMarketPlaceVehicle![index]);
+                                  }),
+                            ),
                           ),
                           // if (viewCarState.isLoading!) const CircularProgressIndicator()
                         ],

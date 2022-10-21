@@ -36,6 +36,7 @@ class BookingRepository {
       if (response.statusCode != 200) {
         throw Exception('Failed to sign in');
       }
+      print(response.data);
 
       completer.complete(response.data);
     } catch (e) {

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../bloc/booking/booking_bloc.dart';
 import '../../bloc/vehicle/view/vehicle_bloc.dart';
 import '../../common/constants.dart';
 import '../../common/ui/background.dart';
@@ -49,13 +50,16 @@ class _HomeTabsState extends State<HomeTabs> with TickerProviderStateMixin<HomeT
             key: _homeScreen,
             onGenerateRoute: (route) => CupertinoPageRoute(
               settings: route,
-              builder: (context) => HomeTab(
-                changeTab: () {
-                  setState(() {
-                    _selectedTabIndex = 1;
-                  });
-                },
-              ),
+              builder: (context) {
+                BlocProvider.of<BookingBloc>(context).add(LoadBookings());
+                return HomeTab(
+                  changeTab: () {
+                    setState(() {
+                      _selectedTabIndex = 1;
+                    });
+                  },
+                );
+              }
             ),
           ),
           Navigator(
@@ -69,7 +73,10 @@ class _HomeTabsState extends State<HomeTabs> with TickerProviderStateMixin<HomeT
             key: _calenderScreen,
             onGenerateRoute: (route) => CupertinoPageRoute(
               settings: route,
-              builder: (context) => const CalenderTab(),
+              builder: (context) {
+                BlocProvider.of<BookingBloc>(context).add(LoadBookings());
+                return const CalenderTab();
+              },
             ),
           ),
           Navigator(

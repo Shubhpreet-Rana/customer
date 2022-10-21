@@ -85,14 +85,14 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                 listener: (context, state) {},
                 child: BlocBuilder<ServiceProviderBloc, ServiceProviderState>(
                     builder: (context, state) {
-                  if (state is Loading) {
-                    return Center(child: CircularProgressIndicator());
+                  if (state is CategoryListLoading) {
+                    return Center(child: const CircularProgressIndicator());
                   }
                   if (state is CategoryListFetchSuccessfully) {
                     var data = state.props[0];
                     List<ServiceCategoryData> serviceCategory =
                         data as List<ServiceCategoryData>;
-                    if (serviceCategory.length > 0) {
+                    if (serviceCategory.isNotEmpty) {
                       categoryData = serviceCategory[0];
                     }
                     return SingleChildScrollView(
@@ -115,77 +115,6 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                                 ),
                                 verticalSpacer(height: 10.0),
                                 getRadioButtons(serviceCategory),
-                                /*          Row(
-                                    children: [
-                                      SizedBox(
-                                        height: 24.0,
-                                        width: 24.0,
-                                        child: Radio(
-                                          value: 1,
-                                          groupValue: _radioValue1,
-                                          onChanged: (int? value) {
-                                            if (value != null) {
-                                              setState(() {
-                                                _handleRadioValueChange1(value);
-                                              });
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                      horizontalSpacer(width: 10.0),
-                                      const Text('Mobile Car Wash'),
-                                    ],
-                                  ),
-                                  verticalSpacer(height: 10.0),
-                                  Row(
-                                    children: [
-                                      SizedBox(
-                                        height: 24.0,
-                                        width: 24.0,
-                                        child: Radio(
-                                          value: 2,
-                                          groupValue: _radioValue1,
-                                          onChanged: (int? value) {
-                                            if (value != null) {
-                                              setState(() {
-                                                _handleRadioValueChange1(value);
-                                              });
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                      horizontalSpacer(width: 10.0),
-                                      const Text('Oil Change'),
-                                    ],
-                                  ),
-                                  verticalSpacer(height: 10.0),
-                                  Row(
-                                    children: [
-                                      SizedBox(
-                                        height: 24.0,
-                                        width: 24.0,
-                                        child: Radio(
-                                          value: 3,
-                                          groupValue: _radioValue1,
-                                          onChanged: (int? value) {
-                                            if (value != null) {
-                                              setState(() {
-                                                _handleRadioValueChange1(value);
-                                              });
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                      horizontalSpacer(width: 10.0),
-                                      const Text('Pick and Drop'),
-                                    ],
-                                  ),
-                                  verticalSpacer(),
-                                  Text(
-                                    AppConstants.ratings,
-                                    style: AppStyles.blackSemiBold,
-                                  ),
-                                  verticalSpacer(height: 10.0),*/
                               ],
                             ),
                           ),
@@ -206,13 +135,7 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                                             currentRatingIndex:
                                                 currentRatingIndex,
                                             index: index));
-                                  }) /*[
-                                  ratingBar(position: "1"),
-                                  ratingBar(position: "2"),
-                                  ratingBar(position: "3"),
-                                  ratingBar(position: "4"),
-                                  ratingBar(position: "5", isSelected: true)
-                                ],*/
+                                  })
                                   )),
                         ),
                         Container(

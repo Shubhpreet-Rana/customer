@@ -7,8 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:place_picker/place_picker.dart';
 import '../../bloc/profile/create/create_profile_bloc.dart';
 import '../../bloc/profile/view/profile_bloc.dart';
@@ -75,6 +73,10 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
           CommonMethods().showToast(context: context, message: state.success);
           Navigator.of(context, rootNavigator: true)
               .pushReplacement(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
+        }
+        if (state is UpdateProfileSuccessfully) {
+          Navigator.of(context).pop();
+          context.read<ProfileBloc>().add(ProfileFetchEvent());
         }
         if (state is CreatedFailed) {
           CommonMethods().showToast(context: context, message: state.error);
@@ -366,7 +368,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
 
   void _createUpdateProfile(BuildContext context) {
     BlocProvider.of<CreateProfileBloc>(context).add(
-      CreateProfileRequested(fNameController.text, lNameController.text, mobileController.text, addressController.text,
+      CreateProfileRequested(fNameController.text, lNameController.text, mobileController.text.replaceAll(" ", ""), addressController.text,
           selectedGender, selectedImage!.path, locationLat, locationLang),
     );
   }

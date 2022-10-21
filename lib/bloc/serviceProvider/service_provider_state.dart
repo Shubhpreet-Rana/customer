@@ -1,10 +1,23 @@
 part of 'service_provider_bloc.dart';
 
-abstract class ServiceProviderState extends Equatable {}
+class ServiceProviderState extends Equatable {
+  List<ServiceCategoryData>? categoryList;
 
-class Loading extends ServiceProviderState {
+  ServiceProviderState({this.categoryList});
+
+  ServiceProviderState copyWith({
+    List<ServiceCategoryData>? categoryList,
+  }) =>
+      ServiceProviderState(categoryList: categoryList ?? this.categoryList);
+
   @override
+  // TODO: implement props
   List<Object?> get props => [];
+}
+
+class CategoryListLoading extends ServiceProviderState {
+  @override
+  List<Object?> get props => [categoryList ?? []];
 }
 
 class CarScreenLoading extends ServiceProviderState {
@@ -13,17 +26,20 @@ class CarScreenLoading extends ServiceProviderState {
 }
 
 class BookServiceLoading extends ServiceProviderState {
+
+  List<ProviderData> providerData;
+  BookServiceLoading(this.providerData);
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [providerData];
 }
 
 class CategoryListFetchSuccessfully extends ServiceProviderState {
-  List<ServiceCategoryData> serviceCategory;
+  List<ServiceCategoryData>? serviceCategory;
 
-  CategoryListFetchSuccessfully(this.serviceCategory) : super();
+  CategoryListFetchSuccessfully(this.serviceCategory);
 
   @override
-  List<Object> get props => [serviceCategory];
+  List<Object?> get props => [serviceCategory!];
 }
 
 class CategoryListFailed extends ServiceProviderState {
@@ -54,15 +70,20 @@ class GetAllServiceProviderFailed extends ServiceProviderState {
 }
 
 class BookingSuccessfully extends ServiceProviderState {
+  List<ProviderData> providerData;
+
+  BookingSuccessfully(this.providerData);
+
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [providerData];
 }
 
 class BookingFailed extends ServiceProviderState {
   final String error;
+  List<ProviderData> providerData;
 
-  BookingFailed(this.error);
+  BookingFailed(this.error,this.providerData);
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [providerData,error];
 }

@@ -20,9 +20,7 @@ class AppHeaders {
               padding: const EdgeInsets.only(left: 30.0, top: 15.0),
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
-                onTap: onTapped != null
-                    ? onTapped
-                    : () => Navigator.of(context).pop(),
+                onTap: onTapped ?? () => Navigator.of(context).pop(),
                 child: const Icon(
                   Icons.arrow_back_ios,
                   color: Colors.white,
