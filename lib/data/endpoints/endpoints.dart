@@ -22,6 +22,7 @@ class EndPoints {
   static const String editmarketvehicle = '/boulou/public/api/editmarketvehicle';
   static const String getCard = '/boulou/public/api/getcard';
   static const String chargeUser = '/boulou/public/api/chargeuser';
+  static const String addFeedback = '/boulou/public/api/addfeedback';
   static const String addCard = '/boulou/public/api/addcard';
   static const String deleteMyMarketPlaceVehicle = '/boulou/public/api/deletemarketallvehicle';
 }
