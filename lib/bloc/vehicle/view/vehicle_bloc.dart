@@ -6,7 +6,6 @@ import 'package:equatable/equatable.dart';
 import '../../../data/repository/add_vehicle_repository.dart';
 import '../../../model/vehicle.dart';
 import '../../../screens/vehicle/edit_vehicle.dart';
-import '../../../screens/vehicle/vehicle_details.dart';
 
 part 'vehicle_event.dart';
 

@@ -1,9 +1,9 @@
 part of 'service_provider_bloc.dart';
 
 class ServiceProviderState extends Equatable {
-  List<ServiceCategoryData>? categoryList;
+  final List<ServiceCategoryData>? categoryList;
 
-  ServiceProviderState({this.categoryList});
+  const ServiceProviderState({this.categoryList});
 
   ServiceProviderState copyWith({
     List<ServiceCategoryData>? categoryList,
@@ -27,16 +27,16 @@ class CarScreenLoading extends ServiceProviderState {
 
 class BookServiceLoading extends ServiceProviderState {
 
-  List<ProviderData> providerData;
-  BookServiceLoading(this.providerData);
+  final List<ProviderData> providerData;
+  const BookServiceLoading(this.providerData);
   @override
   List<Object> get props => [providerData];
 }
 
 class CategoryListFetchSuccessfully extends ServiceProviderState {
-  List<ServiceCategoryData>? serviceCategory;
+  final List<ServiceCategoryData>? serviceCategory;
 
-  CategoryListFetchSuccessfully(this.serviceCategory);
+  const CategoryListFetchSuccessfully(this.serviceCategory);
 
   @override
   List<Object?> get props => [serviceCategory!];
@@ -45,16 +45,17 @@ class CategoryListFetchSuccessfully extends ServiceProviderState {
 class CategoryListFailed extends ServiceProviderState {
   final String? error;
 
-  CategoryListFailed(this.error);
+  const CategoryListFailed(this.error);
 
   @override
   List<Object?> get props => [error];
 }
 
 class GetAllServiceProviderFetchSuccessfully extends ServiceProviderState {
-  List<ProviderData> providerData;
+  final List<ProviderData> providerData;
 
-  GetAllServiceProviderFetchSuccessfully(this.providerData) : super();
+
+  const GetAllServiceProviderFetchSuccessfully(this.providerData) : super();
 
   @override
   List<Object> get props => [providerData];
@@ -63,16 +64,16 @@ class GetAllServiceProviderFetchSuccessfully extends ServiceProviderState {
 class GetAllServiceProviderFailed extends ServiceProviderState {
   final String? error;
 
-  GetAllServiceProviderFailed(this.error);
+  const GetAllServiceProviderFailed(this.error);
 
   @override
   List<Object?> get props => [error];
 }
 
 class BookingSuccessfully extends ServiceProviderState {
-  List<ProviderData> providerData;
+  final List<ProviderData> providerData;
 
-  BookingSuccessfully(this.providerData);
+  const BookingSuccessfully(this.providerData);
 
   @override
   List<Object> get props => [providerData];
@@ -80,9 +81,9 @@ class BookingSuccessfully extends ServiceProviderState {
 
 class BookingFailed extends ServiceProviderState {
   final String error;
-  List<ProviderData> providerData;
+  final List<ProviderData> providerData;
 
-  BookingFailed(this.error,this.providerData);
+  const BookingFailed(this.error,this.providerData);
 
   @override
   List<Object?> get props => [providerData,error];

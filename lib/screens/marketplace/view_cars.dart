@@ -1,7 +1,6 @@
 import 'package:app/bloc/delete_my_marketplace_vehicle/delete_my_marketplace_vehicle_bloc.dart';
 import 'package:app/bloc/home/add_car/add_car_bloc.dart';
 import 'package:app/bloc/home/view_cars/view_car_bloc.dart';
-import 'package:app/common/methods/custom_storage.dart';
 import 'package:app/screens/marketplace/sell_car.dart';
 import 'package:app/screens/marketplace/view_details.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -187,7 +186,7 @@ class _ViewCarsState extends State<ViewCars> {
                                 );
                     }),
                   )
-                : MyListedCarView()
+                : myListedCarView()
           ],
         ),
       ),
@@ -246,7 +245,7 @@ class _ViewCarsState extends State<ViewCars> {
                         ],
                       ),
                       Text(
-                        "Posted on " + "  ${DateFormat('yyyy-MM-dd ').format(car.createdAt!)}",
+                        "Posted on " "  ${DateFormat('yyyy-MM-dd ').format(car.createdAt!)}",
                         maxLines: 2,
                         textAlign: TextAlign.center,
                         style: AppStyles.lightText12,
@@ -356,7 +355,7 @@ class _ViewCarsState extends State<ViewCars> {
                           CircleAvatar(
                             backgroundColor: Colours.darkGray.code,
                             radius: 20.0,
-                            backgroundImage: AssetImage("car"),
+                            backgroundImage: AssetImage(Assets.car.name),
                           ),
                           horizontalSpacer(width: 5.0),
                           Text(
@@ -378,7 +377,7 @@ class _ViewCarsState extends State<ViewCars> {
                                 behavior: HitTestBehavior.translucent,
                                 onTap: () {
                                   Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
-                                      builder: (context) => MyAppMap(
+                                      builder: (context) => const MyAppMap(
                                             showPickUp: false,
                                           )));
                                 },
@@ -520,7 +519,7 @@ class _ViewCarsState extends State<ViewCars> {
                           ],
                         ),
                         Text(
-                          "Posted on " + " ${DateFormat('yyyy-MM-dd ').format(car.createdAt!)}",
+                          "Posted on " " ${DateFormat('yyyy-MM-dd ').format(car.createdAt!)}",
                           maxLines: 2,
                           textAlign: TextAlign.center,
                           style: AppStyles.lightText12,
@@ -615,7 +614,7 @@ class _ViewCarsState extends State<ViewCars> {
         ),
       );
 
-  MyListedCarView() {
+  myListedCarView() {
     return BlocListener<ViewCarBloc, ViewCarState>(listener: (context, state) {
       if (state is GetMyMarketLoading) {}
       if (state is NoMyMarketVehicleFound && state.currentPageMyMarket == null) {}

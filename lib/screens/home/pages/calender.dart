@@ -36,7 +36,7 @@ class _CalenderTabState extends State<CalenderTab> {
   }
 
   @override
-  Widget build(BuildContextcontext) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundImage(
           child: Column(
@@ -50,13 +50,19 @@ class _CalenderTabState extends State<CalenderTab> {
                 if (bookingState.myBookingList != null && bookingState.myBookingList!.isNotEmpty) {
                   finalResultList!.clear();
                   finalResultList!.addAll(bookingState.myBookingList ?? []);
-                  print(bookingState.myBookingList);
                   if (finalResultList?.length == 1) {
                     BlocProvider.of<BookingBloc>(context).add(GetMostPopularBookingList());
                   }
                 }
                 if (bookingState is BookingLoading) {
-                  return Expanded(child: Container(height: MediaQuery.of(context).size.height, color: Colors.white, alignment: Alignment.center, child: CircularProgressIndicator()));
+                  return Expanded(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      color: Colors.white,
+                      alignment: Alignment.center,
+                      child: const CircularProgressIndicator(),
+                    ),
+                  );
                 }
                 if (bookingState is MyBookingNoData && bookingState.currentPage == null) {
                   return Expanded(
@@ -115,7 +121,6 @@ class _CalenderTabState extends State<CalenderTab> {
                                               }
                                             }
                                             String formattedDate = DateFormat('yyyy-MM-dd').format(myBookingData.date!);
-                                            print(formattedDate);
                                             return listItem(finalResultList![index]);
                                           }),
                                     ),

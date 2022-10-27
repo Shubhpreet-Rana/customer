@@ -1,9 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-
 import '../../common/services/getit.dart';
 import '../endpoints/endpoints.dart';
 import '../network/dio_client.dart';

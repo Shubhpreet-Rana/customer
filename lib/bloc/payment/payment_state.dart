@@ -10,7 +10,7 @@ class InitialLoading extends PaymentState{}
 class Loading extends PaymentState{}
 
 class PaymentProceeded extends PaymentState{
-  dynamic response;
+  final dynamic response;
   PaymentProceeded(this.response);
   @override
   // TODO: implement props
@@ -18,7 +18,7 @@ class PaymentProceeded extends PaymentState{
 
 }
 class PaymentFailed extends PaymentState{
-  String? error;
+  final String? error;
   PaymentFailed(this.error);
   @override
   // TODO: implement props
@@ -26,14 +26,14 @@ class PaymentFailed extends PaymentState{
 
 }
 class ApplePaymentSuccessful extends PaymentState{
-  dynamic res;
+  final dynamic res;
   ApplePaymentSuccessful(this.res);
   @override
   // TODO: implement props
   List<Object?> get props => [res];
 }
 class ApplePaymentFailed extends PaymentState{
-  String err;
+  final String err;
   ApplePaymentFailed(this.err);
   @override
   // TODO: implement props

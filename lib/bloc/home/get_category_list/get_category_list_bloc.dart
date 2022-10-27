@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:app/data/repository/get_categoryList_repository.dart';
-import 'package:app/data/repository/home_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';

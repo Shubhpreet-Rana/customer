@@ -1,18 +1,10 @@
-import 'dart:io';
-
-import 'package:app/bloc/booking/booking_bloc.dart';
-import 'package:app/bloc/payment/payment_bloc.dart';
-import 'package:app/bloc/payment/payment_sheets/payment_sheets.dart';
 import 'package:app/common/assets.dart';
 import 'package:app/common/ui/background.dart';
 import 'package:app/model/my_bookings.dart';
 import 'package:app/screens/bookings/book/payment_options.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../common/colors.dart';
 import '../../common/constants.dart';
 import '../../common/methods/common.dart';
@@ -32,13 +24,11 @@ class BookingDetails extends StatefulWidget {
 
 class _BookingDetailsState extends State<BookingDetails> {
   TextEditingController descriptionController = TextEditingController();
-  var paymentIntent;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
@@ -55,51 +45,51 @@ class _BookingDetailsState extends State<BookingDetails> {
           verticalSpacer(),
           Expanded(
               child: Container(
-                width: CommonMethods.deviceWidth(),
-                height: CommonMethods.deviceHeight() + CommonMethods.deviceHeight() * .42,
-                decoration: BoxDecoration(
-                  color: Colours.lightGray.code,
+            width: CommonMethods.deviceWidth(),
+            height: CommonMethods.deviceHeight() + CommonMethods.deviceHeight() * .42,
+            decoration: BoxDecoration(
+              color: Colours.lightGray.code,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                header(),
+                verticalSpacer(height: 10.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                  child: Text(AppConstants.serviceCategories, style: AppStyles.blackSemiBold),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    header(),
-                    verticalSpacer(height: 10.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-                      child: Text(AppConstants.serviceCategories, style: AppStyles.blackSemiBold),
-                    ),
-                    verticalSpacer(height: 10.0),
-                    centerWidget(),
-                    verticalSpacer(height: 10.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                verticalSpacer(height: 10.0),
+                centerWidget(),
+                verticalSpacer(height: 10.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Text("28 Mar, 2022", style: AppStyles.blackSemiBold),
-                              horizontalSpacer(width: 10.0),
-                              Text(
-                                "- Booking Date",
-                                style: AppStyles.lightText,
-                              ),
-                            ],
+                          Text("28 Mar, 2022", style: AppStyles.blackSemiBold),
+                          horizontalSpacer(width: 10.0),
+                          Text(
+                            "- Booking Date",
+                            style: AppStyles.lightText,
                           ),
-                          Icon(
-                            Icons.calendar_month,
-                            color: Colours.blue.code,
-                            size: 30.0,
-                          )
                         ],
                       ),
-                    ),
-                    verticalSpacer(height: 10.0),
-                    Expanded(child: bottomWidget()),
-                  ],
+                      Icon(
+                        Icons.calendar_month,
+                        color: Colours.blue.code,
+                        size: 30.0,
+                      )
+                    ],
+                  ),
                 ),
-              ))
+                verticalSpacer(height: 10.0),
+                Expanded(child: bottomWidget()),
+              ],
+            ),
+          ))
         ],
       )),
     );
@@ -175,7 +165,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                   style: AppStyles.lightText,
                 ),
                 Text(
-                  r"$" + "${widget.myBookingData.amount}",
+                  r"$" "${double.parse(widget.myBookingData.amount!)}",
                   style: AppStyles.blackSemiBold,
                 ),
               ],
@@ -189,7 +179,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                   style: AppStyles.lightText,
                 ),
                 Text(
-                  r"$" + "${widget.myBookingData.gstAmount}",
+                  r"$" "${double.parse(widget.myBookingData.gstAmount!)}",
                   style: AppStyles.blackSemiBold,
                 ),
               ],
@@ -203,7 +193,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                   style: AppStyles.blackSemiW400_1,
                 ),
                 Text(
-                  r"$" + ((int.parse(widget.myBookingData.amount!)+int.parse(widget.myBookingData.gstAmount!))).toString(),
+                  r"$" + (double.parse(widget.myBookingData.amount!) + double.parse(widget.myBookingData.gstAmount!)).toString(),
                   style: AppStyles.textBlueSemiBold,
                 ),
               ],
@@ -317,9 +307,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                               Icons.star,
                               color: Color(0xFFF1C21C),
                             ),
-                        rating: double.parse(widget.myBookingData.rating!=null?widget.myBookingData.rating!:"5"),
+                        rating: double.parse(widget.myBookingData.rating != null ? widget.myBookingData.rating! : "5"),
                         itemSize: 18.0),
-                    Text(widget.myBookingData.rating!=null?widget.myBookingData.rating!:"5")
+                    Text(widget.myBookingData.rating != null ? widget.myBookingData.rating! : "5")
                   ],
                 ),
                 Text(
@@ -353,18 +343,17 @@ class _BookingDetailsState extends State<BookingDetails> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        _requestedUserProfile(),
-   _requestedPayment()
-      ],
+      children: [_requestedUserProfile(), _requestedPayment()],
     );
   }
 
   _requestedUserProfile() {
     return Row(
       children: const [
-       CircleAvatar(),
-        SizedBox(width: 10.0,),
+        CircleAvatar(),
+        SizedBox(
+          width: 10.0,
+        ),
         Text("Thomas")
       ],
     );
@@ -372,16 +361,23 @@ class _BookingDetailsState extends State<BookingDetails> {
 
   _requestedPayment() {
     return Row(
-      children:  [
-       ElevatedButton(onPressed: (){}, child: const Text("Cancel")),
-        const SizedBox(width: 10.0,),
-        ElevatedButton(onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentOptions(totalPayment: ((int.parse(widget.myBookingData.amount!)+int.parse(widget.myBookingData.gstAmount!))).toDouble(),
-          bookingId: widget.myBookingData.id.toString(),)));
-        }, child: const Text("Completed")),
+      children: [
+        ElevatedButton(onPressed: () {}, child: const Text("Cancel")),
+        const SizedBox(
+          width: 10.0,
+        ),
+        ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PaymentOptions(
+                            totalPayment: ((double.parse(widget.myBookingData.amount!) + double.parse(widget.myBookingData.gstAmount!))).toDouble(),
+                            bookingId: widget.myBookingData.id.toString(),
+                          )));
+            },
+            child: const Text("Completed")),
       ],
     );
   }
-
-
 }

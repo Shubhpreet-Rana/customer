@@ -1,9 +1,9 @@
 part of 'get_card_bloc.dart';
 
 class GetCardState extends Equatable {
-  int? selectedCard;
+  final int? selectedCard;
 
-  GetCardState({
+  const GetCardState({
     this.selectedCard = 0,
   });
 
@@ -23,9 +23,9 @@ class GetCardsInitialLoading extends GetCardState {}
 class GetCardsLoading extends GetCardState {}
 
 class GetCardSuccessfully extends GetCardState {
-  final  cardList;
+  final dynamic cardList;
 
-  GetCardSuccessfully(this.cardList);
+  const GetCardSuccessfully(this.cardList);
 
   @override
   // TODO: implement props
@@ -33,9 +33,9 @@ class GetCardSuccessfully extends GetCardState {
 }
 
 class GetCardsFailed extends GetCardState {
-  String? error;
+  final String? error;
 
-  GetCardsFailed(this.error);
+  const GetCardsFailed(this.error);
 
   @override
   // TODO: implement props
@@ -43,8 +43,8 @@ class GetCardsFailed extends GetCardState {
 }
 
 class GetSelectedCardValue extends GetCardState{
-var  selectedValue;
-  GetSelectedCardValue(this.selectedValue);
+  final dynamic  selectedValue;
+  const GetSelectedCardValue(this.selectedValue);
   @override
   // TODO: implement props
   List<Object> get props => [selectedValue!];

@@ -5,16 +5,13 @@ abstract class GetCardEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class GetCardsRequested extends GetCardEvent {}
 
-class GetCardsRequested extends GetCardEvent {
+class GetSelectedCard extends GetCardEvent {
+  final int? selectedCard;
 
-}
-class GetSelectedCard extends GetCardEvent{
-  int? selectedCard;
   GetSelectedCard(this.selectedCard);
+
   @override
   List<Object> get props => [selectedCard!];
-
 }
-
-

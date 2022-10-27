@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:async';
 
 import 'package:app/common/constants.dart';
@@ -72,7 +74,6 @@ class ServiceProviderRepository {
         "Authorization": "Bearer $token",
       };
       String url = "${EndPoints.baseUrl}${EndPoints.getProviderList}";
-      print(url);
       final response = await netWorkLocator.dio.get(url,
           options: Options(
             headers: headers,
@@ -130,9 +131,6 @@ class ServiceProviderRepository {
       if (response.statusCode != 200) {
         throw Exception('Failed to sign in');
       }
-
-      print(response.statusCode);
-
       completer.complete(response.data);
     } catch (e) {
       Map<String, dynamic> error = {"message": "failed", "status": 0};

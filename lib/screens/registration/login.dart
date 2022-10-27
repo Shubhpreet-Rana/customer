@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/auth/auth_bloc.dart';
-import '../../bloc/profile/create/create_profile_bloc.dart' as profile;
 import '../../bloc/profile/view/profile_bloc.dart';
 import '../../common/assets.dart';
 import '../../common/colors.dart';
@@ -32,7 +31,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController emailController = TextEditingController(text: kDebugMode ? "gursewaksingh@gmail.com" : "");
+  TextEditingController emailController = TextEditingController(text: kDebugMode ? /*"gursewaksingh@gmail.com"*/ "testcustomer4@gmail.com" : "");
   TextEditingController passwordController = TextEditingController(text: kDebugMode ? "12345678" : "");
   bool show = true;
   bool rememberMe = false;

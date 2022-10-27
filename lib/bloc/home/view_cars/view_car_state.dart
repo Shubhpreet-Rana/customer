@@ -1,22 +1,22 @@
 part of 'view_car_bloc.dart';
 
 class ViewCarState extends Equatable {
-  String page_size = "20";
-  int? currentPage;
-  bool? hasMoreData;
+  final String pageSize = "20";
+  final int? currentPage;
+  final bool? hasMoreData;
 
-  bool? isLoading;
-  bool? isFetchingMore;
-  List<AllVehicleData>? vehicle;
+  final bool? isLoading;
+  final bool? isFetchingMore;
+  final List<AllVehicleData>? vehicle;
 
-  int? currentPageMyMarket;
-  bool? hasMoreDataMyMarket;
+  final int? currentPageMyMarket;
+  final bool? hasMoreDataMyMarket;
 
-  bool? isLoadingMyMarket;
-  bool? isFetchingMoreMyMarket;
-  List<MyVehicleMarketPlace>? myMarketPlaceVehicle;
+  final bool? isLoadingMyMarket;
+  final bool? isFetchingMoreMyMarket;
+  final List<MyVehicleMarketPlace>? myMarketPlaceVehicle;
 
-  ViewCarState(
+  const ViewCarState(
       {this.currentPage = 1,
       this.hasMoreData = true,
       this.isLoading = true,
@@ -75,9 +75,9 @@ class GetAllVehicleLoading extends ViewCarState {}
 class GetMyMarketLoading extends ViewCarState {}
 
 class GetAllVehicleSuccessfully extends ViewCarState {
-  List<AllVehicleData>? data;
+  final List<AllVehicleData>? data;
 
-  GetAllVehicleSuccessfully({required this.data});
+  const GetAllVehicleSuccessfully({required this.data});
 
   @override
   List<Object> get props => [data!];
@@ -86,25 +86,25 @@ class GetAllVehicleSuccessfully extends ViewCarState {
 class NoAllVehicleFound extends ViewCarState {
   final String noData;
 
-  NoAllVehicleFound(this.noData);
+  const NoAllVehicleFound(this.noData);
 
   @override
   List<Object> get props => [noData];
 }
 
 class MyMarketPlaceVehicles extends ViewCarState {
-  List<MyVehicleMarketPlace>? myMarketVehicle;
+  final  List<MyVehicleMarketPlace>? myMarketVehicle;
 
-  MyMarketPlaceVehicles({this.myMarketVehicle});
+  const MyMarketPlaceVehicles({this.myMarketVehicle});
 
   @override
   List<Object> get props => [myMarketVehicle!];
 }
 
 class NoMyMarketVehicleFound extends ViewCarState {
-  String noData;
+  final  String noData;
 
-  NoMyMarketVehicleFound(this.noData);
+  const NoMyMarketVehicleFound(this.noData);
 
   @override
   List<Object> get props => [noData];

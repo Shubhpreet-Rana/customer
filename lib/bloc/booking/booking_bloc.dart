@@ -29,7 +29,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
       if (res['status'] == 1) {
         MyBooking myBooking = MyBooking.fromJson(res);
         if (myBooking.data!.isEmpty) {
-          emit(MyBookingNoData("No bookings found"));
+          emit(const MyBookingNoData("No bookings found"));
         } else {
           emit(state.copyWith(myBookingList: myBooking.data));
           if (myBooking.data!.isEmpty) {
@@ -42,7 +42,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
           emit(state.copyWith(isFetchingMore: false));
         }
       } else {
-        emit(MyBookingNoData("No bookings found"));
+        emit(const MyBookingNoData("No bookings found"));
       }
     } catch (e) {
       emit(GetBookingFailed(e.toString()));

@@ -1,12 +1,9 @@
-import 'package:app/common/assets.dart';
 import 'package:app/common/constants.dart';
 import 'package:app/common/methods/custom_storage.dart';
 import 'package:app/screens/registration/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../bloc/profile/view/profile_bloc.dart';
 import '../../../common/colors.dart';
 import '../../../common/methods/common.dart';

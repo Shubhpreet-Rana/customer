@@ -1,8 +1,7 @@
 import 'dart:async';
-
 import 'package:app/data/repository/get_cards_repository.dart';
-import 'package:app/model/card_list_model.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'get_card_event.dart';
@@ -24,16 +23,18 @@ class GetCardBloc extends Bloc<GetCardEvent, GetCardState> {
       if (res['status'] == 1) {
         emit(GetCardSuccessfully(res["data"]));
       } else {
-        emit(GetCardsFailed('error'));
+        emit(const GetCardsFailed('error'));
       }
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   FutureOr<void> _getSelectedCard(GetSelectedCard event, Emitter<GetCardState> emit) {
     try {
      emit(GetSelectedCardValue(event.selectedCard));
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }

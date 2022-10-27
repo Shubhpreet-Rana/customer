@@ -1,16 +1,14 @@
 import 'package:app/common/methods/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../common/colors.dart';
 import '../../common/constants.dart';
 import '../../common/ui/background.dart';
 import '../../common/ui/common_ui.dart';
 import '../../common/ui/headers.dart';
 import '../registration/profile_setup.dart';
-import '../registration/signup.dart';
 import '../vehicle/edit_vehicle.dart';
-import '../vehicle/vehicle_details.dart';
+
 
 class EditOptions extends StatefulWidget {
   const EditOptions({Key? key}) : super(key: key);

@@ -1,6 +1,6 @@
-import 'dart:async';
-import 'dart:convert';
+// ignore_for_file: file_names
 
+import 'dart:async';
 import 'package:app/common/constants.dart';
 import 'package:app/common/methods/custom_storage.dart';
 import 'package:app/common/services/getit.dart';

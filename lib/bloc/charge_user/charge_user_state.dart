@@ -11,7 +11,7 @@ class InitialLoading extends ChargeUserState {}
 class Loading extends ChargeUserState {}
 
 class ChargeUserSuccessfully extends ChargeUserState {
-  dynamic response;
+  final dynamic response;
 
   ChargeUserSuccessfully(this.response);
 
@@ -20,10 +20,10 @@ class ChargeUserSuccessfully extends ChargeUserState {
   List<Object?> get props => [response];
 }
 
-class ChargeUserfailed extends ChargeUserState {
-  String? error;
+class ChargeUserFailed extends ChargeUserState {
+  final String? error;
 
-  ChargeUserfailed(this.error);
+  ChargeUserFailed(this.error);
 
   @override
   // TODO: implement props

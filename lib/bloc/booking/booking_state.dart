@@ -1,16 +1,16 @@
 part of 'booking_bloc.dart';
 
 class BookingState extends Equatable {
-  String page_size = "5";
-  int? currentPage;
-  bool? hasMoreData;
+  final String pageSize = "5";
+  final int? currentPage;
+  final bool? hasMoreData;
 
-  bool? isLoading;
-  bool? isFetchingMore;
-  List<MyBookingData>? myBookingList;
-  List<MyBookingData>? getPopularList;
+  final bool? isLoading;
+  final bool? isFetchingMore;
+  final List<MyBookingData>? myBookingList;
+  final List<MyBookingData>? getPopularList;
 
-  BookingState({
+  const BookingState({
     this.currentPage = 1,
     this.hasMoreData = true,
     this.isLoading = true,
@@ -46,7 +46,7 @@ class BookingLoading extends BookingState {
 class MyBookingNoData extends BookingState {
   final String message;
 
-  MyBookingNoData(this.message);
+  const MyBookingNoData(this.message);
 
   @override
   List<Object> get props => [message];
@@ -54,7 +54,7 @@ class MyBookingNoData extends BookingState {
 class GetBookingFailed extends BookingState {
   final String error;
 
-  GetBookingFailed(this.error);
+  const GetBookingFailed(this.error);
 
   @override
   List<Object> get props => [error];

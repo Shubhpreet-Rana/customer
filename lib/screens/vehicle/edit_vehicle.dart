@@ -1,16 +1,10 @@
 import 'dart:io';
-
-import 'package:app/bloc/profile/view/profile_bloc.dart';
-import 'package:app/bloc/vehicle/add/add_vehicle_bloc.dart';
 import 'package:app/common/styles/styles.dart';
-import 'package:app/screens/vehicle/vehicle_details.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
 import '../../bloc/vehicle/view/vehicle_bloc.dart';
 import '../../common/colors.dart';
 import '../../common/constants.dart';
@@ -20,7 +14,6 @@ import '../../common/ui/common_ui.dart';
 import '../../common/ui/drop_down.dart';
 import '../../common/ui/edit_text.dart';
 import '../../common/ui/headers.dart';
-import '../home/home_tabs.dart';
 
 class EditVehicle extends StatefulWidget {
   const EditVehicle({Key? key}) : super(key: key);

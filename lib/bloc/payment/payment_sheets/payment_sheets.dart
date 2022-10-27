@@ -40,7 +40,6 @@ class StripeServices {
 
   static _getCardToken() async {
     return await Stripe.instance.createToken(CreateTokenParams.card(params: CardTokenParams(name: "Sahil", type: TokenType.Card, currency: "INR", address: address))).then((value) {
-      print(value);
     });
   }
 }

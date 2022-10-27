@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import '../colors.dart';
 import '../methods/call_back.dart';
 
@@ -25,7 +23,7 @@ class MyEditText extends StatelessWidget {
 
   const MyEditText(this.hintText, this.obscureValue, this.type, this.textCapital, this.paddingValue,
       this.controllerName, this.hintColor, this.isEditable,
-      {this.maxLine,
+      {Key? key, this.maxLine,
         this.contentPadding,
         this.iconClick,
         this.textInputAction = TextInputAction.next,
@@ -33,7 +31,7 @@ class MyEditText extends StatelessWidget {
         this.suffixIcon,
         this.isPrefix = false,
         this.prefixIcon,
-        this.bgColor});
+        this.bgColor}):super(key: key);
 
   Widget getContainer({Widget? child}) {
     if (maxLine != null) {

@@ -1,10 +1,6 @@
-import 'dart:io';
-
 import 'package:app/common/colors.dart';
-import 'package:app/common/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../methods/common.dart';
 import '../styles/styles.dart';
 

@@ -1,8 +1,7 @@
 import 'dart:async';
-
 import 'package:app/data/repository/charge_user_repository.dart';
-import 'package:app/data/repository/get_cards_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'charge_user_event.dart';
@@ -24,8 +23,10 @@ class ChargeUserBloc extends Bloc<ChargeUserEvent, ChargeUserState> {
       if (res['status'] == 1) {
         emit(ChargeUserSuccessfully(res["data"]));
       } else {
-        emit(ChargeUserfailed('error'));
+        emit(ChargeUserFailed('error'));
       }
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }

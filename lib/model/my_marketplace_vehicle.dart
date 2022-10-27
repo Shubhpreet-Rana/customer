@@ -94,9 +94,7 @@ class MyVehicleMarketPlace {
         color: json["color"],
         mileage: json["mileage"],
         capacity: json["capacity"],
-        manufacturingYear: json["manufacturing_year"] == null
-            ? null
-            : json["manufacturing_year"],
+        manufacturingYear: json["manufacturing_year"],
         address: json["address"],
         addressLat: json["address_lat"],
         addressLong: json["address_long"],
@@ -119,7 +117,7 @@ class MyVehicleMarketPlace {
         "mileage": mileage,
         "capacity": capacity,
         "manufacturing_year":
-            manufacturingYear == null ? null : manufacturingYear,
+            manufacturingYear,
         "address": address,
         "address_lat": addressLat,
         "address_long": addressLong,

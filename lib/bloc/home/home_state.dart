@@ -9,7 +9,7 @@ class Loading extends HomeState {
 }
 
 class GetBannerSuccessfully extends HomeState {
-  Map<dynamic, dynamic>? data;
+  final Map<dynamic, dynamic>? data;
 
   GetBannerSuccessfully({this.data});
 

@@ -56,14 +56,13 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   Future<void> getAddressFromLatLong(double latitude, double longitude) async {
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
-      print(placemarks);
       Placemark place = placemarks[0];
       var data = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
       address = data;
       setState(() {});
     } catch (e, s) {
-      print(e.toString());
-      print(s.toString());
+      debugPrint(e.toString());
+      debugPrint(s.toString());
     }
   }
 
@@ -241,7 +240,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   }
 
   _onSelect(bool? newValue, ServiceTypes type) {
-    if (selectedServices.length > 0) {
+    if (selectedServices.isNotEmpty) {
       // ignore: curly_braces_in_flow_control_structures
       if (selectedServices.contains(type)) {
         type.isSelected = newValue!;
@@ -398,29 +397,27 @@ class _ServiceDetailsState extends State<ServiceDetails> {
             builder: (context) => MyAppMap(
                   serviceTypes: roadSideAssistanceExist[0],
                   callback: (LatLng latLng) async {
-                    if (latLng != null) {
-                      ServiceTypes roadSideAssistanceType = roadSideAssistanceExist[0];
-                      roadSideAssistanceType.lat = latLng.latitude;
-                      roadSideAssistanceType.long = latLng.latitude;
+                    ServiceTypes roadSideAssistanceType = roadSideAssistanceExist[0];
+                    roadSideAssistanceType.lat = latLng.latitude;
+                    roadSideAssistanceType.long = latLng.latitude;
 
-                      await showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          useRootNavigator: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20),
-                            ),
+                    await showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        useRootNavigator: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
                           ),
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          backgroundColor: Colors.white,
-                          builder: (context) {
-                            return SelectDate(
-                              selectedServices: [roadSideAssistanceType],
-                              item: widget.item,
-                            );
-                          });
-                    }
+                        ),
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        backgroundColor: Colors.white,
+                        builder: (context) {
+                          return SelectDate(
+                            selectedServices: [roadSideAssistanceType],
+                            item: widget.item,
+                          );
+                        });
                   },
                 )));
       } else {

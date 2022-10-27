@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:app/common/services/NavigationService.dart';
-import 'package:app/permission_handler.dart';
 import 'package:app/screens/notifications/notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:images_picker/images_picker.dart';
-// import 'package:permission_handler/permission_handler.dart';
-
 import '../../screens/filters/filters.dart';
-import '../colors.dart';
 
 class CommonMethods {
   static GetIt? _locator;

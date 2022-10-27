@@ -6,10 +6,10 @@ abstract class ChargeUserEvent extends Equatable {
 }
 
 class ChargeUserRequested extends ChargeUserEvent {
-  String? providerId;
-  String? cardId;
-  String? amount;
-  String? bookingId;
+  final String? providerId;
+  final String? cardId;
+  final String? amount;
+  final String? bookingId;
 
   ChargeUserRequested({this.cardId, this.amount, this.providerId,this.bookingId});
 

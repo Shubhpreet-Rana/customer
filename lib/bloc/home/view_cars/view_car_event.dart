@@ -6,25 +6,25 @@ abstract class ViewCarEvent extends Equatable {
 }
 
 class GetAllVehicle extends ViewCarEvent {
-  String? page;
+  final String? page;
 
   GetAllVehicle({this.page});
 }
 
 class GetMyMarketVehicle extends ViewCarEvent {
-  String? page;
+  final  String? page;
 
   GetMyMarketVehicle({this.page});
 }
 
 class FetchAllVehicle extends ViewCarEvent {
-  bool? fetchingMore;
+  final bool? fetchingMore;
 
   FetchAllVehicle({this.fetchingMore});
 
 }
 class FetchMyMarketVehicle extends ViewCarEvent {
-  bool? fetchingMore;
+  final  bool? fetchingMore;
 
   FetchMyMarketVehicle({this.fetchingMore});
 

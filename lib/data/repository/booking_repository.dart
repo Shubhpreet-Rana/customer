@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
+
 
 import 'package:app/common/constants.dart';
 import 'package:app/common/methods/custom_storage.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+
 
 import '../../common/services/getit.dart';
 import '../endpoints/endpoints.dart';
@@ -25,8 +25,7 @@ class BookingRepository {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
       };
-      final url='${EndPoints.baseUrl}${EndPoints.mybooking}?page=${currentPage}&per_page=5';
-      print(url);
+      final url='${EndPoints.baseUrl}${EndPoints.mybooking}?page=$currentPage&per_page=5';
       final response = await netWorkLocator.dio.get(
         url,
         options: Options(
@@ -36,7 +35,6 @@ class BookingRepository {
       if (response.statusCode != 200) {
         throw Exception('Failed to sign in');
       }
-      print(response.data);
 
       completer.complete(response.data);
     } catch (e) {

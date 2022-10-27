@@ -229,7 +229,6 @@ class _SelectDateState extends State<SelectDate> {
                     behavior: HitTestBehavior.translucent,
                     onTap: () async {
                       await _selectTime(context).then((String value) async {
-                        print(value);
                         Navigator.of(context, rootNavigator: false).push(
                           CupertinoPageRoute(
                             builder: (context) => ConfirmBooking(

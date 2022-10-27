@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app/data/repository/payment_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'payment_state.dart';
@@ -26,7 +27,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         emit(PaymentFailed("asjdhas"));
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -40,7 +41,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         emit(ApplePaymentFailed("bjcbjjcnas"));
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }

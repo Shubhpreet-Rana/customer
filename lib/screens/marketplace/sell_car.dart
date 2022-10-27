@@ -5,11 +5,9 @@ import 'package:app/bloc/home/view_cars/view_car_bloc.dart';
 import 'package:app/common/location_util.dart';
 import 'package:app/model/all_vehicle_model.dart';
 import 'package:app/model/my_marketplace_vehicle.dart';
-import 'package:app/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
@@ -17,7 +15,6 @@ import 'package:place_picker/widgets/place_picker.dart';
 import '../../common/colors.dart';
 import '../../common/constants.dart';
 import '../../common/methods/common.dart';
-import '../../common/styles/styles.dart';
 import '../../common/ui/background.dart';
 import '../../common/ui/common_ui.dart';
 import '../../common/ui/drop_down.dart';
@@ -29,7 +26,7 @@ class SellCar extends StatefulWidget {
   final AllVehicleData? myVehicleMarketPlace;
   final MyVehicleMarketPlace ? myVehicle;
 
-  SellCar({Key? key, this.fromEdit = false, this.myVehicleMarketPlace,this.myVehicle}) : super(key: key);
+  const SellCar({Key? key, this.fromEdit = false, this.myVehicleMarketPlace,this.myVehicle}) : super(key: key);
 
   @override
   State<SellCar> createState() => _SellCarState();
@@ -204,9 +201,8 @@ class _SellCarState extends State<SellCar> {
                                       )));
 
                               // Handle the result in your way
-                              print(result);
 
-                              if (mounted && result != null) {
+                              if (mounted) {
                                 setState(() {
                                   locationLat = result.latLng!.latitude;
                                   locationLang = result.latLng!.longitude;
@@ -550,18 +546,18 @@ class _SellCarState extends State<SellCar> {
       return CommonMethods().showToast(context:context, message: "Address is required");
     } else {
       BlocProvider.of<SellCarBloc>(context).add(AddCarToSell(
-          brand_name: brandNameController.text,
-          model_name: modelController.text,
+          brandName: brandNameController.text,
+          modelName: modelController.text,
           capacity: engineController.text,
           color: selectedColor,
           description: descriptionController.text,
           mileage: mileage,
-          manufacturing_year: manufacturingController.text,
+          manufacturingYear: manufacturingController.text,
           address: addressController.text,
           price: priceController.text,
-          car_image_1: image1,
-          car_image_2: image2.isNotEmpty ? image2 : "",
-          car_image_3: image3.isNotEmpty ? image3 : "",
+          carImage_1: image1,
+          carImage_2: image2.isNotEmpty ? image2 : "",
+          carImage_3: image3.isNotEmpty ? image3 : "",
           address_lat: locationLat,
           address_long: locationLang));
     }
@@ -570,19 +566,19 @@ class _SellCarState extends State<SellCar> {
   void updateVehicleDetail() {
     BlocProvider.of<SellCarBloc>(context).add(UpdateCarToSell(
         id: widget.myVehicleMarketPlace!=null? widget.myVehicleMarketPlace!.id:widget.myVehicle!.id!,
-        brand_name: brandNameController.text,
-        model_name: modelController.text,
+        brandName: brandNameController.text,
+        modelName: modelController.text,
         price: priceController.text,
         address_long: locationLang,
         address_lat: locationLat,
         color: selectedColor,
         address: addressController.text,
         capacity: engineController.text,
-        car_image_3: image3,
-        car_image_2: image2,
-        car_image_1: image1,
+        carImage_3: image3,
+        carImage_2: image2,
+        carImage_1: image1,
         description: descriptionController.text,
-        manufacturing_year: manufacturingController.text,
+        manufacturingYear: manufacturingController.text,
         mileage: mileage));
   }
 

@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:app/common/methods/common.dart';
 import 'package:app/data/repository/home_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:image_picker/image_picker.dart';
 
-import '../../../model/all_vehicle_model.dart';
+
 
 part 'add_car_event.dart';
 
@@ -17,7 +15,7 @@ part 'sell_car_state.dart';
 class SellCarBloc extends Bloc<SellCarEvent, AddCarToSellState> {
   final HomeRepository homeRepository;
 
-  SellCarBloc({required this.homeRepository}) : super(initialState()) {
+  SellCarBloc({required this.homeRepository}) : super(InitialState()) {
     on<AddCarToSell>(_addCarToSell);
     on<Select1Image>(_selected1Image);
     on<Select2Image>(_selected2Image);
@@ -32,16 +30,16 @@ class SellCarBloc extends Bloc<SellCarEvent, AddCarToSellState> {
     emit(Loading());
     try {
       final res = await homeRepository.sellCarVehicle(
-        brand_name: event.brand_name,
-        model_name: event.model_name,
+        brandName: event.brandName,
+        modelName: event.modelName,
         capacity: event.capacity,
-        car_image_1: event.car_image_1,
-        car_image_2: event.car_image_2,
-        car_image_3: event.car_image_3,
+        carImage_1: event.carImage_1,
+        carImage_2: event.carImage_2,
+        carImage_3: event.carImage_3,
         color: event.color,
         description: event.description,
         mileage: event.mileage,
-        manufacturing_year: event.manufacturing_year,
+        manufacturingYear: event.manufacturingYear,
         address: event.address,
         address_lat: event.address_lat,
         address_long: event.address_long,
@@ -83,16 +81,16 @@ class SellCarBloc extends Bloc<SellCarEvent, AddCarToSellState> {
     try {
       final res = await homeRepository.updateCarVehicle(
         id: event.id,
-        brand_name: event.brand_name,
-        model_name: event.model_name,
+        brand_name: event.brandName,
+        model_name: event.modelName,
         capacity: event.capacity,
-        car_image_1: event.car_image_1,
-        car_image_2: event.car_image_2,
-        car_image_3: event.car_image_3,
+        car_image_1: event.carImage_1,
+        car_image_2: event.carImage_2,
+        car_image_3: event.carImage_3,
         color: event.color,
         description: event.description,
         mileage: event.mileage,
-        manufacturing_year: event.manufacturing_year,
+        manufacturing_year: event.manufacturingYear,
         address: event.address,
         address_lat: event.address_lat,
         address_long: event.address_long,

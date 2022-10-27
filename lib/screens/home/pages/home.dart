@@ -1,6 +1,5 @@
 import 'package:app/bloc/booking/booking_bloc.dart';
 import 'package:app/bloc/home/home_bloc.dart';
-import 'package:app/bloc/serviceProvider/service_provider_bloc.dart';
 import 'package:app/common/assets.dart';
 import 'package:app/common/colors.dart';
 import 'package:app/model/get_banner.dart';
@@ -12,7 +11,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
@@ -102,7 +100,10 @@ class _HomeTabState extends State<HomeTab> {
                       listener: (context, state) {},
                       child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                         if (state is Loading) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(child: Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: CircularProgressIndicator(),
+                          ));
                         }
                         if (state is GetBannerSuccessfully) {
                           var data = state.props[0] as Map<String, dynamic>;
@@ -149,7 +150,7 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
                     child: Text(AppConstants.bookingText, style: AppStyles.blackSemiBold),
                   ),
                   const SizedBox(height: 5),
@@ -164,7 +165,10 @@ class _HomeTabState extends State<HomeTab> {
                       }
                     }
                     if (bookingState is BookingLoading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: CircularProgressIndicator(),
+                      ));
                     }
                     if (bookingState is MyBookingNoData && bookingState.currentPage == null) {
                       return const Center(
@@ -189,7 +193,7 @@ class _HomeTabState extends State<HomeTab> {
                             }
                           }
                           String formattedDate = DateFormat('yyyy-MM-dd').format(myBookingData.date!);
-                          print(formattedDate);
+
                           return listItem(finalResultList![index]);
                         });
                   }),
@@ -202,7 +206,6 @@ class _HomeTabState extends State<HomeTab> {
                           for (int i = 0; i < 2; i++) {
                             getPopularList?.add(bookingState.myBookingList![i]);
                           }
-                          print(getPopularList);
                         }
                       }
                     },
@@ -236,7 +239,10 @@ class _HomeTabState extends State<HomeTab> {
                           verticalSpacer(),
                           BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                             if (state is Loading) {
-                              return const Center(child: CircularProgressIndicator());
+                              return const Center(child: Padding(
+                                padding: EdgeInsets.all(10.0),
+                                child: CircularProgressIndicator(),
+                              ));
                             }
                             if (state is GetBannerSuccessfully) {
                               var data = state.props[0] as Map<String, dynamic>;
@@ -263,7 +269,7 @@ class _HomeTabState extends State<HomeTab> {
                               GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
-                                    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => SellCar()));
+                                    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const SellCar()));
                                   },
                                   child: rowButton(bkColor: Colours.textBlack.code, text: AppConstants.addToSell, paddingHorizontal: 8.0)),
                               horizontalSpacer(),
@@ -318,7 +324,6 @@ class _HomeTabState extends State<HomeTab> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  // mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

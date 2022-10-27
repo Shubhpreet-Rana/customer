@@ -37,6 +37,7 @@ class _AppDropdownState extends State<AppDropdown> {
       child: DropdownButtonHideUnderline(
           child: DropdownButton(
         value: selectedItem ?? widget.items![0],
+        borderRadius: BorderRadius.circular(13),
         items: widget.items!.map((String value) {
           return DropdownMenuItem<String>(
             value: value,

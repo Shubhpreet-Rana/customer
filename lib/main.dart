@@ -47,11 +47,11 @@ Future<void> main() async {
   CommonMethods.init();
   PreferenceUtils.init();
   await Stripe.instance.applySettings();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
 
   @override

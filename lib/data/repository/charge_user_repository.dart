@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:app/common/constants.dart';
 import 'package:app/common/methods/custom_storage.dart';
 import 'package:app/common/services/getit.dart';
@@ -8,7 +6,7 @@ import 'package:app/data/endpoints/endpoints.dart';
 import 'package:app/data/network/dio_client.dart';
 import 'package:app/data/network/exceptions.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+
 
 class ChargeUserRepository {
   final netWorkLocator = getIt.get<DioClient>();

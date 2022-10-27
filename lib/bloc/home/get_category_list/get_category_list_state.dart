@@ -9,7 +9,7 @@ class Loading extends GetCategoryListState {
 }
 
 class GetCategoryListSuccessfully extends GetCategoryListState {
- List<CategoryList>? data;
+ final List<CategoryList>? data;
 
   GetCategoryListSuccessfully({this.data});
 
@@ -17,10 +17,10 @@ class GetCategoryListSuccessfully extends GetCategoryListState {
   List<Object?> get props => [data];
 }
 
-class NoLisy extends GetCategoryListState {
+class NoList extends GetCategoryListState {
   final String noData;
 
-  NoLisy(this.noData);
+  NoList(this.noData);
 
   @override
   List<Object?> get props => [noData];

@@ -2,7 +2,6 @@ import 'package:app/common/constants.dart';
 import 'package:app/common/methods/common.dart';
 import 'package:app/common/styles/styles.dart';
 import 'package:app/common/ui/headers.dart';
-import 'package:app/screens/registration/forgot_password.dart';
 import 'package:app/screens/registration/profile_setup.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';

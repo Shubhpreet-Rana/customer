@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 part of 'add_car_bloc.dart';
 
 abstract class SellCarEvent extends Equatable {
@@ -6,32 +8,32 @@ abstract class SellCarEvent extends Equatable {
 }
 
 class AddCarToSell extends SellCarEvent {
-  String? brand_name;
-  String? model_name;
-  String? capacity;
-  String? car_image_1;
-  String? car_image_2;
-  String? car_image_3;
-  String? color;
-  String? description;
-  String? mileage;
-  String? manufacturing_year;
-  String? address;
-  double? address_lat;
-  double? address_long;
-  String? price;
+  final  String? brandName;
+  final  String? modelName;
+  final  String? capacity;
+  final  String? carImage_1;
+  final  String? carImage_2;
+  final  String? carImage_3;
+  final  String? color;
+  final  String? description;
+  final  String? mileage;
+  final  String? manufacturingYear;
+  final  String? address;
+  final  double? address_lat;
+  final  double? address_long;
+  final  String? price;
 
   AddCarToSell(
-      {this.brand_name,
-      this.model_name,
+      {this.brandName,
+      this.modelName,
       this.capacity,
-      this.car_image_1,
-      this.car_image_2,
-      this.car_image_3,
+      this.carImage_1,
+      this.carImage_2,
+      this.carImage_3,
       this.color,
       this.description,
       this.mileage,
-      this.manufacturing_year,
+      this.manufacturingYear,
       this.address,
       this.address_lat,
       this.address_long,
@@ -39,33 +41,33 @@ class AddCarToSell extends SellCarEvent {
 }
 
 class UpdateCarToSell extends SellCarEvent {
-  String? brand_name;
-  String? model_name;
-  String? capacity;
-  String? car_image_1;
-  String? car_image_2;
-  String? car_image_3;
-  String? color;
-  String? description;
-  String? mileage;
-  String? manufacturing_year;
-  String? address;
-  double? address_lat;
-  double? address_long;
-  String? price;
-  int? id;
+  final String? brandName;
+  final String? modelName;
+  final String? capacity;
+  final String? carImage_1;
+  final String? carImage_2;
+  final String? carImage_3;
+  final String? color;
+  final String? description;
+  final String? mileage;
+  final String? manufacturingYear;
+  final String? address;
+  final double? address_lat;
+  final double? address_long;
+  final String? price;
+  final int? id;
 
   UpdateCarToSell(
-      {this.brand_name,
-      this.model_name,
+      {this.brandName,
+      this.modelName,
       this.capacity,
-      this.car_image_1,
-      this.car_image_2,
-      this.car_image_3,
+      this.carImage_1,
+      this.carImage_2,
+      this.carImage_3,
       this.color,
       this.description,
       this.mileage,
-      this.manufacturing_year,
+      this.manufacturingYear,
       this.address,
       this.address_lat,
       this.address_long,
@@ -74,19 +76,19 @@ class UpdateCarToSell extends SellCarEvent {
 }
 
 class Select1Image extends SellCarEvent {
-  BuildContext context;
+  final BuildContext context;
 
   Select1Image(this.context);
 }
 
 class Select2Image extends SellCarEvent {
-  BuildContext context;
+  final BuildContext context;
 
   Select2Image(this.context);
 }
 
 class Select3Image extends SellCarEvent {
-  BuildContext context;
+  final BuildContext context;
 
   Select3Image(this.context);
 }

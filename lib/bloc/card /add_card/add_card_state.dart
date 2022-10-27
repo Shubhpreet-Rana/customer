@@ -1,9 +1,9 @@
 part of 'add_card_bloc.dart';
 
 class AddCardState extends Equatable {
-  int? selectedCard;
+  final int? selectedCard;
 
-  AddCardState({
+  const AddCardState({
     this.selectedCard = 0,
   });
 
@@ -23,9 +23,9 @@ class InitialLoading extends AddCardState {}
 class Loading extends AddCardState {}
 
 class AddCardSuccessfully extends AddCardState {
-  dynamic response;
+  final dynamic response;
 
-  AddCardSuccessfully(this.response);
+  const AddCardSuccessfully(this.response);
 
   @override
   // TODO: implement props
@@ -33,9 +33,9 @@ class AddCardSuccessfully extends AddCardState {
 }
 
 class AddCardsFailed extends AddCardState {
-  String? error;
+  final String? error;
 
-  AddCardsFailed(this.error);
+  const AddCardsFailed(this.error);
 
   @override
   // TODO: implement props

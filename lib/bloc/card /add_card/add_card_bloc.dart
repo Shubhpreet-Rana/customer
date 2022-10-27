@@ -1,8 +1,7 @@
 import 'dart:async';
-
 import 'package:app/data/repository/add_card_repository.dart';
-import 'package:app/data/repository/get_cards_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'add_card_state.dart';
@@ -23,8 +22,10 @@ class AddCardBloc extends Bloc<AddCardEvent, AddCardState> {
       if (res['status'] == 1) {
         emit(AddCardSuccessfully(res["data"]));
       } else {
-        emit(AddCardsFailed('error'));
+        emit(const AddCardsFailed('error'));
       }
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }

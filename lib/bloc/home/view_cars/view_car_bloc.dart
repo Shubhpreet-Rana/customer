@@ -31,7 +31,7 @@ class ViewCarBloc extends Bloc<ViewCarEvent, ViewCarState> {
       if (res['status'] == 1) {
         AllVehicel allVehicle = AllVehicel.fromJson(res);
         if (allVehicle.vehicle!.isEmpty) {
-          emit(NoAllVehicleFound("No vehicle found"));
+          emit(const NoAllVehicleFound("No vehicle found"));
           emit(state.copyWith(hasMoreData: false));
         } else {
           emit(state.copyWith(vehicle: allVehicle.vehicle!));
@@ -60,10 +60,10 @@ class ViewCarBloc extends Bloc<ViewCarEvent, ViewCarState> {
       if (res['status'] == 1) {
         MyMarketPlaceVehicle allVehicle = MyMarketPlaceVehicle.fromJson(res);
         if (allVehicle.vehicle!.isEmpty) {
-          emit(NoMyMarketVehicleFound("No vehicle found"));
+          emit(const NoMyMarketVehicleFound("No vehicle found"));
         } else {
           emit(state.copyWith(myMarketPlaceVehicle: allVehicle.vehicle!));
-          if (allVehicle.vehicle!.length == 0) {
+          if (allVehicle.vehicle!.isEmpty) {
             emit(state.copyWith(hasMoreDataMyMarket: false));
           }
           int currentPage = state.currentPageMyMarket!;

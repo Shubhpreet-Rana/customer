@@ -4,13 +4,10 @@ import 'package:app/screens/bookings/book/service_details.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import '../../common/colors.dart';
 import '../../common/location_util.dart';
 import '../../common/methods/common.dart';
 import '../../common/ui/background.dart';
 import '../../common/ui/common_ui.dart';
-import '../../common/ui/drop_down.dart';
 import '../../common/ui/headers.dart';
 import '../../common/constants.dart';
 
@@ -19,9 +16,9 @@ class MyAppMap extends StatefulWidget {
   final bool showMarker;
   final LatLng? latLng;
   final ServiceTypes? serviceTypes;
-  Function? callback;
+  final Function? callback;
 
-  MyAppMap(
+   const MyAppMap(
       {Key? key,
       this.showPickUp = true,
       this.showMarker = false,
@@ -176,7 +173,7 @@ class MyAppMapState extends State<MyAppMap> {
                         ),
                       )
                     : const SizedBox.shrink())
-                : SizedBox.shrink(),
+                : const SizedBox.shrink(),
             verticalSpacer(height: widget.showPickUp ? 0.0 : 20.0),
             Expanded(
               child: GoogleMap(

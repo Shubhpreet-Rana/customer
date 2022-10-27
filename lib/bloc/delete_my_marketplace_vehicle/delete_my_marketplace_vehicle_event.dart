@@ -8,7 +8,7 @@ abstract class DeleteMarketPlaceVehicleEvent extends Equatable {
 
 
 class DeleteMyVehicleRequested extends DeleteMarketPlaceVehicleEvent {
-  String? id;
+  final String? id;
 
   DeleteMyVehicleRequested({this.id});
 }

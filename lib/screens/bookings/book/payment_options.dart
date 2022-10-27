@@ -1,9 +1,7 @@
 import 'package:app/bloc/card%20/get_card/get_card_bloc.dart';
 import 'package:app/bloc/charge_user/charge_user_bloc.dart';
-import 'package:app/bloc/payment/payment_bloc.dart';
 import 'package:app/bloc/payment/payment_sheets/payment_sheets.dart';
 import 'package:app/common/styles/styles.dart';
-import 'package:app/model/card_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -19,9 +17,9 @@ import '../../../common/ui/headers.dart';
 
 class PaymentOptions extends StatefulWidget {
   final double totalPayment;
-  String? bookingId;
+  final String? bookingId;
 
-  PaymentOptions({Key? key, required this.totalPayment, this.bookingId}) : super(key: key);
+  const PaymentOptions({Key? key, required this.totalPayment, this.bookingId}) : super(key: key);
 
   @override
   State<PaymentOptions> createState() => _PaymentOptionsState();
@@ -30,8 +28,6 @@ class PaymentOptions extends StatefulWidget {
 class _PaymentOptionsState extends State<PaymentOptions> {
   String totalPayment = "";
   List<dynamic> cardList = [];
-
-  var paymentIntent;
   int? selectedCard;
 
   @override
@@ -53,6 +49,7 @@ class _PaymentOptionsState extends State<PaymentOptions> {
           verticalSpacer(),
           Expanded(
               child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
             child: Container(
               width: CommonMethods.deviceWidth(),
               height: CommonMethods.deviceHeight(),
@@ -101,7 +98,11 @@ class _PaymentOptionsState extends State<PaymentOptions> {
                     height: 1.5,
                     color: Colours.hintColor.code,
                   ),
-                  paymentOptions(icon: Assets.card.name, text: AppConstants.paymentItems[1]),
+                  GestureDetector(
+                      onTap: () {
+                        _openCardSheet();
+                      },
+                      child: paymentOptions(icon: Assets.card.name, text: AppConstants.paymentItems[1])),
                   Container(
                     height: 1.5,
                     color: Colours.hintColor.code,
@@ -159,6 +160,7 @@ class _PaymentOptionsState extends State<PaymentOptions> {
             padding: EdgeInsets.zero,
             itemCount: cardList.length,
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return BlocListener<GetCardBloc, GetCardState>(
                 listener: (context, state) {
@@ -283,7 +285,7 @@ class _PaymentOptionsState extends State<PaymentOptions> {
     return showModalBottomSheet(
         context: context,
         builder: (context) {
-          return NoWebhookPaymentCardFormScreen();
+          return const NoWebhookPaymentCardFormScreen();
         });
   }
 
@@ -293,6 +295,8 @@ class _PaymentOptionsState extends State<PaymentOptions> {
 }
 
 class NoWebhookPaymentCardFormScreen extends StatefulWidget {
+  const NoWebhookPaymentCardFormScreen({Key? key}) : super(key: key);
+
   @override
   _NoWebhookPaymentCardFormScreenState createState() => _NoWebhookPaymentCardFormScreenState();
 }
@@ -351,8 +355,7 @@ class _NoWebhookPaymentCardFormScreenState extends State<NoWebhookPaymentCardFor
         child: Text(AppConstants.addCard));
   }
 
-  _getCardToken() async {
+  void _getCardToken() async {
     var data = await StripeServices.getCardToken();
-    print(data);
   }
 }

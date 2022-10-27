@@ -167,11 +167,11 @@ class Card {
   int ?expYear;
   String? fingerprint;
   String ?funding;
-  dynamic? generatedFrom;
+  dynamic generatedFrom;
   String? last4;
   Networks ?networks;
   ThreeDSecureUsage? threeDSecureUsage;
-  dynamic ?wallet;
+  dynamic wallet;
 
   factory Card.fromJson(Map<String, dynamic> json) => Card(
     brand: json["brand"],

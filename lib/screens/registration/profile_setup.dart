@@ -18,7 +18,6 @@ import '../../common/ui/common_ui.dart';
 import '../../common/ui/drop_down.dart';
 import '../../common/ui/edit_text.dart';
 import '../../common/ui/headers.dart';
-import '../maps/pick_location.dart';
 import '../vehicle/vehicle_details.dart';
 
 class ProfileSetUp extends StatefulWidget {
@@ -60,8 +59,8 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
       addressController.text = state.userProfile.user!.address ?? "";
       genderText = state.userProfile.user!.getGenderText;
       imageUrl = state.userProfile.user!.userImage;
-      locationLat =(state.userProfile.user!.addressLat!=null? double.tryParse(state.userProfile.user!.addressLat!): 0.0)!;
-      locationLang =(state.userProfile.user!.addressLong!=null? double.tryParse(state.userProfile.user!.addressLong!): 0.0)!;
+      locationLat = (state.userProfile.user!.addressLat != null ? double.tryParse(state.userProfile.user!.addressLat!) : 0.0)!;
+      locationLang = (state.userProfile.user!.addressLong != null ? double.tryParse(state.userProfile.user!.addressLong!) : 0.0)!;
     }
   }
 
@@ -71,8 +70,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
       listener: (context, state) {
         if (state is CreatedSuccessfully) {
           CommonMethods().showToast(context: context, message: state.success);
-          Navigator.of(context, rootNavigator: true)
-              .pushReplacement(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
+          Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
         }
         if (state is UpdateProfileSuccessfully) {
           Navigator.of(context).pop();
@@ -88,10 +86,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SafeArea(
-                    bottom: false,
-                    child: AppHeaders()
-                        .extendedHeader(text: widget.fromEdit ? AppConstants.editProfile : AppConstants.setup, context: context)),
+                SafeArea(bottom: false, child: AppHeaders().extendedHeader(text: widget.fromEdit ? AppConstants.editProfile : AppConstants.setup, context: context)),
                 verticalSpacer(
                   height: 40.0,
                 ),
@@ -123,7 +118,6 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                           fromUrl: widget.fromEdit && selectedImage == null ? true : false,
                           onSelect: () async {
                             selectedImage = await CommonMethods().showAlertDialog(context);
-                            print(selectedImage);
                             if (mounted) setState(() {});
                           },
                         ),
@@ -133,13 +127,11 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                         Row(
                           children: [
                             Expanded(
-                              child: MyEditText(AppConstants.fNameHint, false, TextInputType.text, TextCapitalization.none, 10.0,
-                                  fNameController, Colours.hintColor.code, true),
+                              child: MyEditText(AppConstants.fNameHint, false, TextInputType.text, TextCapitalization.none, 10.0, fNameController, Colours.hintColor.code, true),
                             ),
                             horizontalSpacer(),
                             Expanded(
-                              child: MyEditText(AppConstants.lNameHint, false, TextInputType.text, TextCapitalization.none, 10.0,
-                                  lNameController, Colours.hintColor.code, true),
+                              child: MyEditText(AppConstants.lNameHint, false, TextInputType.text, TextCapitalization.none, 10.0, lNameController, Colours.hintColor.code, true),
                             ),
                           ],
                         ),
@@ -165,8 +157,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                         verticalSpacer(),
                         headingText(text: AppConstants.mobileHint),
                         verticalSpacer(height: 10.0),
-                        MyEditText(AppConstants.mobileHint, false, TextInputType.phone, TextCapitalization.none, 10.0,
-                            mobileController, Colours.hintColor.code, true),
+                        MyEditText(AppConstants.mobileHint, false, TextInputType.phone, TextCapitalization.none, 10.0, mobileController, Colours.hintColor.code, true),
                         verticalSpacer(),
                         headingText(text: AppConstants.addressHint),
                         verticalSpacer(height: 10.0),
@@ -192,9 +183,8 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                                           )));
 
                                   // Handle the result in your way
-                                  print(result);
 
-                                  if (mounted && result != null) {
+                                  if (mounted) {
                                     setState(() {
                                       locationLat = result.latLng!.latitude;
                                       locationLang = result.latLng!.longitude;
@@ -234,8 +224,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                           selectedItem: AppConstants.paymentItems[0],
                           onChange: (value) {
                             selectedPaymentOption = value;
-                            if (selectedPaymentOption == AppConstants.paymentItems[1] ||
-                                selectedPaymentOption == AppConstants.paymentItems[2]) {
+                            if (selectedPaymentOption == AppConstants.paymentItems[1] || selectedPaymentOption == AppConstants.paymentItems[2]) {
                               showAddCard = true;
                             } else {
                               showAddCard = false;
@@ -283,20 +272,12 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                               Row(
                                 children: [
                                   Expanded(
-                                    child: MyEditText(
-                                        AppConstants.cardExpDateHint,
-                                        false,
-                                        const TextInputType.numberWithOptions(),
-                                        TextCapitalization.none,
-                                        10.0,
-                                        cardExpDateController,
-                                        Colours.hintColor.code,
-                                        true),
+                                    child: MyEditText(AppConstants.cardExpDateHint, false, const TextInputType.numberWithOptions(), TextCapitalization.none, 10.0, cardExpDateController,
+                                        Colours.hintColor.code, true),
                                   ),
                                   horizontalSpacer(),
                                   Expanded(
-                                    child: MyEditText(AppConstants.cardCvvHint, false, TextInputType.number,
-                                        TextCapitalization.none, 10.0, cardCvvController, Colours.hintColor.code, true),
+                                    child: MyEditText(AppConstants.cardCvvHint, false, TextInputType.number, TextCapitalization.none, 10.0, cardCvvController, Colours.hintColor.code, true),
                                   ),
                                 ],
                               ),
@@ -314,11 +295,12 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                                 true,
                               ),
                               verticalSpacer(),
-                             /* state is LoadingUpdate
+                              /* state is LoadingUpdate
                                   ? const Center(
                                       child: CircularProgressIndicator(),
                                     )
-                                  :*/ submitButton(),
+                                  :*/
+                              submitButton(),
                               verticalSpacer(height: 50),
                             ],
                           )
@@ -368,8 +350,8 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
 
   void _createUpdateProfile(BuildContext context) {
     BlocProvider.of<CreateProfileBloc>(context).add(
-      CreateProfileRequested(fNameController.text, lNameController.text, mobileController.text.replaceAll(" ", ""), addressController.text,
-          selectedGender, selectedImage!.path, locationLat, locationLang),
+      CreateProfileRequested(
+          fNameController.text, lNameController.text, mobileController.text.replaceAll(" ", ""), addressController.text, selectedGender, selectedImage!.path, locationLat, locationLang),
     );
   }
 
@@ -377,7 +359,6 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
       behavior: HitTestBehavior.translucent,
       onTap: () {
         validate();
-
       },
       child: appButton(bkColor: Colours.blue.code, text: widget.fromEdit ? AppConstants.update : AppConstants.submitText));
 }

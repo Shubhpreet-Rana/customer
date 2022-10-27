@@ -7,8 +7,8 @@ class PaymentEvent extends Equatable {
 }
 
 class MakePaymentEvent extends PaymentEvent {
-  String? amount;
-  String? currency;
+  final  String? amount;
+  final String? currency;
 
   MakePaymentEvent({this.amount, this.currency});
 
@@ -18,8 +18,8 @@ class MakePaymentEvent extends PaymentEvent {
 }
 
 class MakeApplePayment extends PaymentEvent {
-  String? amount;
-  String? currency;
+  final  String? amount;
+  final  String? currency;
 
   MakeApplePayment({this.amount, this.currency});
 

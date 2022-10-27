@@ -1,7 +1,5 @@
-import 'package:app/screens/bookings/book/payment_options.dart';
 import 'package:app/screens/bookings/book/service_details.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -21,9 +19,9 @@ class ConfirmBooking extends StatefulWidget {
   final List<ServiceTypes> selectedServices;
   final Map<String, dynamic> item;
   final DateTime selectedDate;
-  String? selectedTime;
+  final String? selectedTime;
 
-  ConfirmBooking({Key? key, required this.selectedServices, required this.item, required this.selectedDate, this.selectedTime}) : super(key: key);
+  const ConfirmBooking({Key? key, required this.selectedServices, required this.item, required this.selectedDate, this.selectedTime}) : super(key: key);
 
   @override
   State<ConfirmBooking> createState() => _ConfirmBookingState();
@@ -34,16 +32,15 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
 
   Future<void> getAddressFromLatLong(double latitude, double longitude) async {
     try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+      List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
 
-      print(placemarks);
-      Placemark place = placemarks[0];
+      Placemark place = placeMarks[0];
       var data = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
       address = data;
       setState(() {});
     } catch (e, s) {
-      print(e);
-      print(s);
+      debugPrint(e.toString());
+      debugPrint(s.toString());
     }
   }
 
@@ -450,9 +447,9 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
   getSelectCatIds() {
     List<String>? catIds = [];
     if (widget.selectedServices.isNotEmpty) {
-      widget.selectedServices.forEach((element) {
+      for (var element in widget.selectedServices) {
         catIds.add(element.id);
-      });
+      }
     }
     return catIds;
   }

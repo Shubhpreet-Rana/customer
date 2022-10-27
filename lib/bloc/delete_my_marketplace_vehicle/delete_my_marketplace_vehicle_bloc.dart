@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:app/data/repository/booking_repository.dart';
 import 'package:app/data/repository/delete_my_markertplace_vehicle_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +29,7 @@ class DeleteMarketPlaceVehicleBloc extends Bloc<DeleteMarketPlaceVehicleEvent, D
       }
     } catch (e) {
       emit(DeletedMyVehicleFailed("error"));
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }
