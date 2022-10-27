@@ -127,7 +127,7 @@ class _ViewCarsState extends State<ViewCars> {
                                   child: NotificationListener(
                                     onNotification: (ScrollNotification scrollInfo) {
                                       if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-                                        if (!viewCarState.isFetchingMore! && viewCarState.hasMoreData! && !viewCarState.isLoading!) {
+                                        if (!viewCarState.isFetchingMore! && viewCarState.hasMoreData! ) {
                                           BlocProvider.of<ViewCarBloc>(context).add(FetchAllVehicle(fetchingMore: true));
                                           BlocProvider.of<ViewCarBloc>(context).add(GetAllVehicle(page: viewCarState.currentPage!.toString()));
                                         }

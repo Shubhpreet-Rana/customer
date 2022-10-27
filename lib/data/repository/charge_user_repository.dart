@@ -19,7 +19,7 @@ class ChargeUserRepository {
 
       var data = {'service_provider_id': providerId, "amount": amount, "card_id": cardId, "booking_id": bookingId};
 
-      final option = Options(headers: {"Authorization": "Bearer $token", "Content-Type": "application/x-www-form-urlencoded"});
+      final option = Options(headers: {"Authorization": "Bearer $token", "Content-Type": "application/json"});
       var response = await netWorkLocator.dio.post('${EndPoints.baseUrl}${EndPoints.chargeUser}', options: option, data: data);
 
       if (response.statusCode == 200) {

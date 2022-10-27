@@ -1,8 +1,10 @@
+import 'package:app/bloc/feedback/feedback_bloc.dart';
 import 'package:app/common/assets.dart';
 import 'package:app/common/ui/background.dart';
 import 'package:app/model/my_bookings.dart';
 import 'package:app/screens/bookings/book/payment_options.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../common/colors.dart';
@@ -24,6 +26,8 @@ class BookingDetails extends StatefulWidget {
 
 class _BookingDetailsState extends State<BookingDetails> {
   TextEditingController descriptionController = TextEditingController();
+
+  double? feedbackRating;
 
   @override
   void initState() {
@@ -120,7 +124,10 @@ class _BookingDetailsState extends State<BookingDetails> {
               color: Color(0xFFF1C21C),
             ),
             onRatingUpdate: (rating) {
-              print(rating);
+              feedbackRating = rating;
+              if (mounted) {
+                setState(() {});
+              }
             },
           ),
           verticalSpacer(height: 10.0),
@@ -146,7 +153,18 @@ class _BookingDetailsState extends State<BookingDetails> {
             maxLine: 4,
           ),
           verticalSpacer(),
-          appButton(bkColor: Colours.blue.code, text: AppConstants.submitReview, height: 50.0),
+          BlocBuilder<AddFeedbackBloc, AddFeedbackState>(builder: (context, state) {
+            return GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  _addReview();
+                },
+                child: state is Loading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : appButton(bkColor: Colours.blue.code, text: AppConstants.submitReview, height: 50.0));
+          }),
           verticalSpacer(),
         ],
       );
@@ -379,5 +397,9 @@ class _BookingDetailsState extends State<BookingDetails> {
             child: const Text("Completed")),
       ],
     );
+  }
+
+  _addReview() {
+    BlocProvider.of<AddFeedbackBloc>(context).add(FeedBackRequested(rating: feedbackRating.toString(), providerId: " 71", feed: descriptionController.text));
   }
 }

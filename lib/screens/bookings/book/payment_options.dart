@@ -113,12 +113,26 @@ class _PaymentOptionsState extends State<PaymentOptions> {
                     color: Colours.hintColor.code,
                   ),
                   verticalSpacer(height: 30.0),
-                  GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        _payNowButton(cardList[selectedCard!]["id"]);
-                      },
-                      child: appButton(bkColor: selectedCard != null ? Colours.blue.code : Colors.grey, text: AppConstants.payNow, height: 50.0)),
+                  BlocListener<ChargeUserBloc, ChargeUserState>(
+                    listener: (ctx, state) {
+                      if (state is ChargeUserSuccessfully) {
+                        Navigator.of(context).pop(state.response);
+                      }
+                      if (state is ChargeUserFailed) {
+                        CommonMethods().showToast(context: context, message: state.error);
+                      }
+                    },
+                    child: BlocBuilder<ChargeUserBloc, ChargeUserState>(builder: (context, state) {
+                      return GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            _payNowButton(cardList[selectedCard!]["id"]);
+                          },
+                          child: state is Loading
+                              ? const Center(child: CircularProgressIndicator())
+                              : appButton(bkColor: selectedCard != null ? Colours.blue.code : Colors.grey, text: AppConstants.payNow, height: 50.0));
+                    }),
+                  ),
                   verticalSpacer(height: 5.0),
                 ],
               ),
@@ -290,7 +304,7 @@ class _PaymentOptionsState extends State<PaymentOptions> {
   }
 
   _payNowButton(String? id) {
-    BlocProvider.of<ChargeUserBloc>(context).add(ChargeUserRequested(providerId: "1", cardId: id, amount: widget.totalPayment.toString(), bookingId: widget.bookingId));
+    BlocProvider.of<ChargeUserBloc>(context).add(ChargeUserRequested(providerId: "71", cardId: id, amount: widget.totalPayment.toString(), bookingId: widget.bookingId));
   }
 }
 

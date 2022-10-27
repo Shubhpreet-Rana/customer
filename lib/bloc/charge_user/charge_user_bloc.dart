@@ -23,7 +23,7 @@ class ChargeUserBloc extends Bloc<ChargeUserEvent, ChargeUserState> {
       if (res['status'] == 1) {
         emit(ChargeUserSuccessfully(res["data"]));
       } else {
-        emit(ChargeUserFailed('error'));
+        emit(ChargeUserFailed(res["message"]));
       }
     } catch (e) {
       debugPrint(e.toString());
