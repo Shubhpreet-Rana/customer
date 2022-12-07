@@ -131,7 +131,7 @@ class AuthRepository {
     try {
       String deviceToken = await NotificationServices.instance.getDeviceToken;
       Map<String, dynamic> data = <String, dynamic>{
-        'user_type': 3,
+        'user_type': 2,
         "device_token": deviceToken,
         "device_type": Platform.isIOS ? 1 : 2,
         "login_type": loginType,

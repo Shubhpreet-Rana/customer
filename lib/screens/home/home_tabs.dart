@@ -30,13 +30,7 @@ class _HomeTabsState extends State<HomeTabs> with TickerProviderStateMixin<HomeT
 
   @override
   void initState() {
-    NotificationServices.instance
-      ..permissions
-      ..setForegroundNotificationPresentationOptions
-      ..getInitialMessage
-      ..onMessage
-      ..onMessageOpenedApp
-      ..onBackgroundMessage;
+
 
     BlocProvider.of<BookingBloc>(context).add(
       const GetBookingListEvent(

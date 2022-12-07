@@ -35,6 +35,7 @@ import 'bloc/profile/view/profile_bloc.dart';
 import 'bloc/vehicle/view/vehicle_bloc.dart';
 import 'common/constants.dart';
 import 'common/methods/custom_storage.dart';
+import 'common/notification_services/notifications_services.dart';
 import 'common/services/NavigationService.dart';
 import 'common/services/getit.dart';
 import 'data/repository/auth_repository.dart';
@@ -52,6 +53,13 @@ void main() async {
   Stripe.merchantIdentifier = "IN";
   CommonMethods.init();
   PreferenceUtils.init();
+  NotificationServices.instance
+    ..permissions
+    ..setForegroundNotificationPresentationOptions
+    ..getInitialMessage
+    ..onMessage
+    ..onMessageOpenedApp
+    ..onBackgroundMessage;
   await Stripe.instance.applySettings();
   runApp(const MyApp());
 }

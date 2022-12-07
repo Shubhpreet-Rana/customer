@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>App</string>
+	<string>Boulou Customer</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,22 +22,45 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb2726155580852097</string>
+				<string>com.googleusercontent.apps.1045196393723-fsjit9935l2flb6rmucnugplbc28kqm7</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FacebookAppID</key>
+	<string>2726155580852097</string>
+	<key>FacebookClientToken</key>
+	<string>def831bf6d48215799af61d6470be2e9</string>
+	<key>FacebookDisplayName</key>
+	<string>Boulou Customer</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>We need access to your camera to add photos to a listing</string>
+	<string>This app needs access to your camera to add photos for profile picture and vehicle images.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>place_picker and location libraries using this permission.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background.</string>
+	<string>This app needs access to location for address of yours for vehicle service.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>geolocator and location libraries using this permission</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>If you want to record a memo, we need access to your microphone</string>
+	<string>image_picker library using this permission.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need access to your media library in order to add photos to a listing</string>
+	<string>This app needs access to your camera to add photos for profile picture and vehicle images.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>If you want to add audio, please grant access to the speech</string>
 	<key>UIBackgroundModes</key>
@@ -66,32 +89,5 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
-
-
-	<key>CFBundleURLTypes</key>
-    <array>
-      <dict>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>CFBundleURLSchemes</key>
-        <array>
-          <string>fb2726155580852097</string>
- 	      <string>com.googleusercontent.apps.1045196393723-fsjit9935l2flb6rmucnugplbc28kqm7</string>
-        </array>
-      </dict>
-    </array>
-    <key>FacebookAppID</key>
-    <string>2726155580852097</string>
-    <key>FacebookClientToken</key>
-    <string>def831bf6d48215799af61d6470be2e9</string>
-    <key>FacebookDisplayName</key>
-    <string>Boulou Customer</string>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-      <string>fbapi</string>
-      <string>fb-messenger-share-api</string>
-    </array>
-
-
 </dict>
 </plist>

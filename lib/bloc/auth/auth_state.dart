@@ -118,5 +118,6 @@ class SocialAuthLoadingState extends SocialAuthState {
 }
 
 class SocialAuthSuccessState extends SocialAuthState {
-  const SocialAuthSuccessState();
+  final String screenName;
+  const SocialAuthSuccessState({required this.screenName});
 }

@@ -54,14 +54,22 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
+      onTap: FocusManager.instance.primaryFocus?.unfocus,
       child: BlocListener<SocialAuthBloc, SocialAuthState>(
         listener: (context, state) {
-          if (state is SocialAuthLoadingState) {
+          if (state is SocialAuthSuccessState) {
+            PreferenceUtils.setBool(AppConstants.rememberMe, _rememberMe);
+            if (state.screenName == 'setup_profile') {
+              Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const ProfileSetUpScreen()));
+            } else if (state.screenName == 'add_vehicle') {
+              Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
+            } else {
+              context.read<ProfileBloc>().add(ProfileFetchEvent());
+              Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const HomeTabs()));
+            }
+          } else if (state is SocialAuthLoadingState) {
             _commonLoader();
-          } else {
+          } else if (state is! SocialAuthSuccessState) {
             Navigator.of(context).pop();
           }
         },
@@ -85,7 +93,6 @@ class _LoginScreenState extends State<LoginScreen> {
           },
           child: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
-              print(state);
               return Scaffold(
                 body: BackgroundImage(
                   child: Column(

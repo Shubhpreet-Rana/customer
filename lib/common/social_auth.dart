@@ -50,7 +50,7 @@ Future<SocialAuthModel?> facebookAuth() async {
       final AccessToken accessToken = result.accessToken!;
       Map<String, dynamic> userData = await facebookAuth.getUserData();
       return SocialAuthModel(
-        providerId: accessToken.token,
+        providerId: accessToken.userId,
         email: userData['email'],
         displayName: userData['name'],
         photoUrl: userData['picture']['data']['url'],

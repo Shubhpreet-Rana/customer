@@ -148,10 +148,8 @@ class SocialAuthBloc extends Bloc<SocialAuthEvent, SocialAuthState> {
 
   final AuthRepository _authRepository;
 
-  FutureOr<void> _socialAuthEvent(
-      SocialAuthSignInEvent event, Emitter<SocialAuthState> emit) async {
-    BuildContext context =
-    locator<NavigationService>().navigatorKey.currentContext!;
+  FutureOr<void> _socialAuthEvent(SocialAuthSignInEvent event, Emitter<SocialAuthState> emit) async {
+    BuildContext context = locator<NavigationService>().navigatorKey.currentContext!;
     try {
       SocialAuthModel? socialAuthUserCredentials;
       String loginType = "";
@@ -166,20 +164,23 @@ class SocialAuthBloc extends Bloc<SocialAuthEvent, SocialAuthState> {
         socialAuthUserCredentials = await appleAuth();
       }
       emit(const SocialAuthLoadingState());
-      if (socialAuthUserCredentials != null &&
-          socialAuthUserCredentials.providerId.isNotEmpty) {
-        if (loginType == "google_id" &&
-            socialAuthUserCredentials.email.isEmpty) {
-          CommonMethods()
-              .showToast(context: context, message: "Email not found.");
+      if (socialAuthUserCredentials != null && socialAuthUserCredentials.providerId.isNotEmpty) {
+        if (loginType == "google_id" && socialAuthUserCredentials.email.isEmpty) {
+          CommonMethods().showToast(context: context, message: "Email not found.");
           emit(const SocialAuthInitialState());
           return;
         }
-        final res = await _authRepository.socialSignIn(
-            socialAuthUserCredentials: socialAuthUserCredentials,
-            loginType: loginType);
+        final res = await _authRepository.socialSignIn(socialAuthUserCredentials: socialAuthUserCredentials, loginType: loginType);
         if (res['status'] == 1) {
-          emit(const SocialAuthSuccessState());
+          await PreferenceUtils.setString(AppConstants.userInfo, json.encode(res)).then((value) {
+            if (res['user']['screen'] == "setup_profile") {
+              emit(const SocialAuthSuccessState(screenName: 'setup_profile'));
+            } else if (res['user']['screen'] == "add_vehicle") {
+              emit(const SocialAuthSuccessState(screenName: 'add_vehicle'));
+            } else {
+              emit(const SocialAuthSuccessState(screenName: 'home_screen'));
+            }
+          });
         } else {
           CommonMethods().showToast(
             context: context,
