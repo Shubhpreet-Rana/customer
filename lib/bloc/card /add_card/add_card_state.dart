@@ -1,43 +1,30 @@
 part of 'add_card_bloc.dart';
 
-class AddCardState extends Equatable {
-  final int? selectedCard;
-
-  const AddCardState({
-    this.selectedCard = 0,
-  });
-
-  AddCardState copyWith({
-    int? selectedCard,
-  }) =>
-      AddCardState(
-        selectedCard: selectedCard ?? this.selectedCard,
-      );
+abstract class AddCardState extends Equatable {
+  const AddCardState();
 
   @override
-  List<Object> get props => [selectedCard!];
+  List<Object?> get props => [];
 }
 
-class InitialLoading extends AddCardState {}
+class AddCardInitialState extends AddCardState {}
 
-class Loading extends AddCardState {}
+class AddCardLoadingState extends AddCardState {}
 
-class AddCardSuccessfully extends AddCardState {
+class AddCardSuccessState extends AddCardState {
   final dynamic response;
 
-  const AddCardSuccessfully(this.response);
+  const AddCardSuccessState(this.response);
 
   @override
-  // TODO: implement props
-  List<Object> get props => [response];
+  List<Object?> get props => [response];
 }
 
 class AddCardsFailed extends AddCardState {
-  final String? error;
+  final String error;
 
-  const AddCardsFailed(this.error);
+  const AddCardsFailed({required this.error});
 
   @override
-  // TODO: implement props
-  List<Object> get props => [error!];
+  List<Object> get props => [error];
 }

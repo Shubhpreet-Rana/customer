@@ -6,12 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AppHeaders {
-  Widget extendedHeader(
-          {GestureTapCallback? onTapped,
-          bool backNavigation = true,
-          required BuildContext context,
-          required String text}) =>
-      Column(
+  Widget extendedHeader({GestureTapCallback? onTapped, bool backNavigation = true, required BuildContext context, required String text}) => Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -37,18 +32,18 @@ class AppHeaders {
         ],
       );
 
-  Widget collapsedHeader({
-    bool backNavigation = true,
-    required BuildContext context,
-    String text = "",
-    bool filterIcon = true,
-    bool menuIcon = true,
-    Function()? onFilterClick,
-    Function()? onNotificationClick,
-    IconData bellIcon = Icons.notifications,
-  }) =>
+  Widget collapsedHeader(
+          {bool backNavigation = true,
+          required BuildContext context,
+          String text = "",
+          bool filterIcon = true,
+          bool menuIcon = true,
+          Function()? onFilterClick,
+          Function()? onNotificationClick,
+          IconData bellIcon = Icons.notifications,
+          bool isBottomPadding = false}) =>
       Padding(
-        padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+        padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0, bottom: isBottomPadding?20:0),
         child: Row(
           children: [
             backNavigation
@@ -91,7 +86,7 @@ class AppHeaders {
                   onTap: () {
                     if (onNotificationClick != null) onNotificationClick();
                   },
-                  child:  Icon(
+                  child: Icon(
                     bellIcon,
                     color: Colors.white,
                     size: 25.0,

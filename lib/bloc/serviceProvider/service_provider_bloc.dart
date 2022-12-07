@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/services/NavigationService.dart';
 import '../../data/repository/service_provider_repository.dart';
 import '../../main.dart';
+import '../booking/booking_bloc.dart';
 
 part 'service_provider_state.dart';
 
@@ -50,7 +51,7 @@ class ServiceProviderBloc extends Bloc<ServiceProviderEvent, ServiceProviderStat
   ) async {
     emit(CarScreenLoading());
     try {
-      final res = await serviceProviderRepository.getAllServiceProvider(categoryName: event.name, catid: event.catid, rating: event.rating, location: event.location);
+      final res = await serviceProviderRepository.getAllServiceProvider(categoryName: event.name, catid: event.catId, rating: event.rating, location: event.location);
       if (res['status'] == 1) {
         GetServiceProviderList getServiceProviderList = GetServiceProviderList.fromJson(res);
         providerData = getServiceProviderList.data!;
@@ -76,15 +77,25 @@ class ServiceProviderBloc extends Bloc<ServiceProviderEvent, ServiceProviderStat
           address_lat: event.address_lat,
           address_long: event.address_long,
           gst_amount: event.gstAmount,
+          serviceProviderId: event.serviceProviderId,
           time: event.time);
       if (res['status'] == 1) {
-        CommonMethods().showToast(context: locator<NavigationService>().navigatorKey.currentContext!, message: "Service booked successfully");
+        BlocProvider.of<BookingBloc>(locator<NavigationService>().navigatorKey.currentContext!).add(
+          const GetBookingListEvent(isLoadingInitialState: true, isLoadingMoreDataState: false, isPaginationStartFromFirstPage: true),
+        );
+        CommonMethods().showToast(
+          context: locator<NavigationService>().navigatorKey.currentContext!,
+          message: "Service booked successfully",
+          isRedColor: false,
+        );
         emit(BookingSuccessfully(providerData));
       } else {
         emit(BookingFailed(res['message'], providerData));
       }
     } catch (e) {
       emit(BookingFailed(e.toString(), providerData));
+
+      rethrow;
     }
   }
 }

@@ -27,7 +27,7 @@ class HomeRepository {
         "Authorization": "Bearer $token",
       };
       final response = await netWorkLocator.dio.get(
-        '${EndPoints.baseUrl}${EndPoints.banner}',
+        EndPoints.banner,
         options: Options(
           headers: headers,
         ),
@@ -59,13 +59,10 @@ class HomeRepository {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
       };
-      final url = "${EndPoints.baseUrl}${EndPoints.marketallvehicle}?page=$page&per_page=20";
-
+      final url = "${EndPoints.marketallvehicle}?page=$page&per_page=20";
       final response = await netWorkLocator.dio.get(
         url,
-        options: Options(
-          headers: headers,
-        ),
+        options: Options(headers: headers),
       );
       if (response.statusCode != 200) {
         throw Exception('Failed to sign in');
@@ -94,7 +91,7 @@ class HomeRepository {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
       };
-      final url = "${EndPoints.baseUrl}${EndPoints.marketvehicle}?page=$page&per_page=20";
+      final url = "${EndPoints.marketVehicle}?page=$page&per_page=20";
       final response = await netWorkLocator.dio.get(
         url,
         options: Options(
@@ -158,7 +155,7 @@ class HomeRepository {
         'car_image_3': carImage_3.isNotEmpty ? MultipartFile.fromFileSync(carImage_3, contentType: MediaType(mimeTypeData3![0], mimeTypeData3[1]), filename: basename(carImage_3)) : null,
       });
       Map<String, String> headers = {"Accept": "application/json", "Authorization": "Bearer $token", "Content-Type": "multipart/form-data; boundary=<calculated when request is sent>"};
-      const url = "${EndPoints.baseUrl}${EndPoints.addmarketvehicle}";
+      const String url = EndPoints.addmarketvehicle;
       final response = await netWorkLocator.dio.post(
         url,
         data: formData,
@@ -241,7 +238,7 @@ class HomeRepository {
         formData.files.add(MapEntry("car_image_3", MultipartFile.fromFileSync(car_image_3!, contentType: MediaType(imagePath3[0], imagePath3[1]), filename: basename(car_image_3))));
       }
       Map<String, String> headers = {"Accept": "application/json", "Authorization": "Bearer $token", "Content-Type": "multipart/form-data; boundary=<calculated when request is sent>"};
-      final url = "${EndPoints.baseUrl}${EndPoints.editmarketvehicle}?id=$id";
+      final url = "${EndPoints.editmarketvehicle}?id=$id";
       final response = await netWorkLocator.dio.post(
         url,
         data: formData,

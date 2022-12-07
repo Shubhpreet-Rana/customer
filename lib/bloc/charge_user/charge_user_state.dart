@@ -2,7 +2,6 @@ part of 'charge_user_bloc.dart';
 
 class ChargeUserState extends Equatable {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
@@ -16,7 +15,6 @@ class ChargeUserSuccessfully extends ChargeUserState {
   ChargeUserSuccessfully(this.response);
 
   @override
-  // TODO: implement props
   List<Object?> get props => [response];
 }
 
@@ -26,6 +24,5 @@ class ChargeUserFailed extends ChargeUserState {
   ChargeUserFailed(this.error);
 
   @override
-  // TODO: implement props
   List<Object?> get props => [error];
 }

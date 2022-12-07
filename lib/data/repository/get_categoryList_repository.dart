@@ -20,7 +20,7 @@ class GetCategoryListRepository {
 
 
       final option = Options(headers: {"Authorization": "Bearer $token","Accept": "application/json"});
-      var response = await netWorkLocator.dio.get('${EndPoints.baseUrl}${EndPoints.getCategoryList}', options: option);
+      var response = await netWorkLocator.dio.get(EndPoints.getCategoryList, options: option);
 
       if (response.statusCode == 200) {
         completer.complete(response.data);

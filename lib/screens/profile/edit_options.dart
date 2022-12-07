@@ -41,7 +41,7 @@ class _EditOptionsState extends State<EditOptions> {
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-                            builder: (context) => const ProfileSetUp(
+                            builder: (context) => const ProfileSetUpScreen(
                                   fromEdit: true,
                                 )));
                       },

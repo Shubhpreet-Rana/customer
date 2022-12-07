@@ -5,8 +5,8 @@ abstract class AuthEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LogInRequested extends AuthEvent {
-  LogInRequested(this.email, this.password);
+class LogInRequestedEvent extends AuthEvent {
+  LogInRequestedEvent(this.email, this.password);
 
   final String email;
   final String password;
@@ -16,8 +16,8 @@ class LogInEvent extends AuthEvent {}
 
 class RegisterEvent extends AuthEvent {}
 
-class RegisterRequested extends AuthEvent {
-  RegisterRequested(this.email, this.password, this.confirmPassword);
+class RegisterRequestedEvent extends AuthEvent {
+  RegisterRequestedEvent(this.email, this.password, this.confirmPassword);
 
   final String email;
   final String password;
@@ -26,20 +26,36 @@ class RegisterRequested extends AuthEvent {
 
 class RecoverEmailEvent extends AuthEvent {}
 
-class OtpRequested extends AuthEvent {
-  OtpRequested(this.email);
+class OtpRequestedEvent extends AuthEvent {
+  OtpRequestedEvent(this.email);
 
   final String email;
 }
 
 class ResetPasswordEvent extends AuthEvent {}
 
-class ResetPasswordRequested extends AuthEvent {
-  ResetPasswordRequested(this.email, this.otp, this.password);
+class ResetPasswordRequestedEvent extends AuthEvent {
+  ResetPasswordRequestedEvent(this.email, this.otp, this.password);
 
   final String email;
   final String otp;
   final String password;
 }
 
-class LogOutRequested extends AuthEvent {}
+class LogOutRequestedEvent extends AuthEvent {}
+
+abstract class SocialAuthEvent {
+  const SocialAuthEvent();
+}
+
+class SocialAuthSignInEvent extends SocialAuthEvent {
+  final bool isGoogleSignInEvent;
+  final bool isFacebookSignInEvent;
+  final bool isAppleSignInEvent;
+
+  const SocialAuthSignInEvent({
+    this.isAppleSignInEvent = false,
+    this.isFacebookSignInEvent = false,
+    this.isGoogleSignInEvent = false,
+  });
+}

@@ -19,7 +19,7 @@ class DeleteMarketPlaceVehicleBloc extends Bloc<DeleteMarketPlaceVehicleEvent, D
     DeleteMyVehicleRequested event,
     Emitter<DeleteMarketPlaceVehicleState> emit,
   ) async {
-    emit(Loading());
+    emit(DeleteVehicleLoadingState());
     try {
       var res = await deleteMyMarketPlaceVehicleRepository.deleteMyMarketPlaceVehicle(id: event.id!);
       if (res["status"] == 200) {

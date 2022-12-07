@@ -79,14 +79,14 @@ class _NotificationsState extends State<Notifications> {
                   textAlign: TextAlign.center,
                   text: TextSpan(
                     children: [
-                      TextSpan(text: name + " ", style: AppStyles.blackBold),
+                      TextSpan(text: "$name ", style: AppStyles.blackBold),
                       TextSpan(
-                        text: msg + " ",
+                        text: "$msg ",
                         style: AppStyles.lightText,
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       ),
                       TextSpan(
-                        text: type + ".",
+                        text: "$type.",
                         style: AppStyles.blackBold,
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       ),
@@ -94,7 +94,7 @@ class _NotificationsState extends State<Notifications> {
                   ),
                 ),
                 Text(
-                  time + " ",
+                  "$time ",
                   style: AppStyles.lightText,
                 ),
               ],

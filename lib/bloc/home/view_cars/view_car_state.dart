@@ -1,111 +1,71 @@
 part of 'view_car_bloc.dart';
 
-class ViewCarState extends Equatable {
-  final String pageSize = "20";
-  final int? currentPage;
-  final bool? hasMoreData;
-
-  final bool? isLoading;
-  final bool? isFetchingMore;
-  final List<AllVehicleData>? vehicle;
-
-  final int? currentPageMyMarket;
-  final bool? hasMoreDataMyMarket;
-
-  final bool? isLoadingMyMarket;
-  final bool? isFetchingMoreMyMarket;
-  final List<MyVehicleMarketPlace>? myMarketPlaceVehicle;
-
-  const ViewCarState(
-      {this.currentPage = 1,
-      this.hasMoreData = true,
-      this.isLoading = true,
-      this.isFetchingMore = false,
-      this.vehicle,
-      this.currentPageMyMarket = 1,
-      this.hasMoreDataMyMarket = true,
-      this.isLoadingMyMarket = true,
-      this.isFetchingMoreMyMarket = false,
-      this.myMarketPlaceVehicle});
-
-  ViewCarState copyWith({
-    int? currentPage,
-    bool? hasMoreData,
-    bool? isLoading,
-    bool? isFetchingMore,
-    List<AllVehicleData>? vehicle,
-    int? currentPageMyMarket,
-    bool? hasMoreDataMyMarket,
-    bool? isLoadingMyMarket,
-    bool? isFetchingMoreMyMarket,
-    List<MyVehicleMarketPlace>? myMarketPlaceVehicle,
-  }) =>
-      ViewCarState(
-          currentPage: currentPage ?? this.currentPage,
-          hasMoreData: hasMoreData ?? this.hasMoreData,
-          isLoading: isLoading ?? this.isLoading,
-          isFetchingMore: isFetchingMore ?? this.isFetchingMore,
-          vehicle: vehicle ?? this.vehicle,
-          currentPageMyMarket: currentPageMyMarket ?? this.currentPageMyMarket,
-          hasMoreDataMyMarket: hasMoreDataMyMarket ?? this.hasMoreDataMyMarket,
-          isLoadingMyMarket: isLoadingMyMarket ?? this.isLoadingMyMarket,
-          isFetchingMoreMyMarket:
-              isFetchingMoreMyMarket ?? this.isFetchingMoreMyMarket,
-          myMarketPlaceVehicle:
-              myMarketPlaceVehicle ?? this.myMarketPlaceVehicle);
+abstract class AllVehicleState extends Equatable {
+  const AllVehicleState();
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [
-        currentPage!,
-        hasMoreData!,
-        isLoading!,
-        isFetchingMore!,
-        vehicle ?? [],
-        currentPageMyMarket!,
-        hasMoreDataMyMarket!,
-        isLoadingMyMarket!,
-        isFetchingMoreMyMarket!,
-        myMarketPlaceVehicle ?? []
-      ];
+  List<Object> get props => [];
 }
 
-class GetAllVehicleLoading extends ViewCarState {}
-
-class GetMyMarketLoading extends ViewCarState {}
-
-class GetAllVehicleSuccessfully extends ViewCarState {
-  final List<AllVehicleData>? data;
-
-  const GetAllVehicleSuccessfully({required this.data});
-
-  @override
-  List<Object> get props => [data!];
+class AllVehicleInitialState extends AllVehicleState {
+  const AllVehicleInitialState();
 }
 
-class NoAllVehicleFound extends ViewCarState {
-  final String noData;
+class AllVehicleLoadingState extends AllVehicleState {
+  final bool isInitialLoadingState;
+  final bool isFetchingMoreLoadingState;
 
-  const NoAllVehicleFound(this.noData);
+  const AllVehicleLoadingState({
+    required this.isInitialLoadingState,
+    required this.isFetchingMoreLoadingState,
+  });
 
   @override
-  List<Object> get props => [noData];
+  List<Object> get props => [isInitialLoadingState, isFetchingMoreLoadingState];
 }
 
-class MyMarketPlaceVehicles extends ViewCarState {
-  final  List<MyVehicleMarketPlace>? myMarketVehicle;
+class AllVehicleLoadedState extends AllVehicleState {
+  final List<AllVehicleData> allVehicleList;
+  final bool isLastPage;
 
-  const MyMarketPlaceVehicles({this.myMarketVehicle});
+  const AllVehicleLoadedState(
+      {required this.allVehicleList, required this.isLastPage});
 
   @override
-  List<Object> get props => [myMarketVehicle!];
+  List<Object> get props => [allVehicleList, isLastPage];
 }
 
-class NoMyMarketVehicleFound extends ViewCarState {
-  final  String noData;
-
-  const NoMyMarketVehicleFound(this.noData);
+abstract class MyMarketVehicleState extends Equatable {
+  const MyMarketVehicleState();
 
   @override
-  List<Object> get props => [noData];
+  List<Object> get props => [];
+}
+
+class MyMarketVehicleInitialState extends MyMarketVehicleState {
+  const MyMarketVehicleInitialState();
+}
+
+class MyMarketVehicleLoadingState extends MyMarketVehicleState {
+  final bool isInitialLoadingState;
+  final bool isFetchingMoreLoadingState;
+
+  const MyMarketVehicleLoadingState({
+    required this.isInitialLoadingState,
+    required this.isFetchingMoreLoadingState,
+  });
+
+  @override
+  List<Object> get props => [isInitialLoadingState, isFetchingMoreLoadingState];
+}
+
+class MyMarketVehicleLoadedState extends MyMarketVehicleState {
+  final List<MyVehicleMarketPlace> myMarketVehicle;
+  final bool isLastPage;
+
+  const MyMarketVehicleLoadedState(
+      {required this.myMarketVehicle, required this.isLastPage});
+
+  @override
+  List<Object> get props => [myMarketVehicle, isLastPage];
 }

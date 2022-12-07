@@ -7,7 +7,6 @@ import 'package:app/data/network/dio_client.dart';
 import 'package:app/data/network/exceptions.dart';
 import 'package:dio/dio.dart';
 
-
 class ChargeUserRepository {
   final netWorkLocator = getIt.get<DioClient>();
 
@@ -17,10 +16,15 @@ class ChargeUserRepository {
       var userInfo = PreferenceUtils.getUserInfo(AppConstants.userInfo);
       String token = userInfo['token'];
 
-      var data = {'service_provider_id': providerId, "amount": amount, "card_id": cardId, "booking_id": bookingId};
+      var data = {
+        'service_provider_id': providerId,
+        "amount": double.tryParse(amount ?? "0")?.toInt(),
+        "card_id": cardId,
+        "booking_id": bookingId,
+      };
 
       final option = Options(headers: {"Authorization": "Bearer $token", "Content-Type": "application/json"});
-      var response = await netWorkLocator.dio.post('${EndPoints.baseUrl}${EndPoints.chargeUser}', options: option, data: data);
+      var response = await netWorkLocator.dio.post(EndPoints.chargeUser, options: option, data: data);
 
       if (response.statusCode == 200) {
         completer.complete(response.data);

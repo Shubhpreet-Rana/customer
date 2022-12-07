@@ -22,29 +22,28 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundImage(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: AppConstants.marketplace, context: context, backNavigation: true, onFilterClick: () {})),
-          verticalSpacer(),
-          Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: AppConstants.marketplace, context: context, backNavigation: true, onFilterClick: () {})),
+            verticalSpacer(),
+            Expanded(
               child: Container(
-                  margin: const EdgeInsets.only(bottom: 20.0, top: 2.0),
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    color: Colours.lightGray.code,
-                    borderRadius: const BorderRadius.only(
-                      bottomRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                    ),
-                  ),
-                  child: listItem(widget.car))),
-        ],
-      )),
+                margin: const EdgeInsets.only(bottom: 0.0, top: 2.0),
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  color: Colours.lightGray.code,
+                ),
+                child: _listItem(widget.car),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget listItem(AllVehicleData car) => Column(
+  Widget _listItem(AllVehicleData car) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
@@ -94,7 +93,7 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                         ],
                       ),
                       Text(
-                        "Posted on " + car.createdAt!.toString(),
+                        "Posted on ${car.createdAt!}",
                         maxLines: 2,
                         textAlign: TextAlign.center,
                         style: AppStyles.lightText12,
@@ -201,14 +200,14 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                   CircleAvatar(
                     backgroundColor: Colours.darkGray.code,
                     radius: 20.0,
-                    backgroundImage: AssetImage(car.carImage1!),
+                    backgroundImage: NetworkImage(car.userImage!),
                   ),
                   horizontalSpacer(width: 10.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        car.brandName!,
+                        "${car.userFirstName}  ${car.userLastName}",
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         style: AppStyles.blackSemiW400_1,
@@ -222,7 +221,7 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                           ),
                           horizontalSpacer(width: 5.0),
                           Text(
-                            "36 China town, Down street, \nCalifornia",
+                            car.address!,
                             maxLines: 2,
                             textAlign: TextAlign.start,
                             style: AppStyles.lightText12,
@@ -237,7 +236,7 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                           ),
                           horizontalSpacer(width: 5.0),
                           Text(
-                            "+123-456-7890",
+                            car.userMobile!,
                             maxLines: 2,
                             textAlign: TextAlign.start,
                             style: AppStyles.lightText12,

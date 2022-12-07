@@ -24,7 +24,7 @@ class DeleteMyMarketPlaceVehicleRepository {
         "Authorization": "Bearer $token",
       };
 
-      final response = await netWorkLocator.dio.delete('${EndPoints.baseUrl}${EndPoints.deleteMyMarketPlaceVehicle}?id=$id',
+      final response = await netWorkLocator.dio.delete('${EndPoints.deleteMyMarketPlaceVehicle}?id=$id',
           options: Options(
             headers: headers,
           ));

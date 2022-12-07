@@ -51,7 +51,7 @@ class ProfileRepository {
       /*netWorkLocator.dio.options.validateStatus = (status) {
         return status! < 500;
       };*/
-      final response = await netWorkLocator.dio.post('${EndPoints.baseUrl}${EndPoints.profile}',
+      final response = await netWorkLocator.dio.post(EndPoints.profile,
           data: formData,
           options: Options(
             headers: headers,
@@ -82,7 +82,7 @@ class ProfileRepository {
         "Authorization": "Bearer $token",
       };
       final response = await netWorkLocator.dio.get(
-        '${EndPoints.baseUrl}${EndPoints.getProfile}',
+        EndPoints.getProfile,
         options: Options(
           headers: headers,
         ),

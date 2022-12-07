@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:app/common/constants.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import '../../common/methods/common.dart';
 import '../../common/methods/custom_storage.dart';
+import '../../common/services/NavigationService.dart';
+import '../../common/social_auth.dart';
 import '../../data/repository/auth_repository.dart';
+import '../../main.dart';
 
 part 'auth_event.dart';
 
@@ -14,21 +18,21 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required this.authRepository}) : super(NotLoggedIn()) {
-    on<LogInRequested>(_logInUser);
-    on<RegisterRequested>(_registerUser);
+    on<LogInRequestedEvent>(_logInUser);
+    on<RegisterRequestedEvent>(_registerUser);
     on<RegisterEvent>((event, emit) => emit(NotRegistered()));
     on<LogInEvent>((event, emit) => emit(NotLoggedIn()));
-    on<OtpRequested>(_sendOtp);
+    on<OtpRequestedEvent>(_sendOtp);
     on<RecoverEmailEvent>((event, emit) => emit(ForgotPasswordOtpNotSend()));
-    on<ResetPasswordRequested>(_resetPassword);
+    on<ResetPasswordRequestedEvent>(_resetPassword);
     on<ResetPasswordEvent>((event, emit) => emit(ForgotPasswordOtpNotVerified()));
-    on<LogOutRequested>(_logOutUser);
+    on<LogOutRequestedEvent>(_logOutUser);
   }
 
   final AuthRepository authRepository;
 
   FutureOr<void> _logInUser(
-    LogInRequested event,
+    LogInRequestedEvent event,
     Emitter<AuthState> emit,
   ) async {
     emit(Loading());
@@ -59,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _registerUser(
-    RegisterRequested event,
+    RegisterRequestedEvent event,
     Emitter<AuthState> emit,
   ) async {
     emit(Loading());
@@ -85,7 +89,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _sendOtp(
-    OtpRequested event,
+    OtpRequestedEvent event,
     Emitter<AuthState> emit,
   ) async {
     emit(Loading());
@@ -107,7 +111,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _resetPassword(
-    ResetPasswordRequested event,
+    ResetPasswordRequestedEvent event,
     Emitter<AuthState> emit,
   ) async {
     emit(Loading());
@@ -129,8 +133,69 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  FutureOr<void> _logOutUser(LogOutRequested event, Emitter<AuthState> emit) async {
+  FutureOr<void> _logOutUser(LogOutRequestedEvent event, Emitter<AuthState> emit) async {
     //await locator.prefs.clear();
     emit(NotLoggedIn());
+  }
+}
+
+class SocialAuthBloc extends Bloc<SocialAuthEvent, SocialAuthState> {
+  SocialAuthBloc({required AuthRepository authRepository})
+      : _authRepository = authRepository,
+        super(const SocialAuthInitialState()) {
+    on<SocialAuthSignInEvent>(_socialAuthEvent);
+  }
+
+  final AuthRepository _authRepository;
+
+  FutureOr<void> _socialAuthEvent(
+      SocialAuthSignInEvent event, Emitter<SocialAuthState> emit) async {
+    BuildContext context =
+    locator<NavigationService>().navigatorKey.currentContext!;
+    try {
+      SocialAuthModel? socialAuthUserCredentials;
+      String loginType = "";
+      if (event.isGoogleSignInEvent) {
+        loginType = "google_id";
+        socialAuthUserCredentials = await googleAuth();
+      } else if (event.isFacebookSignInEvent) {
+        loginType = "facebook_id";
+        socialAuthUserCredentials = await facebookAuth();
+      } else if (event.isAppleSignInEvent) {
+        loginType = "apple_id";
+        socialAuthUserCredentials = await appleAuth();
+      }
+      emit(const SocialAuthLoadingState());
+      if (socialAuthUserCredentials != null &&
+          socialAuthUserCredentials.providerId.isNotEmpty) {
+        if (loginType == "google_id" &&
+            socialAuthUserCredentials.email.isEmpty) {
+          CommonMethods()
+              .showToast(context: context, message: "Email not found.");
+          emit(const SocialAuthInitialState());
+          return;
+        }
+        final res = await _authRepository.socialSignIn(
+            socialAuthUserCredentials: socialAuthUserCredentials,
+            loginType: loginType);
+        if (res['status'] == 1) {
+          emit(const SocialAuthSuccessState());
+        } else {
+          CommonMethods().showToast(
+            context: context,
+            message: res['message'],
+          );
+          emit(const SocialAuthInitialState());
+        }
+      } else {
+        emit(const SocialAuthInitialState());
+      }
+    } catch (e) {
+      CommonMethods().showToast(
+        context: context,
+        message: e.toString(),
+      );
+      emit(const SocialAuthInitialState());
+    }
   }
 }

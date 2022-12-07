@@ -18,14 +18,7 @@ class MyAppMap extends StatefulWidget {
   final ServiceTypes? serviceTypes;
   final Function? callback;
 
-   const MyAppMap(
-      {Key? key,
-      this.showPickUp = true,
-      this.showMarker = false,
-      this.latLng,
-      this.serviceTypes,
-      this.callback})
-      : super(key: key);
+  const MyAppMap({Key? key, this.showPickUp = true, this.showMarker = false, this.latLng, this.serviceTypes, this.callback}) : super(key: key);
 
   @override
   State<MyAppMap> createState() => MyAppMapState();
@@ -57,10 +50,7 @@ class MyAppMapState extends State<MyAppMap> {
       );
     }
     if (widget.showMarker) {
-      _add(
-          text: "Provider Location",
-          latitude: _kGooglePlex.target.latitude,
-          longitude: _kGooglePlex.target.longitude);
+      _add(text: "Provider Location", latitude: _kGooglePlex.target.latitude, longitude: _kGooglePlex.target.longitude);
     }
     if (widget.showPickUp) showCurrentLocation();
   }
@@ -70,23 +60,14 @@ class MyAppMapState extends State<MyAppMap> {
     if (position != null) {
       if (position?.latitude != null && position?.longitude != null) {
         if (mapController != null) {
-          mapController?.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(
-                  target: LatLng(position!.latitude, position!.longitude),
-                  zoom: 17.0)));
+          mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position!.latitude, position!.longitude), zoom: 17.0)));
         }
-        _add(
-            text: "Your Location",
-            latitude: position!.latitude,
-            longitude: position!.longitude);
+        _add(text: "Your Location", latitude: position!.latitude, longitude: position!.longitude);
       }
     }
   }
 
-  void _add(
-      {required String text,
-      required double latitude,
-      required double longitude}) {
+  void _add({required String text, required double latitude, required double longitude}) {
     var markerIdVal = text;
     final MarkerId markerId = MarkerId(markerIdVal);
 
@@ -119,15 +100,13 @@ class MyAppMapState extends State<MyAppMap> {
                 child: AppHeaders().collapsedHeader(
                     text: AppConstants.pickDL,
                     context: context,
+                    isBottomPadding: true,
                     backNavigation: true,
                     filterIcon: false,
-                    bellIcon: widget.serviceTypes != null
-                        ? Icons.check
-                        : Icons.notifications,
+                    bellIcon: widget.serviceTypes != null ? Icons.check : Icons.notifications,
                     onNotificationClick: () {
                       if (widget.serviceTypes != null) {
-                        LatLng latLng = LatLng(_kGooglePlex.target.latitude,
-                            _kGooglePlex.target.longitude);
+                        LatLng latLng = LatLng(_kGooglePlex.target.latitude, _kGooglePlex.target.longitude);
                         if (widget.callback != null) {
                           widget.callback!(latLng);
                           Navigator.of(context).pop();
@@ -138,7 +117,6 @@ class MyAppMapState extends State<MyAppMap> {
                         widget.callback!(latLng);
                         Navigator.of(context).pop();
                       }*/
-
                       } else {
                         CommonMethods().openNotifications(context);
                       }
@@ -190,7 +168,7 @@ class MyAppMapState extends State<MyAppMap> {
                 markers: Set<Marker>.of(markers.values),
               ),
             ),
-            verticalSpacer(height: 40.0)
+
           ],
         ),
       ),

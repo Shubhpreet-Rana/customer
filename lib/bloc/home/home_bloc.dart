@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../model/banner_model.dart';
+
 part 'home_event.dart';
 
 part 'home_state.dart';
@@ -24,7 +26,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       final res = await homeRepository.getBanners();
       if (res['status'] == 1) {
-        emit(GetBannerSuccessfully(data: res));
+        BannerModel bannerModel = BannerModel.fromJson(res['data']);
+        emit(GetBannerSuccessfully(bannerData: bannerModel));
       } else {
         emit(GetBannerFailed(res['message']));
       }

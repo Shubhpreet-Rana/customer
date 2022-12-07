@@ -52,7 +52,7 @@ class VehicleRepository {
       netWorkLocator.dio.options.connectTimeout = 500000;
       netWorkLocator.dio.options.receiveTimeout = 1000000;
 
-      final response = await netWorkLocator.dio.post('${EndPoints.baseUrl}${EndPoints.addVehicle}',
+      final response = await netWorkLocator.dio.post(EndPoints.addVehicle,
           data: formData,
           options: Options(
             headers: headers,
@@ -83,7 +83,7 @@ class VehicleRepository {
         "Authorization": "Bearer $token",
       };
       final response = await netWorkLocator.dio.get(
-        '${EndPoints.baseUrl}${EndPoints.getVehicle}',
+        EndPoints.getVehicle,
         options: Options(
           headers: headers,
         ),
@@ -190,7 +190,7 @@ class VehicleRepository {
     netWorkLocator.dio.options.connectTimeout = 500000;
     netWorkLocator.dio.options.receiveTimeout = 1000000;
     try {
-      final response = await netWorkLocator.dio.post('${EndPoints.baseUrl}${EndPoints.editVehicle}?id=${car.carID}',
+      final response = await netWorkLocator.dio.post('${EndPoints.editVehicle}?id=${car.carID}',
           data: formData,
           options: Options(
             headers: headers,

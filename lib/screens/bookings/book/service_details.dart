@@ -3,6 +3,7 @@ import 'package:app/screens/bookings/book/calender_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -55,11 +56,15 @@ class _ServiceDetailsState extends State<ServiceDetails> {
 
   Future<void> getAddressFromLatLong(double latitude, double longitude) async {
     try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
-      Placemark place = placemarks[0];
-      var data = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+      List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
+      Placemark place = placeMarks[0];
+      String data = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
       address = data;
       setState(() {});
+    } on PlatformException catch (e) {
+      debugPrint(e.message);
+      debugPrint(e.details);
+      debugPrint(e.code);
     } catch (e, s) {
       debugPrint(e.toString());
       debugPrint(s.toString());
@@ -70,14 +75,14 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundImage(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: widget.item['serviceType'], context: context, backNavigation: true, onFilterClick: () {})),
-          Padding(padding: const EdgeInsets.only(left: 70.0, top: 2.0), child: Text((AppConstants.servicePopularity), style: AppStyles.whiteText)),
-          verticalSpacer(),
-          Expanded(
-            child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SafeArea(bottom: false, child: AppHeaders().collapsedHeader(text: widget.item['serviceType'], context: context, backNavigation: true, onFilterClick: () {})),
+            Padding(padding: const EdgeInsets.only(left: 70.0, top: 2.0), child: Text((AppConstants.servicePopularity), style: AppStyles.whiteText)),
+            verticalSpacer(),
+            Expanded(
+              child: Container(
                 width: CommonMethods.deviceWidth(),
                 height: CommonMethods.deviceHeight(),
                 decoration: BoxDecoration(
@@ -90,134 +95,85 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                       header(),
                       verticalSpacer(height: 10.0),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-                        child: Text(AppConstants.serviceCategories, style: AppStyles.blackSemiBold),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 0.0,
+                          horizontal: 20.0,
+                        ),
+                        child: Text(
+                          AppConstants.serviceCategories,
+                          style: AppStyles.blackSemiBold,
+                        ),
                       ),
                       verticalSpacer(height: 10.0),
                       SingleChildScrollView(
                         child: Container(
-                            color: Colors.white,
-                            width: CommonMethods.deviceWidth(),
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                MediaQuery.removePadding(
-                                  context: context,
-                                  removeTop: true,
-                                  removeBottom: true,
-                                  child: ListView.builder(
-                                    itemCount: serviceType!.length,
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemBuilder: (context, i) {
-                                      return ExpansionTile(
-                                        title: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 24.0,
-                                              height: 24.0,
-                                              child: Checkbox(
-                                                  value: serviceType![i].isSelected,
-                                                  checkColor: Colors.white,
-                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                                                  onChanged: (val) {
-                                                    _onSelect(val, serviceType![i]);
-                                                  }),
-                                            ),
-                                            horizontalSpacer(
-                                              width: 10.0,
-                                            ),
-                                            Text(
-                                              serviceType![i].title,
-                                              style: AppStyles.blackSemiBold,
-                                            ),
-                                          ],
-                                        ),
-                                        children: <Widget>[
-                                          _buildExpandableContent(serviceType![i]),
+                          color: Colors.white,
+                          width: CommonMethods.deviceWidth(),
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              MediaQuery.removePadding(
+                                context: context,
+                                removeTop: true,
+                                removeBottom: true,
+                                child: ListView.builder(
+                                  itemCount: serviceType!.length,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, i) {
+                                    return ExpansionTile(
+                                      title: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 24.0,
+                                            height: 24.0,
+                                            child: Checkbox(
+                                                value: serviceType![i].isSelected,
+                                                checkColor: Colors.white,
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                                onChanged: (val) {
+                                                  _onSelect(val, serviceType![i]);
+                                                }),
+                                          ),
+                                          horizontalSpacer(
+                                            width: 10.0,
+                                          ),
+                                          Text(
+                                            serviceType![i].title,
+                                            style: AppStyles.blackSemiBold,
+                                          ),
                                         ],
-                                      );
-                                    },
-                                  ),
-                                ),
-                                verticalSpacer(),
-                                GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: () async {
-                                    bookNow();
-
-                                    /*    if (getButtonColor() ==
-                                          Colours.blue.code) {
-                                        var list = selectedServices
-                                            .where((element) =>
-                                                element.id == "6")
-                                            .toList();
-                                        if (list.isNotEmpty) {
-                                          resetServices();
-
-                                          var data = selectedServices;
-                                          latLng != null
-                                              ? await showModalBottomSheet(
-                                                  context: context,
-                                                  isScrollControlled: true,
-                                                  useRootNavigator: true,
-                                                  shape:
-                                                      const RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.vertical(
-                                                      top:
-                                                          Radius.circular(20),
-                                                    ),
-                                                  ),
-                                                  clipBehavior: Clip
-                                                      .antiAliasWithSaveLayer,
-                                                  backgroundColor:
-                                                      Colors.white,
-                                                  builder: (context) {
-                                                    //serviceType!.add(value)
-                                                    return SelectDate(
-                                                      selectedServices: data,
-                                                      item: widget.item,
-                                                    );
-                                                  })
-                                              : Navigator.of(context,
-                                                      rootNavigator: false)
-                                                  .push(CupertinoPageRoute(
-                                                      builder: (context) =>
-                                                          MyAppMap(
-                                                              isDetailPage:
-                                                                  false,
-                                                              callback:
-                                                                  (LatLng?
-                                                                      value) {
-                                                                latLng =
-                                                                    value;
-                                                                print(value);
-                                                              })));
-                                        } else {
-                                          var data = selectedServices;
-
-                                          resetServices();
-                                        }
-                                      }*/
+                                      ),
+                                      children: <Widget>[
+                                        _buildExpandableContent(serviceType![i]),
+                                      ],
+                                    );
                                   },
-                                  child: appButton(
-                                    bkColor: getButtonColor(),
-                                    text: AppConstants.bookNow,
-                                    height: 50.0,
-                                  ),
                                 ),
-                                verticalSpacer(height: 100.0),
-                              ],
-                            )),
+                              ),
+                              verticalSpacer(),
+                              appButton(
+                                bkColor: getButtonColor(),
+                                onTapped: () async {
+                                  await _bookNow();
+                                },
+                                text: AppConstants.bookNow,
+                                height: 50.0,
+                              ),
+                              verticalSpacer(height: 100.0),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                )),
-          )
-        ],
-      )),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -361,7 +317,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                   ],
                 ),
                 Text(
-                  "Joined " + widget.item['joinDate'],
+                   "Joined ${widget.item['joinDate']}",
                   maxLines: 2,
                   textAlign: TextAlign.center,
                   style: AppStyles.lightText12,
@@ -389,7 +345,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
         ),
       );
 
-  bookNow() async {
+  Future<void> _bookNow() async {
     if (selectedServices.isNotEmpty) {
       List<ServiceTypes> roadSideAssistanceExist = selectedServices.where((element) => element.id == "6").toList();
       if (roadSideAssistanceExist.isNotEmpty) {
@@ -400,7 +356,6 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                     ServiceTypes roadSideAssistanceType = roadSideAssistanceExist[0];
                     roadSideAssistanceType.lat = latLng.latitude;
                     roadSideAssistanceType.long = latLng.latitude;
-
                     await showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,

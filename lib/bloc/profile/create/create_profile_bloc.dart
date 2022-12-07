@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:app/data/repository/profile_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -24,22 +23,20 @@ class CreateProfileBloc extends Bloc<CreateEvent, CreateProfileState> {
     emit(LoadingUpdate());
     try {
       final res = await profileRepository.createProfile(
-          fName: event.fName,
-          lName: event.lName,
-          gender: event.gender,
-          address: event.address,
-          imagePath: event.imagePath,
-          mobile: event.mobile,
-          lat: event.lat,
-          lang: event.lang);
-      if (res['status'] == 1  && res['screen']!='add_vehicle') {
+        fName: event.fName,
+        lName: event.lName,
+        gender: event.gender,
+        address: event.address,
+        imagePath: event.imagePath,
+        mobile: event.mobile,
+        lat: event.lat,
+        lang: event.lang,
+      );
+      if (res['status'] == 1 && res['screen'] != 'add_vehicle') {
         emit(CreatedSuccessfully(res['message']));
-      }
-      else if(res['status'] == 1 && res['screen']=='home'){
+      } else if (res['status'] == 1 && res['screen'] == 'home') {
         emit(UpdateProfileSuccessfully(res['message']));
-      }
-
-      else {
+      } else {
         emit(CreatedFailed(res['message']));
         emit(NotCreated());
       }

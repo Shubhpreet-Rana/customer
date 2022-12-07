@@ -1,31 +1,32 @@
 part of 'view_car_bloc.dart';
 
-abstract class ViewCarEvent extends Equatable {
-  @override
-  List<Object> get props => [];
+abstract class AllVehicleEvent {
+  const AllVehicleEvent();
 }
 
-class GetAllVehicle extends ViewCarEvent {
-  final String? page;
+class AllVehicleRequestEvent extends AllVehicleEvent {
+  final bool isInitialLoadingState;
+  final bool isFetchingMoreLoadingState;
+  final bool isPaginationStartFromFirstPage;
 
-  GetAllVehicle({this.page});
+  const AllVehicleRequestEvent(
+      {required this.isInitialLoadingState,
+      required this.isFetchingMoreLoadingState,
+      required this.isPaginationStartFromFirstPage});
 }
 
-class GetMyMarketVehicle extends ViewCarEvent {
-  final  String? page;
-
-  GetMyMarketVehicle({this.page});
+abstract class MyMarketVehicleEvent {
+  const MyMarketVehicleEvent();
 }
 
-class FetchAllVehicle extends ViewCarEvent {
-  final bool? fetchingMore;
+class MyMarketVehicleRequestEvent extends MyMarketVehicleEvent {
+  final bool isInitialLoadingState;
+  final bool isFetchingMoreLoadingState;
+  final bool isPaginationStartFromFirstPage;
 
-  FetchAllVehicle({this.fetchingMore});
-
-}
-class FetchMyMarketVehicle extends ViewCarEvent {
-  final  bool? fetchingMore;
-
-  FetchMyMarketVehicle({this.fetchingMore});
-
+  const MyMarketVehicleRequestEvent({
+    required this.isInitialLoadingState,
+    required this.isFetchingMoreLoadingState,
+    required this.isPaginationStartFromFirstPage,
+  });
 }

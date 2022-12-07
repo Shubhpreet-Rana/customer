@@ -38,24 +38,42 @@ Widget rowButton({required Color? bkColor, String text = '', double paddingHoriz
       ),
     );
 
-Widget socialButton({required Color? bkColor, required String? icon, String text = ''}) => Container(
-      width: CommonMethods.deviceWidth(),
-      height: 55.0,
-      decoration: BoxDecoration(color: bkColor, borderRadius: BorderRadius.circular(10.0)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SvgPicture.asset(icon!),
-          const SizedBox(
-            width: 10.0,
-          ),
-          Text(
-            text,
-            textAlign: TextAlign.center,
-            style: AppStyles.buttonText,
-          ),
-        ],
+Widget socialButton(
+    {required Color bkColor,
+      required String? icon,
+      required String text,
+      VoidCallback? onTap}) =>
+    GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: onTap,
+      child: Container(
+        width: CommonMethods.deviceWidth(),
+        height: 55.0,
+        decoration: BoxDecoration(
+          color: bkColor,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (icon != null) SvgPicture.asset(icon),
+            if (icon == null)
+              const Icon(
+                Icons.apple,
+                color: Colors.white,
+                size: 35,
+              ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              style: AppStyles.buttonText,
+            ),
+          ],
+        ),
       ),
     );
 
@@ -77,7 +95,8 @@ Widget grayContainer(
     Container(
       padding: EdgeInsets.symmetric(horizontal: child != null || imagePath != null ? 0 : paddingHorizontal, vertical: child != null || imagePath != null ? 0 : paddingVertical),
       decoration: BoxDecoration(color: Colours.lightGray.code, borderRadius: BorderRadius.circular(bRadius)),
-      child: child??/*imagePath != null
+      child:
+          child ?? /*imagePath != null
           ? ClipRRect(
               borderRadius: BorderRadius.circular(bRadius),
               child: fromEdit
@@ -88,17 +107,17 @@ Widget grayContainer(
                     )
                   : Image.file(File(imagePath)),
             )*/
-           Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                icon,
-                Text(
-                  text,
-                  style: AppStyles.lightText,
-                )
-              ],
-            ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  icon,
+                  Text(
+                    text,
+                    style: AppStyles.lightText,
+                  )
+                ],
+              ),
     );
 
 Widget searchBox(
@@ -129,7 +148,7 @@ Widget searchBox(
               border: InputBorder.none,
               hintText: hintText,
             ),
-                onChanged: onSearchChanged,
+            onChanged: onSearchChanged,
           ))
         ],
       ),

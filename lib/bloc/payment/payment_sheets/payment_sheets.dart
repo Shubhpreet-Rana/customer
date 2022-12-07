@@ -18,9 +18,9 @@ class StripeServices {
     address: address,
   );
 
-  static getCardToken() async {
+  static Future<TokenData> getCardToken() async {
     _createPaymentMethod();
-    await stripeInstance.createToken(CreateTokenParams.card(params: cardTokenParams()));
+    return await stripeInstance.createToken(CreateTokenParams.card(params: cardTokenParams()));
   }
 
   static cardTokenParams() {
@@ -40,6 +40,7 @@ class StripeServices {
 
   static _getCardToken() async {
     return await Stripe.instance.createToken(CreateTokenParams.card(params: CardTokenParams(name: "Sahil", type: TokenType.Card, currency: "INR", address: address))).then((value) {
+      print(value);
     });
   }
 }

@@ -20,7 +20,7 @@ class AddCardRepository {
       var data = {'token': tokenId};
 
       final option = Options(headers: {"Authorization": "Bearer $token", "Content-Type": "application/x-www-form-urlencoded"});
-      var response = await netWorkLocator.dio.post('${EndPoints.baseUrl}${EndPoints.addCard}', options: option, data: data);
+      var response = await netWorkLocator.dio.post(EndPoints.addCard, options: option, data: data);
 
       if (response.statusCode == 200) {
         completer.complete(response.data);

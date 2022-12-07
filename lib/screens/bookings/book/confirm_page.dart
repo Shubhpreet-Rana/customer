@@ -33,7 +33,6 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
   Future<void> getAddressFromLatLong(double latitude, double longitude) async {
     try {
       List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
-
       Placemark place = placeMarks[0];
       var data = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
       address = data;
@@ -120,7 +119,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                                           height: 20,
                                         ),
                                         Text(
-                                          "," + widget.selectedTime!,
+                                          ",${widget.selectedTime!}",
                                           style: AppStyles.blackSemiBold,
                                         ),
                                         horizontalSpacer(width: 10.0),
@@ -232,8 +231,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                                                           totalPayment:
                                                               getTotal(),
                                                         )));*/
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
+                                          Navigator.of(context).popUntil((route) => route.isFirst);
                                         }
                                         if (state is BookingFailed) {
                                           CommonMethods().showToast(context: context, message: state.error);
@@ -253,18 +251,18 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                                         return GestureDetector(
                                             behavior: HitTestBehavior.translucent,
                                             onTap: () {
-                                              var data = {
-                                                "amount": getTotal(),
-                                                "date": widget.selectedDate,
-                                                "service_cat_id": getSelectCatIds(),
-                                                "address_lat": getAddressLAT(),
-                                                "address_long": getAddressLONG(),
-                                                "gst_amount": getTotalGST(),
-                                                "time": widget.selectedTime
-                                              };
-                                              BlocProvider.of<ServiceProviderBloc>(context).add(BookService(getTotal().toString(), widget.selectedDate.toString(), getAddressLAT(), getAddressLONG(),
-                                                  getTotalGST().toString(), widget.selectedTime, getSelectCatIds()));
-
+                                              BlocProvider.of<ServiceProviderBloc>(context).add(
+                                                BookService(
+                                                  getTotal().toString(),
+                                                  widget.selectedDate.toString(),
+                                                  getAddressLAT(),
+                                                  getAddressLONG(),
+                                                  getTotalGST().toString(),
+                                                  widget.selectedTime,
+                                                  getSelectCatIds(),
+                                                  widget.item['userId'].toString(),
+                                                ),
+                                              );
                                               /*  Navigator.of(context,
                                                     rootNavigator: true)
                                                 .push(CupertinoPageRoute(
@@ -327,7 +325,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                   style: AppStyles.blackBold,
                 ),
                 Text(
-                  "- " + vehicle.subService,
+                  "- ${vehicle.subService}",
                   style: AppStyles.lightText,
                 ),
               ],
@@ -416,7 +414,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                   ],
                 ),
                 Text(
-                  "Joined " + widget.item['joinDate'],
+                   "Joined ${widget.item['joinDate']}",
                   maxLines: 2,
                   textAlign: TextAlign.center,
                   style: AppStyles.lightText12,

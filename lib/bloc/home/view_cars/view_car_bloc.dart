@@ -1,9 +1,10 @@
 import 'dart:async';
-
-import 'package:app/data/repository/home_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-
+import '../../../common/methods/common.dart';
+import '../../../common/services/NavigationService.dart';
+import '../../../data/repository/home_repository.dart';
+import '../../../main.dart';
 import '../../../model/all_vehicle_model.dart';
 import '../../../model/my_marketplace_vehicle.dart';
 
@@ -11,83 +12,108 @@ part 'view_car_event.dart';
 
 part 'view_car_state.dart';
 
-class ViewCarBloc extends Bloc<ViewCarEvent, ViewCarState> {
+final _navigatorKey = locator<NavigationService>().navigatorKey;
+
+class AllVehicleBloc extends Bloc<AllVehicleEvent, AllVehicleState> {
   final HomeRepository homeRepository;
 
-  ViewCarBloc({required this.homeRepository}) : super(GetAllVehicleLoading()) {
-    on<GetAllVehicle>(_getAllVehicle);
-    on<GetMyMarketVehicle>(_getMyMarketVehicle);
-    on<FetchAllVehicle>(_changeFetchValueAllVehicle);
-    on<FetchMyMarketVehicle>(_changeFetchValueMyMarketVehicle);
+  AllVehicleBloc({required this.homeRepository})
+      : super(const AllVehicleInitialState()) {
+    on<AllVehicleRequestEvent>(_getAllVehicle);
   }
+
+  int _currentPageGetAllVehicle = 1;
 
   Future<FutureOr<void>> _getAllVehicle(
-    GetAllVehicle event,
-    Emitter<ViewCarState> emit,
+    AllVehicleRequestEvent event,
+    Emitter<AllVehicleState> emit,
   ) async {
-    if (event.page == null) emit(GetAllVehicleLoading());
+    emit(AllVehicleLoadingState(
+        isInitialLoadingState: event.isInitialLoadingState,
+        isFetchingMoreLoadingState: event.isFetchingMoreLoadingState));
     try {
-      final res = await homeRepository.getAllVehicle(event.page ?? "1");
+      final res = await homeRepository.getAllVehicle(
+          event.isPaginationStartFromFirstPage
+              ? "1"
+              : "$_currentPageGetAllVehicle");
       if (res['status'] == 1) {
-        AllVehicel allVehicle = AllVehicel.fromJson(res);
-        if (allVehicle.vehicle!.isEmpty) {
-          emit(const NoAllVehicleFound("No vehicle found"));
-          emit(state.copyWith(hasMoreData: false));
+        AllVehicle allVehicle = AllVehicle.fromJson(res);
+        if (allVehicle.vehicle.isEmpty) {
+          emit(const AllVehicleInitialState());
         } else {
-          emit(state.copyWith(vehicle: allVehicle.vehicle!));
-          int currentPage = state.currentPage!;
-          currentPage++;
-          emit(state.copyWith(currentPage: currentPage));
-          emit(state.copyWith(isLoading: false));
-          emit(state.copyWith(isFetchingMore: false));
-          emit(GetAllVehicleSuccessfully(data: allVehicle.vehicle));
+          _currentPageGetAllVehicle++;
+          emit(AllVehicleLoadedState(
+            allVehicleList: allVehicle.vehicle,
+            isLastPage: allVehicle.isLastPage == 1 ? true : false,
+          ));
         }
       } else {
-        emit(NoAllVehicleFound(res['message']));
+        CommonMethods().showToast(
+            context: _navigatorKey.currentContext!, message: res['message']
+            .toString()
+            .toLowerCase()
+            .contains("no vehicle found")
+            ? "All vehicle not found"
+            : res['message']);
+        emit(const AllVehicleInitialState());
       }
     } catch (e) {
-      emit(NoAllVehicleFound(e.toString()));
+      CommonMethods()
+          .showToast(context: _navigatorKey.currentContext!, message: "$e");
+      emit(const AllVehicleInitialState());
     }
   }
+}
 
-  Future<FutureOr<void>> _getMyMarketVehicle(
-    GetMyMarketVehicle event,
-    Emitter<ViewCarState> emit,
+class MyMarketVehicleBloc
+    extends Bloc<MyMarketVehicleEvent, MyMarketVehicleState> {
+  final HomeRepository homeRepository;
+
+  MyMarketVehicleBloc({required this.homeRepository})
+      : super(const MyMarketVehicleInitialState()) {
+    on<MyMarketVehicleRequestEvent>(_getMyMarketVehicle);
+  }
+
+  int _currentPageGetMyMarketVehicle = 1;
+
+  FutureOr<void> _getMyMarketVehicle(
+    MyMarketVehicleRequestEvent event,
+    Emitter<MyMarketVehicleState> emit,
   ) async {
-    if (event.page == null) emit(GetMyMarketLoading());
+    emit(MyMarketVehicleLoadingState(
+        isInitialLoadingState: event.isInitialLoadingState,
+        isFetchingMoreLoadingState: event.isFetchingMoreLoadingState));
     try {
-      final res = await homeRepository.getMyMarketVehicle(event.page ?? "");
+      final res = await homeRepository.getMyMarketVehicle(
+          event.isPaginationStartFromFirstPage
+              ? "1"
+              : "$_currentPageGetMyMarketVehicle");
       if (res['status'] == 1) {
         MyMarketPlaceVehicle allVehicle = MyMarketPlaceVehicle.fromJson(res);
-        if (allVehicle.vehicle!.isEmpty) {
-          emit(const NoMyMarketVehicleFound("No vehicle found"));
+        if (allVehicle.vehicle.isEmpty) {
+          emit(const MyMarketVehicleInitialState());
         } else {
-          emit(state.copyWith(myMarketPlaceVehicle: allVehicle.vehicle!));
-          if (allVehicle.vehicle!.isEmpty) {
-            emit(state.copyWith(hasMoreDataMyMarket: false));
-          }
-          int currentPage = state.currentPageMyMarket!;
-          currentPage++;
-          emit(state.copyWith(currentPageMyMarket: currentPage));
-          emit(state.copyWith(isLoadingMyMarket: false));
-          emit(state.copyWith(isFetchingMoreMyMarket: false));
-          emit(MyMarketPlaceVehicles(myMarketVehicle: allVehicle.vehicle));
+          _currentPageGetMyMarketVehicle++;
+          emit(MyMarketVehicleLoadedState(
+            myMarketVehicle: allVehicle.vehicle,
+            isLastPage: allVehicle.isLastPage == 1 ? true : false,
+          ));
         }
       } else {
-        emit(NoMyMarketVehicleFound(res['message']));
+        CommonMethods().showToast(
+            context: _navigatorKey.currentContext!,
+            message: res['message']
+                    .toString()
+                    .toLowerCase()
+                    .contains("no vehicle found")
+                ? "My listed vehicle not found"
+                : res['message']);
+        emit(const MyMarketVehicleInitialState());
       }
     } catch (e) {
-      emit(NoMyMarketVehicleFound(e.toString()));
+      CommonMethods()
+          .showToast(context: _navigatorKey.currentContext!, message: "$e");
+      emit(const MyMarketVehicleInitialState());
     }
-  }
-
-  Future<FutureOr<void>> _changeFetchValueAllVehicle(
-      FetchAllVehicle event, Emitter<ViewCarState> emit) async {
-    emit(state.copyWith(isFetchingMore: event.fetchingMore));
-  }
-
-  Future<FutureOr<void>> _changeFetchValueMyMarketVehicle(
-      FetchMyMarketVehicle event, Emitter<ViewCarState> emit) async {
-    emit(state.copyWith(isFetchingMoreMyMarket: event.fetchingMore));
   }
 }

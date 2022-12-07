@@ -9,12 +9,12 @@ class Loading extends HomeState {
 }
 
 class GetBannerSuccessfully extends HomeState {
-  final Map<dynamic, dynamic>? data;
+  final BannerModel bannerData;
 
-  GetBannerSuccessfully({this.data});
+  GetBannerSuccessfully({required this.bannerData});
 
   @override
-  List<Object?> get props => [data];
+  List<Object> get props => [bannerData];
 }
 
 class NoBanner extends HomeState {
@@ -23,7 +23,7 @@ class NoBanner extends HomeState {
   NoBanner(this.noData);
 
   @override
-  List<Object?> get props => [noData];
+  List<Object> get props => [noData];
 }
 
 class GetBannerFailed extends HomeState {
@@ -32,5 +32,5 @@ class GetBannerFailed extends HomeState {
   GetBannerFailed(this.error);
 
   @override
-  List<Object?> get props => [error];
+  List<Object> get props => [error];
 }

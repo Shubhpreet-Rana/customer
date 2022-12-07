@@ -21,17 +21,18 @@ class MyEditText extends StatelessWidget {
   final Widget? prefixIcon;
   final Color? bgColor;
 
-  const MyEditText(this.hintText, this.obscureValue, this.type, this.textCapital, this.paddingValue,
-      this.controllerName, this.hintColor, this.isEditable,
-      {Key? key, this.maxLine,
-        this.contentPadding,
-        this.iconClick,
-        this.textInputAction = TextInputAction.next,
-        this.isSuffix = false,
-        this.suffixIcon,
-        this.isPrefix = false,
-        this.prefixIcon,
-        this.bgColor}):super(key: key);
+  const MyEditText(this.hintText, this.obscureValue, this.type, this.textCapital, this.paddingValue, this.controllerName, this.hintColor, this.isEditable,
+      {Key? key,
+      this.maxLine,
+      this.contentPadding,
+      this.iconClick,
+      this.textInputAction = TextInputAction.next,
+      this.isSuffix = false,
+      this.suffixIcon,
+      this.isPrefix = false,
+      this.prefixIcon,
+      this.bgColor})
+      : super(key: key);
 
   Widget getContainer({Widget? child}) {
     if (maxLine != null) {
@@ -54,29 +55,29 @@ class MyEditText extends StatelessWidget {
   Widget build(BuildContext context) {
     return getContainer(
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (isPrefix) prefixIcon!,
-            Expanded(
-              child: TextFormField(
-                obscureText: obscureValue,
-                keyboardType: type,
-                textInputAction: textInputAction,
-                textCapitalization: textCapital,
-                maxLines: maxLine ?? 1,
-               // enabled: isEditable,
-                controller: controllerName,
-                style: const TextStyle(color: Colors.black, fontSize: 14.0,fontWeight: FontWeight.w400),
-                cursorColor: Colours.blue.code,
-                decoration: InputDecoration.collapsed(
-                  border: InputBorder.none,
-                  hintText: hintText,
-                  hintStyle: TextStyle(color: hintColor, fontSize: 14.0, fontWeight: FontWeight.w400),
-                ),
-              ),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        if (isPrefix) prefixIcon!,
+        Expanded(
+          child: TextFormField(
+            obscureText: obscureValue,
+            keyboardType: type,
+            textInputAction: textInputAction,
+            textCapitalization: textCapital,
+            maxLines: maxLine ?? 1,
+            // enabled: isEditable,
+            controller: controllerName,
+            style: const TextStyle(color: Colors.black, fontSize: 14.0, fontWeight: FontWeight.w400),
+            cursorColor: Colours.blue.code,
+            decoration: InputDecoration.collapsed(
+              border: InputBorder.none,
+              hintText: hintText,
+              hintStyle: TextStyle(color: hintColor, fontSize: 14.0, fontWeight: FontWeight.w400),
             ),
-            if (isSuffix) suffixIcon!
-          ],
-        ));
+          ),
+        ),
+        if (isSuffix) suffixIcon!
+      ],
+    ));
   }
 }

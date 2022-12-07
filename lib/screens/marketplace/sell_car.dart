@@ -23,35 +23,35 @@ import '../../common/ui/headers.dart';
 
 class SellCar extends StatefulWidget {
   final bool fromEdit;
-  final AllVehicleData? myVehicleMarketPlace;
-  final MyVehicleMarketPlace ? myVehicle;
+  final AllVehicleData? myVehicle ;
+  final MyVehicleMarketPlace? myVehicleMarketPlace ;
 
-  const SellCar({Key? key, this.fromEdit = false, this.myVehicleMarketPlace,this.myVehicle}) : super(key: key);
+  const SellCar({Key? key, this.fromEdit = false, this.myVehicleMarketPlace, this.myVehicle}) : super(key: key);
 
   @override
   State<SellCar> createState() => _SellCarState();
 }
 
 class _SellCarState extends State<SellCar> {
-  TextEditingController brandNameController = TextEditingController();
-  TextEditingController modelController = TextEditingController();
-  TextEditingController engineController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
-  TextEditingController manufacturingController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
-  String selectedColor = "Black";
-  String mileage = "";
-  String image1 = "";
-  String image2 = '';
-  String image3 = "";
-  String updatedImage1 = "";
-  String updatedImage2 = "";
-  String updatedImage3 = "";
-  double locationLat = 0.0;
-  double locationLang = 0.0;
+  final TextEditingController _brandNameController = TextEditingController();
+  final TextEditingController _modelController = TextEditingController();
+  final TextEditingController _engineController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _manufacturingController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final DateTime _selectedDate = DateTime.now();
+  String _selectedColor = "Black";
+  String _mileage = AppConstants.mileageItems[0];
+  String _image1 = "";
+  String _image2 = '';
+  String _image3 = "";
+  String _updatedImage1 = "";
+  String _updatedImage2 = "";
+  String _updatedImage3 = "";
+  double _locationLat = 0.0;
+  double _locationLang = 0.0;
 
   @override
   void initState() {
@@ -61,10 +61,10 @@ class _SellCarState extends State<SellCar> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: DateTime.now().subtract(const Duration(days: 7305)), lastDate: DateTime.now());
-    if (picked != null && picked != selectedDate) {
+    final DateTime? picked = await showDatePicker(context: context, initialDate: _selectedDate, firstDate: DateTime.now().subtract(const Duration(days: 7305)), lastDate: DateTime.now());
+    if (picked != null && picked != _selectedDate) {
       setState(() {
-        dateController.text = DateFormat('yyyy-MM-dd').format(picked);
+        _dateController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
     }
   }
@@ -77,10 +77,14 @@ class _SellCarState extends State<SellCar> {
           listener: (context, state) {
             if (state is AddCarSuccessfully) {
               Navigator.of(context).pop();
-              CommonMethods().showToast(context: context, message: "Car added successfully"/*, isSuccess: true, title: "Success"*/);
+              CommonMethods().showToast(context: context, message: "Car added successfully" /*, isSuccess: true, title: "Success"*/);
             }
             if (state is UpdateCarSuccessFully) {
-              BlocProvider.of<ViewCarBloc>(context).add(GetMyMarketVehicle());
+              BlocProvider.of<MyMarketVehicleBloc>(context).add(const MyMarketVehicleRequestEvent(
+                isInitialLoadingState: true,
+                isFetchingMoreLoadingState: false,
+                isPaginationStartFromFirstPage: true,
+              ));
               Navigator.of(context).pop();
             }
           },
@@ -110,15 +114,15 @@ class _SellCarState extends State<SellCar> {
                       verticalSpacer(height: 10.0),
                       headingText(text: AppConstants.brandText),
                       verticalSpacer(height: 10.0),
-                      MyEditText(AppConstants.brandText, false, TextInputType.text, TextCapitalization.none, 10.0, brandNameController, Colours.hintColor.code, true),
+                      MyEditText(AppConstants.brandText, false, TextInputType.text, TextCapitalization.none, 10.0, _brandNameController, Colours.hintColor.code, true),
                       verticalSpacer(),
                       headingText(text: AppConstants.modelText),
                       verticalSpacer(height: 10.0),
-                      MyEditText(AppConstants.modelText, false, TextInputType.text, TextCapitalization.none, 10.0, modelController, Colours.hintColor.code, true),
+                      MyEditText(AppConstants.modelText, false, TextInputType.text, TextCapitalization.none, 10.0, _modelController, Colours.hintColor.code, true),
                       verticalSpacer(),
                       headingText(text: AppConstants.engineText),
                       verticalSpacer(height: 10.0),
-                      MyEditText(AppConstants.engineText, false, TextInputType.text, TextCapitalization.none, 10.0, engineController, Colours.hintColor.code, true),
+                      MyEditText(AppConstants.engineText, false, TextInputType.text, TextCapitalization.none, 10.0, _engineController, Colours.hintColor.code, true),
                       verticalSpacer(),
                       headingText(text: AppConstants.colorText),
                       verticalSpacer(height: 10.0),
@@ -127,7 +131,7 @@ class _SellCarState extends State<SellCar> {
                         items: AppConstants.colorItems,
                         selectedItem: AppConstants.colorItems[0],
                         onChange: (String? val) {
-                          selectedColor = val!;
+                          _selectedColor = val!;
                           setState(() {});
                         },
                       ),
@@ -139,13 +143,13 @@ class _SellCarState extends State<SellCar> {
                           items: AppConstants.mileageItems,
                           selectedItem: AppConstants.mileageItems[0],
                           onChange: (value) {
-                            mileage = value;
+                            _mileage = value;
                             setState(() {});
                           }),
                       verticalSpacer(),
                       headingText(text: AppConstants.priceText),
                       verticalSpacer(height: 10.0),
-                      MyEditText(r"$", false, TextInputType.number, TextCapitalization.none, 10.0, priceController, Colours.hintColor.code, true),
+                      MyEditText(r"$", false, TextInputType.number, TextCapitalization.none, 10.0, _priceController, Colours.hintColor.code, true),
                       verticalSpacer(),
                       headingText(text: AppConstants.dateText),
                       verticalSpacer(height: 10.0),
@@ -160,7 +164,7 @@ class _SellCarState extends State<SellCar> {
                           TextInputType.text,
                           TextCapitalization.none,
                           10.0,
-                          dateController,
+                          _dateController,
                           Colours.hintColor.code,
                           false,
                           isSuffix: true,
@@ -173,7 +177,7 @@ class _SellCarState extends State<SellCar> {
                       verticalSpacer(),
                       headingText(text: AppConstants.manufacturingYearText),
                       verticalSpacer(height: 10.0),
-                      MyEditText(AppConstants.manufacturingYearText, false, TextInputType.number, TextCapitalization.none, 10.0, manufacturingController, Colours.hintColor.code, true),
+                      MyEditText(AppConstants.manufacturingYearText, false, TextInputType.number, TextCapitalization.none, 10.0, _manufacturingController, Colours.hintColor.code, true),
                       verticalSpacer(),
                       headingText(text: AppConstants.descriptionText),
                       verticalSpacer(height: 10.0),
@@ -183,7 +187,7 @@ class _SellCarState extends State<SellCar> {
                         TextInputType.text,
                         TextCapitalization.none,
                         10.0,
-                        descriptionController,
+                        _descriptionController,
                         Colours.hintColor.code,
                         true,
                         maxLine: 4,
@@ -194,7 +198,7 @@ class _SellCarState extends State<SellCar> {
                         onTap: () async {
                           try {
                             Position? position = await LocationUtil.getLocation();
-                            if (position != null) {
+                            if (position != null && mounted) {
                               LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => PlacePicker(
                                         "AIzaSyBPFuOfeRqXLrspLP3_p7MmgL2OaLzg9nk",
@@ -204,9 +208,9 @@ class _SellCarState extends State<SellCar> {
 
                               if (mounted) {
                                 setState(() {
-                                  locationLat = result.latLng!.latitude;
-                                  locationLang = result.latLng!.longitude;
-                                  addressController.text = result.formattedAddress!;
+                                  _locationLat = result.latLng!.latitude;
+                                  _locationLang = result.latLng!.longitude;
+                                  _addressController.text = result.formattedAddress!;
                                 });
                               }
                             }
@@ -220,7 +224,7 @@ class _SellCarState extends State<SellCar> {
                           TextInputType.streetAddress,
                           TextCapitalization.none,
                           10.0,
-                          addressController,
+                          _addressController,
                           Colours.hintColor.code,
                           true,
                           isSuffix: true,
@@ -242,10 +246,10 @@ class _SellCarState extends State<SellCar> {
                                 if (state is ImageSelected1Successfully) {
                                   if (state.imagePath!.isNotEmpty) {
                                     if (!widget.fromEdit) {
-                                      image1 = state.imagePath!;
+                                      _image1 = state.imagePath!;
                                     } else {
-                                      updatedImage1 = "";
-                                      image1 = state.imagePath!;
+                                      _updatedImage1 = "";
+                                      _image1 = state.imagePath!;
                                     }
                                     if (mounted) {
                                       setState(() {});
@@ -253,7 +257,7 @@ class _SellCarState extends State<SellCar> {
                                   }
                                 }
                               },
-                              child: updatedImage1 != ""
+                              child: _updatedImage1 != ""
                                   ? GestureDetector(
                                       behavior: HitTestBehavior.translucent,
                                       onTap: () async {
@@ -271,7 +275,7 @@ class _SellCarState extends State<SellCar> {
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(10.0),
                                             child: Image.network(
-                                              updatedImage1,
+                                              _updatedImage1,
                                               height: 100,
                                               width: 100,
                                               fit: BoxFit.cover,
@@ -283,7 +287,7 @@ class _SellCarState extends State<SellCar> {
                                       onTap: () async {
                                         BlocProvider.of<SellCarBloc>(context).add(Select1Image(context));
                                       },
-                                      child: image1 != ""
+                                      child: _image1 != ""
                                           ? SizedBox(
                                               height: 100,
                                               width: 100,
@@ -299,7 +303,7 @@ class _SellCarState extends State<SellCar> {
                                                   child: ClipRRect(
                                                     borderRadius: BorderRadius.circular(10.0),
                                                     child: Image.file(
-                                                      File(image1),
+                                                      File(_image1),
                                                       fit: BoxFit.cover,
                                                     ),
                                                   )),
@@ -323,10 +327,10 @@ class _SellCarState extends State<SellCar> {
                                 if (state is ImageSelected2Successfully) {
                                   if (state.imagePath!.isNotEmpty) {
                                     if (!widget.fromEdit) {
-                                      image2 = state.imagePath!;
+                                      _image2 = state.imagePath!;
                                     } else {
-                                      updatedImage2 = "";
-                                      image2 = state.imagePath!;
+                                      _updatedImage2 = "";
+                                      _image2 = state.imagePath!;
                                     }
                                     if (mounted) {
                                       setState(() {});
@@ -334,7 +338,7 @@ class _SellCarState extends State<SellCar> {
                                   }
                                 }
                               },
-                              child: updatedImage2 != ""
+                              child: _updatedImage2 != ""
                                   ? GestureDetector(
                                       behavior: HitTestBehavior.translucent,
                                       onTap: () async {
@@ -352,7 +356,7 @@ class _SellCarState extends State<SellCar> {
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(10.0),
                                             child: Image.network(
-                                              updatedImage2,
+                                              _updatedImage2,
                                               height: 100,
                                               width: 100,
                                               fit: BoxFit.cover,
@@ -364,7 +368,7 @@ class _SellCarState extends State<SellCar> {
                                       onTap: () async {
                                         BlocProvider.of<SellCarBloc>(context).add(Select2Image(context));
                                       },
-                                      child: image2 != ""
+                                      child: _image2 != ""
                                           ? SizedBox(
                                               height: 100,
                                               width: 100,
@@ -380,7 +384,7 @@ class _SellCarState extends State<SellCar> {
                                                   child: ClipRRect(
                                                     borderRadius: BorderRadius.circular(10.0),
                                                     child: Image.file(
-                                                      File(image2),
+                                                      File(_image2),
                                                       fit: BoxFit.cover,
                                                     ),
                                                   )),
@@ -404,10 +408,10 @@ class _SellCarState extends State<SellCar> {
                                 if (state is ImageSelected3Successfully) {
                                   if (state.imagePath!.isNotEmpty) {
                                     if (!widget.fromEdit) {
-                                      image3 = state.imagePath!;
+                                      _image3 = state.imagePath!;
                                     } else {
-                                      updatedImage3 = "";
-                                      image3 = state.imagePath!;
+                                      _updatedImage3 = "";
+                                      _image3 = state.imagePath!;
                                     }
                                     if (mounted) {
                                       setState(() {});
@@ -415,7 +419,7 @@ class _SellCarState extends State<SellCar> {
                                   }
                                 }
                               },
-                              child: updatedImage3 != ""
+                              child: _updatedImage3 != ""
                                   ? GestureDetector(
                                       behavior: HitTestBehavior.translucent,
                                       onTap: () async {
@@ -433,7 +437,7 @@ class _SellCarState extends State<SellCar> {
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(10.0),
                                             child: Image.network(
-                                              updatedImage3,
+                                              _updatedImage3,
                                               height: 100,
                                               width: 100,
                                               fit: BoxFit.cover,
@@ -445,7 +449,7 @@ class _SellCarState extends State<SellCar> {
                                       onTap: () async {
                                         BlocProvider.of<SellCarBloc>(context).add(Select3Image(context));
                                       },
-                                      child: image3 != ""
+                                      child: _image3 != ""
                                           ? SizedBox(
                                               height: 100,
                                               width: 100,
@@ -461,7 +465,7 @@ class _SellCarState extends State<SellCar> {
                                                   child: ClipRRect(
                                                     borderRadius: BorderRadius.circular(10.0),
                                                     child: Image.file(
-                                                      File(image3),
+                                                      File(_image3),
                                                       fit: BoxFit.cover,
                                                     ),
                                                   )),
@@ -522,101 +526,100 @@ class _SellCarState extends State<SellCar> {
   }
 
   validateData(BuildContext context) {
-    if (brandNameController.text.isEmpty) {
+    if (_brandNameController.text.isEmpty) {
       return CommonMethods().showToast(context: context, message: "Brand name is required");
-    } else if (modelController.text.isEmpty) {
-      return  CommonMethods().showToast(context:context, message: "Model is required");
-    } else if (engineController.text.isEmpty) {
-      return CommonMethods().showToast(context:context, message: "Capacity is required");
-    } else if (selectedColor.isEmpty) {
-      return  CommonMethods().showToast(context:context, message: "Color is required");
-    } else if (selectedColor.isEmpty) {
-      return  CommonMethods().showToast(context:context, message: "Color is required");
-    } else if (descriptionController.text.isEmpty) {
-      CommonMethods().showToast(context:context, message: "Description is required");
-    } else if (mileage.isEmpty) {
-      return  CommonMethods().showToast(context:context, message: "Mileage is required");
-    } else if (manufacturingController.text.isEmpty) {
-      CommonMethods().showToast(context:context, message: "Manufacturing year is required");
-    } else if (dateController.text.isEmpty) {
-      return CommonMethods().showToast(context:context, message: "Date is required");
-    } else if (priceController.text.isEmpty) {
-      CommonMethods().showToast(context:context, message: "Price is required");
-    } else if (addressController.text.isEmpty) {
-      return CommonMethods().showToast(context:context, message: "Address is required");
+    } else if (_modelController.text.isEmpty) {
+      return CommonMethods().showToast(context: context, message: "Model is required");
+    } else if (_engineController.text.isEmpty) {
+      return CommonMethods().showToast(context: context, message: "Capacity is required");
+    } else if (_selectedColor.isEmpty) {
+      return CommonMethods().showToast(context: context, message: "Color is required");
+    } else if (_selectedColor.isEmpty) {
+      return CommonMethods().showToast(context: context, message: "Color is required");
+    } else if (_descriptionController.text.isEmpty) {
+      CommonMethods().showToast(context: context, message: "Description is required");
+    } else if (_mileage.isEmpty) {
+      return CommonMethods().showToast(context: context, message: "Mileage is required");
+    } else if (_manufacturingController.text.isEmpty) {
+      CommonMethods().showToast(context: context, message: "Manufacturing year is required");
+    } else if (_dateController.text.isEmpty) {
+      return CommonMethods().showToast(context: context, message: "Date is required");
+    } else if (_priceController.text.isEmpty) {
+      CommonMethods().showToast(context: context, message: "Price is required");
+    } else if (_addressController.text.isEmpty) {
+      return CommonMethods().showToast(context: context, message: "Address is required");
     } else {
       BlocProvider.of<SellCarBloc>(context).add(AddCarToSell(
-          brandName: brandNameController.text,
-          modelName: modelController.text,
-          capacity: engineController.text,
-          color: selectedColor,
-          description: descriptionController.text,
-          mileage: mileage,
-          manufacturingYear: manufacturingController.text,
-          address: addressController.text,
-          price: priceController.text,
-          carImage_1: image1,
-          carImage_2: image2.isNotEmpty ? image2 : "",
-          carImage_3: image3.isNotEmpty ? image3 : "",
-          address_lat: locationLat,
-          address_long: locationLang));
+          brandName: _brandNameController.text,
+          modelName: _modelController.text,
+          capacity: _engineController.text,
+          color: _selectedColor,
+          description: _descriptionController.text,
+          mileage: _mileage,
+          manufacturingYear: _manufacturingController.text,
+          address: _addressController.text,
+          price: _priceController.text,
+          carImage_1: _image1,
+          carImage_2: _image2.isNotEmpty ? _image2 : "",
+          carImage_3: _image3.isNotEmpty ? _image3 : "",
+          address_lat: _locationLat,
+          address_long: _locationLang));
     }
   }
 
   void updateVehicleDetail() {
     BlocProvider.of<SellCarBloc>(context).add(UpdateCarToSell(
-        id: widget.myVehicleMarketPlace!=null? widget.myVehicleMarketPlace!.id:widget.myVehicle!.id!,
-        brandName: brandNameController.text,
-        modelName: modelController.text,
-        price: priceController.text,
-        address_long: locationLang,
-        address_lat: locationLat,
-        color: selectedColor,
-        address: addressController.text,
-        capacity: engineController.text,
-        carImage_3: image3,
-        carImage_2: image2,
-        carImage_1: image1,
-        description: descriptionController.text,
-        manufacturingYear: manufacturingController.text,
-        mileage: mileage));
+        id: widget.myVehicleMarketPlace != null ? widget.myVehicleMarketPlace!.id : widget.myVehicle!.id!,
+        brandName: _brandNameController.text,
+        modelName: _modelController.text,
+        price: _priceController.text,
+        address_long: _locationLang,
+        address_lat: _locationLat,
+        color: _selectedColor,
+        address: _addressController.text,
+        capacity: _engineController.text,
+        carImage_3: _image3,
+        carImage_2: _image2,
+        carImage_1: _image1,
+        description: _descriptionController.text,
+        manufacturingYear: _manufacturingController.text,
+        mileage: _mileage));
   }
 
   void getVehicleData() {
     if (widget.fromEdit) {
       if (widget.myVehicleMarketPlace != null) {
-        brandNameController.text = widget.myVehicleMarketPlace!.brandName!;
-        modelController.text = widget.myVehicleMarketPlace!.modelName!;
-        priceController.text = widget.myVehicleMarketPlace!.price!;
-        engineController.text = widget.myVehicleMarketPlace!.capacity!.toString();
-        mileage = widget.myVehicleMarketPlace!.mileage!;
-        dateController.text = widget.myVehicleMarketPlace!.createdAt!.toString();
-        selectedColor = widget.myVehicleMarketPlace!.color!;
-        manufacturingController.text = widget.myVehicleMarketPlace!.manufacturingYear!;
-        descriptionController.text = widget.myVehicleMarketPlace!.description!;
-        addressController.text = widget.myVehicleMarketPlace!.address!;
-        updatedImage1 = widget.myVehicleMarketPlace!.carImage1!;
-        updatedImage2 = widget.myVehicleMarketPlace!.carImage2!;
-        updatedImage3 = widget.myVehicleMarketPlace!.carImage3!;
+        _brandNameController.text = widget.myVehicleMarketPlace!.brandName!;
+        _modelController.text = widget.myVehicleMarketPlace!.modelName!;
+        _priceController.text = widget.myVehicleMarketPlace!.price!;
+        _engineController.text = widget.myVehicleMarketPlace!.capacity!.toString();
+        _mileage = widget.myVehicleMarketPlace!.mileage!;
+        _dateController.text = widget.myVehicleMarketPlace!.createdAt!.toString();
+        _selectedColor = widget.myVehicleMarketPlace!.color!;
+        _manufacturingController.text = widget.myVehicleMarketPlace!.manufacturingYear!;
+        _descriptionController.text = widget.myVehicleMarketPlace!.description!;
+        _addressController.text = widget.myVehicleMarketPlace!.address!;
+        _updatedImage1 = widget.myVehicleMarketPlace!.carImage1!;
+        _updatedImage2 = widget.myVehicleMarketPlace!.carImage2!;
+        _updatedImage3 = widget.myVehicleMarketPlace!.carImage3!;
         if (mounted) {
           setState(() {});
         }
-      }
-      else{
+      } else {
         if (widget.myVehicle != null) {
-          brandNameController.text = widget.myVehicle!.brandName!;
-          modelController.text = widget.myVehicle!.modelName!;
-          priceController.text = widget.myVehicle!.price!;
-          engineController.text = widget.myVehicle!.capacity!.toString();
-          mileage = widget.myVehicle!.mileage!;
-          dateController.text = widget.myVehicle!.createdAt!.toString();
-          selectedColor = widget.myVehicle!.color!;
-          manufacturingController.text = widget.myVehicle!.manufacturingYear!;
-          descriptionController.text = widget.myVehicle!.description!;
-          addressController.text = widget.myVehicle!.address!;
-          updatedImage1 = widget.myVehicle!.carImage1!;
-          updatedImage2 = widget.myVehicle!.carImage2!;
-          updatedImage3 = widget.myVehicle!.carImage3!;
+          _brandNameController.text = widget.myVehicle!.brandName!;
+          _modelController.text = widget.myVehicle!.modelName!;
+          _priceController.text = widget.myVehicle!.price!;
+          _engineController.text = widget.myVehicle!.capacity!.toString();
+          _mileage = widget.myVehicle!.mileage!;
+          _dateController.text = widget.myVehicle!.createdAt!.toString();
+          _selectedColor = widget.myVehicle!.color!;
+          _manufacturingController.text = widget.myVehicle!.manufacturingYear!;
+          _descriptionController.text = widget.myVehicle!.description!;
+          _addressController.text = widget.myVehicle!.address!;
+          _updatedImage1 = widget.myVehicle!.carImage1!;
+          _updatedImage2 = widget.myVehicle!.carImage2!;
+          _updatedImage3 = widget.myVehicle!.carImage3!;
           if (mounted) {
             setState(() {});
           }

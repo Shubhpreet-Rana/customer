@@ -43,8 +43,7 @@ class _CarTabState extends State<CarTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    BlocProvider.of<ServiceProviderBloc>(context).add(GetCategoryList());
-    // BlocProvider.of<ServiceProviderBloc>(context).add(AllServiceProviderList("", "", "", {}));
+
   }
 
   @override
@@ -125,102 +124,108 @@ class _CarTabState extends State<CarTab> {
                   decoration: BoxDecoration(
                     color: Colours.lightGray.code,
                   ),
-                  child: BlocListener<ServiceProviderBloc, ServiceProviderState>(
-                    listener: (context, state) {},
-                    child: BlocBuilder<ServiceProviderBloc, ServiceProviderState>(
-                      builder: (context, state) {
-                        if (state is CarScreenLoading) {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                        if (state is GetAllServiceProviderFetchSuccessfully || state is BookingFailed || state is BookingSuccessfully) {
-                          var data = state.props[0];
-                          providerData = data as List<ProviderData>;
-                          print(state);
-                          return MediaQuery.removePadding(
-                            context: context,
-                            removeTop: true,
-                            child: searchController.text.isNotEmpty && searchList.isEmpty
-                                ? const Center(
-                                    child: Text("No data found"),
-                                  )
-                                : providerData.isNotEmpty
-                                    ? ListView.builder(
-                                        itemCount: searchController.text.isNotEmpty && searchList.isNotEmpty
-                                            ? searchList.length
-                                            : filteredList.isNotEmpty
-                                                ? filteredList.length
-                                                : providerData.length,
-                                        shrinkWrap: true,
-                                        itemBuilder: (context, index) {
-                                          List<String> list = [];
-                                          List<Map<String, dynamic>> serviceProviderList = [];
-                                          ServiceCategory? serviceData = searchController.text.isNotEmpty || searchList.isNotEmpty
-                                              ? searchList[index].serviceCategory
+                  child: BlocBuilder<ServiceProviderBloc, ServiceProviderState>(
+                    builder: (context, state) {
+                      if (state is CarScreenLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (state is GetAllServiceProviderFetchSuccessfully || state is BookingFailed || state is BookingSuccessfully) {
+                        var data = state.props[0];
+                        providerData = data as List<ProviderData>;
+                        return MediaQuery.removePadding(
+                          context: context,
+                          removeTop: true,
+                          child: searchController.text.isNotEmpty && searchList.isEmpty
+                              ? const Center(
+                                  child: Text("No data found"),
+                                )
+                              : providerData.isNotEmpty
+                                  ? RefreshIndicator(
+                                      onRefresh: () async {
+                                        BlocProvider.of<ServiceProviderBloc>(context).add(const AllServiceProviderList());
+                                      },
+                                      child: ListView.builder(
+                                          itemCount: searchController.text.isNotEmpty && searchList.isNotEmpty
+                                              ? searchList.length
                                               : filteredList.isNotEmpty
-                                                  ? filteredList[index].serviceCategory
-                                                  : providerData[index].serviceCategory;
-                                          if (serviceData!.oilChange != null ||
-                                              serviceData.autoParts != null ||
-                                              serviceData.autoRepair != null ||
-                                              serviceData.carWash != null ||
-                                              serviceData.gasoline != null ||
-                                              serviceData.roadSideAssistance != null) {
-                                            var data = serviceData.toJson();
-                                            data.forEach((key, value) {
-                                              if (value != null) {
-                                                list.add(key.toString());
-                                                serviceProviderList.add({key: value});
-                                              }
-                                            });
-                                          }
+                                                  ? filteredList.length
+                                                  : providerData.length,
+                                          shrinkWrap: true,
+                                          physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                                          itemBuilder: (context, index) {
+                                            List<String> list = [];
+                                            List<Map<String, dynamic>> serviceProviderList = [];
+                                            ServiceCategory? serviceData = searchController.text.isNotEmpty || searchList.isNotEmpty
+                                                ? searchList[index].serviceCategory
+                                                : filteredList.isNotEmpty
+                                                    ? filteredList[index].serviceCategory
+                                                    : providerData[index].serviceCategory;
+                                            if (serviceData!.oilChange != null ||
+                                                serviceData.autoParts != null ||
+                                                serviceData.autoRepair != null ||
+                                                serviceData.carWash != null ||
+                                                serviceData.gasoline != null ||
+                                                serviceData.roadSideAssistance != null) {
+                                              var data = serviceData.toJson();
+                                              data.forEach((key, value) {
+                                                if (value != null) {
+                                                  list.add(key.toString());
+                                                  serviceProviderList.add({key: value});
+                                                }
+                                              });
+                                            }
 
-                                          return listItem(
-                                            image: searchController.text.isNotEmpty || searchList.isNotEmpty
-                                                ? searchList[index].profile!.userImage!
-                                                : filteredList.isNotEmpty
-                                                    ? filteredList[index].profile!.userImage!
-                                                    : providerData[index].profile!.userImage!,
-                                            serviceType: searchController.text.isNotEmpty || searchList.isNotEmpty
-                                                ? searchList[index].profile!.businessName!
-                                                : filteredList.isNotEmpty
-                                                    ? filteredList[index].profile!.businessName!
-                                                    : providerData[index].profile!.businessName!,
-                                            joinDate: searchController.text.isNotEmpty || searchList.isNotEmpty
-                                                ? searchList[index].profile!.joinDate!
-                                                : filteredList.isNotEmpty
-                                                    ? filteredList[index].profile!.joinDate!
-                                                    : providerData[index].profile!.joinDate!,
-                                            services: List.generate(list.length, (i) {
-                                              return list[i];
-                                            }),
-                                            lat: searchController.text.isNotEmpty || searchList.isNotEmpty
-                                                ? searchList[index].profile!.addressLat!
-                                                : filteredList.isNotEmpty
-                                                    ? filteredList[index].profile!.addressLat!
-                                                    : providerData[index].profile!.addressLat!,
-                                            long: searchController.text.isNotEmpty || searchList.isNotEmpty
-                                                ? searchList[index].profile!.addressLong!
-                                                : filteredList.isNotEmpty
-                                                    ? filteredList[index].profile!.addressLong!
-                                                    : providerData[index].profile!.addressLong!,
-                                            rating: searchController.text.isNotEmpty || searchList.isNotEmpty && searchList[index].profile!.rating != null
-                                                ? double.parse(searchList[index].profile!.rating ?? "4")
-                                                : filteredList.isNotEmpty && filteredList[index].profile!.rating != null
-                                                    ? double.parse(filteredList[index].profile!.rating!)
-                                                    : providerData[index].profile!.rating != null
-                                                        ? double.parse(providerData[index].profile!.rating!)
-                                                        : 4.0,
-                                            serviceProviderList: serviceProviderList,
-                                          );
-                                        })
-                                    : const Center(child: Text("No data found")),
-                          );
-                        }
-                        return const Center(
-                          child: Text("No data found"),
+                                            return listItem(
+                                                image: searchController.text.isNotEmpty || searchList.isNotEmpty
+                                                    ? searchList[index].profile!.userImage!
+                                                    : filteredList.isNotEmpty
+                                                        ? filteredList[index].profile!.userImage!
+                                                        : providerData[index].profile!.userImage!,
+                                                serviceType: searchController.text.isNotEmpty || searchList.isNotEmpty
+                                                    ? searchList[index].profile!.businessName!
+                                                    : filteredList.isNotEmpty
+                                                        ? filteredList[index].profile!.businessName!
+                                                        : providerData[index].profile!.businessName!,
+                                                joinDate: searchController.text.isNotEmpty || searchList.isNotEmpty
+                                                    ? searchList[index].profile!.joinDate!
+                                                    : filteredList.isNotEmpty
+                                                        ? filteredList[index].profile!.joinDate!
+                                                        : providerData[index].profile!.joinDate!,
+                                                services: List.generate(list.length, (i) {
+                                                  return list[i];
+                                                }),
+                                                lat: searchController.text.isNotEmpty || searchList.isNotEmpty
+                                                    ? searchList[index].profile!.addressLat!
+                                                    : filteredList.isNotEmpty
+                                                        ? filteredList[index].profile!.addressLat!
+                                                        : providerData[index].profile!.addressLat!,
+                                                long: searchController.text.isNotEmpty || searchList.isNotEmpty
+                                                    ? searchList[index].profile!.addressLong!
+                                                    : filteredList.isNotEmpty
+                                                        ? filteredList[index].profile!.addressLong!
+                                                        : providerData[index].profile!.addressLong!,
+                                                rating: searchController.text.isNotEmpty || searchList.isNotEmpty && searchList[index].profile!.rating != null
+                                                    ? double.parse(searchList[index].profile!.rating ?? "4")
+                                                    : filteredList.isNotEmpty && filteredList[index].profile!.rating != null
+                                                        ? double.parse(filteredList[index].profile!.rating!)
+                                                        : providerData[index].profile!.rating != null
+                                                            ? double.parse(providerData[index].profile!.rating!)
+                                                            : 4.0,
+                                                serviceProviderList: serviceProviderList,
+                                                userId: searchController.text.isNotEmpty || searchList.isNotEmpty
+                                                    ? searchList[index].profile!.userId
+                                                    : filteredList.isNotEmpty
+                                                        ? filteredList[index].profile!.userId
+                                                        : providerData[index].profile!.userId);
+                                          }),
+                                    )
+                                  : const Center(child: Text("No data found")),
                         );
-                      },
-                    ),
+                      }
+                      return const Center(
+                        child: Text("No data found"),
+                      );
+                    },
                   ),
                 ),
               )
@@ -236,10 +241,11 @@ class _CarTabState extends State<CarTab> {
     required String serviceType,
     required String joinDate,
     required List<String> services,
-    double rating = 4,
+    double rating = 3,
     double? lat,
     double? long,
     List<Map<String, dynamic>>? serviceProviderList,
+    required int userId,
   }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -257,6 +263,7 @@ class _CarTabState extends State<CarTab> {
             children: [
               SizedBox(
                 width: 100.0,
+                height: 80,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: CachedNetworkImage(
@@ -275,11 +282,11 @@ class _CarTabState extends State<CarTab> {
                     Text(
                       serviceType,
                       maxLines: 2,
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.start,
                       style: AppStyles.blackSemiBold,
                     ),
                     Text(
-                      "Joined " + joinDate,
+                      "Joined $joinDate",
                       maxLines: 2,
                       textAlign: TextAlign.center,
                       style: AppStyles.lightText12,
@@ -328,12 +335,13 @@ class _CarTabState extends State<CarTab> {
               Row(
                 children: [
                   RatingBarIndicator(
-                      itemBuilder: (context, _) => const Icon(
-                            Icons.star,
-                            color: Color(0xFFF1C21C),
-                          ),
-                      rating: rating,
-                      itemSize: 18.0),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      color: Color(0xFFF1C21C),
+                    ),
+                    rating: rating,
+                    itemSize: 18.0,
+                  ),
                   /* RatingBar.builder(
                       initialRating: rating,
                       minRating: 1,
@@ -356,11 +364,26 @@ class _CarTabState extends State<CarTab> {
               Row(
                 children: [
                   GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => MyAppMap(showPickUp: false, showMarker: true, latLng: LatLng(lat!, long!))));
-                      },
-                      child: rowButton(bkColor: Colours.lightWhite.code, textColor: Colours.blue.code, text: AppConstants.location, paddingHorizontal: 8.0, paddingVertical: 7.0)),
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(
+                          builder: (context) => MyAppMap(
+                            showPickUp: false,
+                            showMarker: true,
+                            latLng: LatLng(lat!, long!),
+                          ),
+                        ),
+                      );
+                    },
+                    child: rowButton(
+                      bkColor: Colours.lightWhite.code,
+                      textColor: Colours.blue.code,
+                      text: AppConstants.location,
+                      paddingHorizontal: 8.0,
+                      paddingVertical: 7.0,
+                    ),
+                  ),
                   horizontalSpacer(),
                   GestureDetector(
                       behavior: HitTestBehavior.translucent,
@@ -373,7 +396,8 @@ class _CarTabState extends State<CarTab> {
                           "rating": rating,
                           "lat": lat,
                           "serviceProviderList": serviceProviderList,
-                          "long": long
+                          "long": long,
+                          "userId": userId
                         };
                         Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => ServiceDetails(item: item)));
                       },
@@ -388,7 +412,7 @@ class _CarTabState extends State<CarTab> {
   }
 
   getDefaultRefreshData() {
-    BlocProvider.of<ServiceProviderBloc>(context).add(AllServiceProviderList("", "", "", const {}));
+    BlocProvider.of<ServiceProviderBloc>(context).add(const AllServiceProviderList());
   }
 
   Future<String> getAddressFromLatLong(double latitude, double longitude) async {
@@ -405,9 +429,17 @@ class _CarTabState extends State<CarTab> {
       return;
     }
 
-    for (var element in providerData) {
-      if (element.profile!.businessName!.toLowerCase().contains(text.toLowerCase())) {
-        searchList.add(element);
+    if (filteredList.isNotEmpty) {
+      for (var element in filteredList) {
+        if (element.profile!.businessName!.toLowerCase().contains(text.toLowerCase())) {
+          searchList.add(element);
+        }
+      }
+    } else {
+      for (var element in providerData) {
+        if (element.profile!.businessName!.toLowerCase().contains(text.toLowerCase())) {
+          searchList.add(element);
+        }
       }
     }
 

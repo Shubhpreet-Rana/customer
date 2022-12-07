@@ -1,20 +1,18 @@
+import 'dart:async';
 import 'dart:io';
-
 import 'package:app/common/services/NavigationService.dart';
 import 'package:app/screens/notifications/notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:images_picker/images_picker.dart';
 import '../../screens/filters/filters.dart';
 
 class CommonMethods {
   static GetIt? _locator;
-  final ImagePicker _picker = ImagePicker();
 
-  static Future<GetIt> get _instance async => _locator ??= GetIt.instance;
+  static FutureOr<GetIt> get _instance => _locator ??= GetIt.instance;
 
   static Future<GetIt> init() async {
     _locator = await _instance;
@@ -31,8 +29,12 @@ class CommonMethods {
     Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const ApplyFilters()));
   }
 
-  openNotifications(BuildContext context) {
-    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const Notifications()));
+  void openNotifications(BuildContext context) {
+    Navigator.of(context, rootNavigator: false).push(
+      CupertinoPageRoute(
+        builder: (context) => const Notifications(),
+      ),
+    );
   }
 
   Future<File?> showAlertDialog(BuildContext context, {int imageQuality = 85}) async {
@@ -46,7 +48,7 @@ class CommonMethods {
                 CupertinoDialogAction(
                     isDefaultAction: true,
                     onPressed: () async {
-                      selectedImage = await pickOrCaptureImage(false, imageQuality: imageQuality);
+                      selectedImage = await pickOrCaptureImage(context, false, imageQuality: imageQuality).whenComplete(() => Navigator.pop(context));
 
                       /*var status = await PermissionHandler.requestGalleryPermission();
                       if (status.isGranted) {
@@ -55,15 +57,14 @@ class CommonMethods {
                       } else {
                         openAppSettings();
                       }*/
-                      Navigator.pop(context);
                     },
                     child: const Text("Gallery")),
                 CupertinoDialogAction(
                     textStyle: const TextStyle(color: Colors.red),
                     isDefaultAction: true,
                     onPressed: () async {
-                      selectedImage = await pickOrCaptureImage(true, imageQuality: imageQuality);
-/*
+                      selectedImage = await pickOrCaptureImage(context, true, imageQuality: imageQuality).whenComplete(() => Navigator.pop(context));
+                      /*
 
                       var status = await PermissionHandler.requestCameraPermission();
                       if (status.isGranted) {
@@ -71,8 +72,6 @@ class CommonMethods {
                         openAppSettings();
                       }
 */
-
-                      Navigator.pop(context);
                     },
                     child: const Text("Camera")),
               ],
@@ -80,24 +79,38 @@ class CommonMethods {
     return selectedImage;
   }
 
-  Future<File?> pickOrCaptureImage(bool isCamera, {int imageQuality = 85}) async {
-    // Pick an image
-    if (!isCamera) {
-      var image = await ImagesPicker.pick(pickType: PickType.image,
-      count: 1,
-      maxSize: imageQuality); /*_picker.getImage(source: ImageSource.gallery, imageQuality: imageQuality);*/
-      return File(image!.first.path);
-    }
-    // Capture a photo
-    if (isCamera) {
-      var photo = await ImagesPicker.openCamera(pickType: PickType.image,maxSize: imageQuality) /*_picker.getImage(source: ImageSource.camera)*/;
-      return File(photo!.first.path);
+  Future<File?> pickOrCaptureImage(BuildContext context, bool isCamera, {int imageQuality = 85}) async {
+    try {
+      // Pick an image
+      if (!isCamera) {
+        var image = await ImagesPicker.pick(pickType: PickType.image, count: 1, maxSize: imageQuality); /*_picker.getImage(source: ImageSource.gallery, imageQuality: imageQuality);*/
+        return File(image!.first.path);
+      }
+      // Capture a photo
+      if (isCamera) {
+        var photo = await ImagesPicker.openCamera(pickType: PickType.image, maxSize: imageQuality) /*_picker.getImage(source: ImageSource.camera)*/;
+        return File(photo!.first.path);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      CommonMethods().showToast(context: context, message: "Try again!");
     }
     return null;
   }
 
-  showToast({required BuildContext context, String? message}) {
+  Future<bool?> showToast({
+    required BuildContext context,
+    required String message,
+    bool isRedColor = true,
+  }) {
     return Fluttertoast.showToast(
-        msg: message!, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.TOP, timeInSecForIosWeb: 1, backgroundColor: Colors.red, textColor: Colors.white, fontSize: 16.0);
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 1,
+      backgroundColor: isRedColor ? Colors.red : Colors.green,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 }

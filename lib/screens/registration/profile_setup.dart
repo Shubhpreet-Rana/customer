@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:app/common/ui/avatar.dart';
 import 'package:app/common/ui/background.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,328 +18,335 @@ import '../../common/ui/edit_text.dart';
 import '../../common/ui/headers.dart';
 import '../vehicle/vehicle_details.dart';
 
-class ProfileSetUp extends StatefulWidget {
+class ProfileSetUpScreen extends StatefulWidget {
   final bool fromEdit;
 
-  const ProfileSetUp({Key? key, this.fromEdit = false}) : super(key: key);
+  const ProfileSetUpScreen({Key? key, this.fromEdit = false}) : super(key: key);
 
   @override
-  State<ProfileSetUp> createState() => _ProfileSetUpState();
+  State<ProfileSetUpScreen> createState() => _ProfileSetUpScreenState();
 }
 
-class _ProfileSetUpState extends State<ProfileSetUp> {
-  TextEditingController fNameController = TextEditingController(text: kDebugMode ? "Test fName" : "");
-  TextEditingController lNameController = TextEditingController(text: kDebugMode ? "Test lName" : "");
-  TextEditingController mobileController = TextEditingController(text: kDebugMode ? "9090909090" : "");
-  TextEditingController addressController = TextEditingController(text: kDebugMode ? "Mohali Phase 3B2" : "");
-  TextEditingController cardNumberController = TextEditingController();
-  TextEditingController cardExpDateController = TextEditingController();
-  TextEditingController cardCvvController = TextEditingController();
-  TextEditingController cardNameController = TextEditingController();
-  int selectedGender = 1;
-  String genderText = AppConstants.genderItems[0];
-  String? selectedPaymentOption;
-  bool showAddCard = false;
-  File? selectedImage;
-  String? imageUrl;
-  double locationLat = 0.0;
-  double locationLang = 0.0;
+class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
+  final TextEditingController _fNameController = TextEditingController(/*text: kDebugMode ? "Test fName" : ""*/);
+  final TextEditingController _lNameController = TextEditingController(/*text: kDebugMode ? "Test lName" : ""*/);
+  final TextEditingController _mobileController = TextEditingController(/*text: kDebugMode ? "9090909090" : ""*/);
+  final TextEditingController _addressController = TextEditingController(/*text: kDebugMode ? "Mohali Phase 3B2" : ""*/);
+  final TextEditingController _cardNumberController = TextEditingController();
+  final TextEditingController _cardExpDateController = TextEditingController();
+  final TextEditingController _cardCvvController = TextEditingController();
+  final TextEditingController _cardNameController = TextEditingController();
+  int _selectedGender = 1;
+  String _genderText = AppConstants.genderItems[0];
+  String? _selectedPaymentOption;
+  bool _showAddCard = false;
+  File? _selectedImage;
+  String? _imageUrl;
+  double _locationLat = 0.0;
+  double _locationLang = 0.0;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     var state = context.read<ProfileBloc>().state;
     if (state is ProfileLoaded) {
-      fNameController.text = state.userProfile.user!.firstName ?? "";
-      lNameController.text = state.userProfile.user!.lastName ?? "";
-      mobileController.text = state.userProfile.user!.mobile ?? "";
-      addressController.text = state.userProfile.user!.address ?? "";
-      genderText = state.userProfile.user!.getGenderText;
-      imageUrl = state.userProfile.user!.userImage;
-      locationLat = (state.userProfile.user!.addressLat != null ? double.tryParse(state.userProfile.user!.addressLat!) : 0.0)!;
-      locationLang = (state.userProfile.user!.addressLong != null ? double.tryParse(state.userProfile.user!.addressLong!) : 0.0)!;
+      _fNameController.text = state.userProfile.user?.firstName ?? "";
+      _lNameController.text = state.userProfile.user?.lastName ?? "";
+      _mobileController.text = state.userProfile.user?.mobile ?? "";
+      _addressController.text = state.userProfile.user?.address ?? "";
+      _genderText = state.userProfile.user?.getGenderText ?? "";
+      _imageUrl = state.userProfile.user?.userImage;
+      _locationLat = (state.userProfile.user != null && state.userProfile.user?.addressLat != null ? double.tryParse(state.userProfile.user!.addressLat!) : 0.0) ?? 0.0;
+      _locationLang = (state.userProfile.user != null && state.userProfile.user?.addressLong != null ? double.tryParse(state.userProfile.user!.addressLong!) : 0.0) ?? 0.0;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreateProfileBloc, CreateProfileState>(
-      listener: (context, state) {
-        if (state is CreatedSuccessfully) {
-          CommonMethods().showToast(context: context, message: state.success);
-          Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const VehicleDetails()));
-        }
-        if (state is UpdateProfileSuccessfully) {
-          Navigator.of(context).pop();
-          context.read<ProfileBloc>().add(ProfileFetchEvent());
-        }
-        if (state is CreatedFailed) {
-          CommonMethods().showToast(context: context, message: state.error);
-        }
-      },
-      child: BlocBuilder<CreateProfileBloc, CreateProfileState>(builder: (context, state) {
-        return Scaffold(
-          body: BackgroundImage(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SafeArea(bottom: false, child: AppHeaders().extendedHeader(text: widget.fromEdit ? AppConstants.editProfile : AppConstants.setup, context: context)),
-                verticalSpacer(
-                  height: 40.0,
-                ),
-                Expanded(
-                  child: Container(
-                    width: CommonMethods.deviceWidth(),
-                    height: CommonMethods.deviceHeight(),
-                    padding: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 5.0, top: 40.0),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(33),
-                        topRight: Radius.circular(33),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: BlocListener<CreateProfileBloc, CreateProfileState>(
+        listener: (BuildContext context, state) {
+          if (state is CreatedSuccessfully) {
+            CommonMethods().showToast(context: context, message: state.success);
+            Navigator.of(context, rootNavigator: true).pushReplacement(
+              CupertinoPageRoute(
+                builder: (context) => const VehicleDetails(),
+              ),
+            );
+          }
+          if (state is UpdateProfileSuccessfully) {
+            Navigator.of(context).pop();
+            context.read<ProfileBloc>().add(ProfileFetchEvent());
+          }
+          if (state is CreatedFailed) {
+            CommonMethods().showToast(context: context, message: state.error);
+          }
+        },
+        child: BlocBuilder<CreateProfileBloc, CreateProfileState>(builder: (context, state) {
+          return Scaffold(
+            body: BackgroundImage(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SafeArea(bottom: false, child: AppHeaders().extendedHeader(text: widget.fromEdit ? AppConstants.editProfile : AppConstants.setup, context: context)),
+                  verticalSpacer(
+                    height: 40.0,
+                  ),
+                  Expanded(
+                    child: Container(
+                      width: CommonMethods.deviceWidth(),
+                      height: CommonMethods.deviceHeight(),
+                      padding: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 5.0, top: 40.0),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(33),
+                          topRight: Radius.circular(33),
+                        ),
+                        color: Color.fromRGBO(255, 255, 255, 1),
                       ),
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                    ),
-                    child: SingleChildScrollView(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Avatar(
-                          radius: 50.0,
-                          isCamera: true,
-                          imagePath: widget.fromEdit && selectedImage == null
-                              ? imageUrl!
-                              : selectedImage == null
-                                  ? ""
-                                  : selectedImage!.path,
-                          isFile: selectedImage != null ? true : false,
-                          fromUrl: widget.fromEdit && selectedImage == null ? true : false,
-                          onSelect: () async {
-                            selectedImage = await CommonMethods().showAlertDialog(context);
-                            if (mounted) setState(() {});
-                          },
-                        ),
-                        verticalSpacer(),
-                        headingText(text: AppConstants.userName),
-                        verticalSpacer(height: 10.0),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: MyEditText(AppConstants.fNameHint, false, TextInputType.text, TextCapitalization.none, 10.0, fNameController, Colours.hintColor.code, true),
-                            ),
-                            horizontalSpacer(),
-                            Expanded(
-                              child: MyEditText(AppConstants.lNameHint, false, TextInputType.text, TextCapitalization.none, 10.0, lNameController, Colours.hintColor.code, true),
-                            ),
-                          ],
-                        ),
-                        verticalSpacer(),
-                        headingText(text: AppConstants.genderHint),
-                        verticalSpacer(height: 10.0),
-                        AppDropdown(
-                          bgColor: Colours.blue.code,
-                          items: AppConstants.genderItems,
-                          selectedItem: genderText,
-                          onChange: (item) {
-                            if (item == AppConstants.genderItems[0]) {
-                              selectedGender = 1;
-                            }
-                            if (item == AppConstants.genderItems[1]) {
-                              selectedGender = 2;
-                            }
-                            if (item == AppConstants.genderItems[2]) {
-                              selectedGender = 3;
-                            }
-                          },
-                        ),
-                        verticalSpacer(),
-                        headingText(text: AppConstants.mobileHint),
-                        verticalSpacer(height: 10.0),
-                        MyEditText(AppConstants.mobileHint, false, TextInputType.phone, TextCapitalization.none, 10.0, mobileController, Colours.hintColor.code, true),
-                        verticalSpacer(),
-                        headingText(text: AppConstants.addressHint),
-                        verticalSpacer(height: 10.0),
-                        MyEditText(
-                          AppConstants.addressExp,
-                          false,
-                          TextInputType.streetAddress,
-                          TextCapitalization.none,
-                          10.0,
-                          addressController,
-                          Colours.hintColor.code,
-                          true,
-                          isSuffix: true,
-                          suffixIcon: GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () async {
-                              try {
-                                Position? position = await LocationUtil.getLocation();
-                                if (position != null) {
-                                  LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => PlacePicker(
-                                            "AIzaSyBPFuOfeRqXLrspLP3_p7MmgL2OaLzg9nk",
-                                          )));
-
-                                  // Handle the result in your way
-
-                                  if (mounted) {
-                                    setState(() {
-                                      locationLat = result.latLng!.latitude;
-                                      locationLang = result.latLng!.longitude;
-                                      addressController.text = result.formattedAddress!;
-                                    });
-                                  }
-                                  /*LatLng latLng = LatLng(position.latitude, position.longitude);
-                                  //void showPlacePicker() async {
-                                  Map<String, dynamic>? result = await Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => PlacePicker(
-                                            displayLocation: latLng,
-                                          )));
-
-                                  if (mounted && result != null && result.isNotEmpty) {
-                                    setState(() {
-                                      locationResult = result;
-                                      addressController.text = result['address'];
-                                    });
-                                  }*/
-                                }
-                              } catch (e) {
-                                throw e.toString();
+                      child: SingleChildScrollView(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Avatar(
+                            radius: 50.0,
+                            isCamera: true,
+                            imagePath: widget.fromEdit && _selectedImage == null
+                                ? _imageUrl!
+                                : _selectedImage == null
+                                    ? ""
+                                    : _selectedImage!.path,
+                            isFile: _selectedImage != null ? true : false,
+                            fromUrl: widget.fromEdit && _selectedImage == null ? true : false,
+                            onSelect: () async {
+                              _selectedImage = await CommonMethods().showAlertDialog(context);
+                              if (mounted) setState(() {});
+                            },
+                          ),
+                          verticalSpacer(),
+                          headingText(text: AppConstants.userName),
+                          verticalSpacer(height: 10.0),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: MyEditText(AppConstants.fNameHint, false, TextInputType.text, TextCapitalization.none, 10.0, _fNameController, Colours.hintColor.code, true),
+                              ),
+                              horizontalSpacer(),
+                              Expanded(
+                                child: MyEditText(AppConstants.lNameHint, false, TextInputType.text, TextCapitalization.none, 10.0, _lNameController, Colours.hintColor.code, true),
+                              ),
+                            ],
+                          ),
+                          verticalSpacer(),
+                          headingText(text: AppConstants.genderHint),
+                          verticalSpacer(height: 10.0),
+                          AppDropdown(
+                            bgColor: Colours.blue.code,
+                            items: AppConstants.genderItems,
+                            selectedItem: _genderText,
+                            onChange: (item) {
+                              if (item == AppConstants.genderItems[0]) {
+                                _selectedGender = 1;
+                              }
+                              if (item == AppConstants.genderItems[1]) {
+                                _selectedGender = 2;
+                              }
+                              if (item == AppConstants.genderItems[2]) {
+                                _selectedGender = 3;
                               }
                             },
-                            child: Icon(
-                              Icons.location_pin,
-                              color: Colours.blue.code,
+                          ),
+                          verticalSpacer(),
+                          headingText(text: AppConstants.mobileHint),
+                          verticalSpacer(height: 10.0),
+                          MyEditText(AppConstants.mobileHint, false, TextInputType.phone, TextCapitalization.none, 10.0, _mobileController, Colours.hintColor.code, true),
+                          verticalSpacer(),
+                          headingText(text: AppConstants.addressHint),
+                          verticalSpacer(height: 10.0),
+                          MyEditText(
+                            AppConstants.addressExp,
+                            false,
+                            TextInputType.streetAddress,
+                            TextCapitalization.none,
+                            10.0,
+                            _addressController,
+                            Colours.hintColor.code,
+                            true,
+                            isSuffix: true,
+                            suffixIcon: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () async {
+                                try {
+                                  Position? position = await LocationUtil.getLocation();
+                                  if (position != null && mounted) {
+                                    LocationResult? result = await Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => PlacePicker(
+                                              "AIzaSyBPFuOfeRqXLrspLP3_p7MmgL2OaLzg9nk",
+                                            )));
+
+                                    // Handle the result in your way
+
+                                    if (mounted && result != null) {
+                                      setState(() {
+                                        _locationLat = result.latLng!.latitude;
+                                        _locationLang = result.latLng!.longitude;
+                                        _addressController.text = result.formattedAddress!;
+                                      });
+                                    }
+                                    /*LatLng latLng = LatLng(position.latitude, position.longitude);
+                                    //void showPlacePicker() async {
+                                    Map<String, dynamic>? result = await Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => PlacePicker(
+                                              displayLocation: latLng,
+                                            )));
+
+                                    if (mounted && result != null && result.isNotEmpty) {
+                                      setState(() {
+                                        locationResult = result;
+                                        addressController.text = result['address'];
+                                      });
+                                    }*/
+                                  }
+                                } catch (e) {
+                                  debugPrint(e.toString());
+                                }
+                              },
+                              child: Icon(
+                                Icons.location_pin,
+                                color: Colours.blue.code,
+                              ),
                             ),
                           ),
-                        ),
-                        verticalSpacer(),
-                        headingText(text: AppConstants.paymentHint),
-                        verticalSpacer(height: 10.0),
-                        AppDropdown(
-                          bgColor: Colours.blue.code,
-                          items: AppConstants.paymentItems,
-                          selectedItem: AppConstants.paymentItems[0],
-                          onChange: (value) {
-                            selectedPaymentOption = value;
-                            if (selectedPaymentOption == AppConstants.paymentItems[1] || selectedPaymentOption == AppConstants.paymentItems[2]) {
-                              showAddCard = true;
-                            } else {
-                              showAddCard = false;
-                            }
-                            setState(() {});
-                          },
-                        ),
-                        verticalSpacer(),
-                        if (!showAddCard)
-                          state is LoadingUpdate
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : submitButton(),
-                        verticalSpacer(height: showAddCard ? 20 : 50),
-                        if (showAddCard)
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              headingText(text: AppConstants.cardNumberHint),
-                              verticalSpacer(height: 10.0),
-                              MyEditText(
-                                AppConstants.cardNumberHint,
-                                false,
-                                const TextInputType.numberWithOptions(),
-                                TextCapitalization.none,
-                                10.0,
-                                cardNumberController,
-                                Colours.hintColor.code,
-                                true,
-                              ),
-                              verticalSpacer(),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: headingText(text: AppConstants.cardExpDateHint),
-                                  ),
-                                  horizontalSpacer(),
-                                  Expanded(
-                                    child: headingText(text: AppConstants.cardCvvHint),
-                                  ),
-                                ],
-                              ),
-                              verticalSpacer(height: 10.0),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: MyEditText(AppConstants.cardExpDateHint, false, const TextInputType.numberWithOptions(), TextCapitalization.none, 10.0, cardExpDateController,
-                                        Colours.hintColor.code, true),
-                                  ),
-                                  horizontalSpacer(),
-                                  Expanded(
-                                    child: MyEditText(AppConstants.cardCvvHint, false, TextInputType.number, TextCapitalization.none, 10.0, cardCvvController, Colours.hintColor.code, true),
-                                  ),
-                                ],
-                              ),
-                              verticalSpacer(),
-                              headingText(text: AppConstants.cardNameHint),
-                              verticalSpacer(height: 10.0),
-                              MyEditText(
-                                AppConstants.cardNameHint,
-                                false,
-                                TextInputType.text,
-                                TextCapitalization.none,
-                                10.0,
-                                cardNameController,
-                                Colours.hintColor.code,
-                                true,
-                              ),
-                              verticalSpacer(),
-                              /* state is LoadingUpdate
-                                  ? const Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  :*/
-                              submitButton(),
-                              verticalSpacer(height: 50),
-                            ],
-                          )
-                      ],
-                    )),
-                  ),
-                )
-              ],
+                          verticalSpacer(),
+                          headingText(text: AppConstants.paymentHint),
+                          verticalSpacer(height: 10.0),
+                          AppDropdown(
+                            bgColor: Colours.blue.code,
+                            items: AppConstants.paymentItems,
+                            selectedItem: AppConstants.paymentItems[0],
+                            onChange: (value) {
+                              _selectedPaymentOption = value;
+                              if (_selectedPaymentOption == AppConstants.paymentItems[1] || _selectedPaymentOption == AppConstants.paymentItems[2]) {
+                                _showAddCard = true;
+                              } else {
+                                _showAddCard = false;
+                              }
+                              setState(() {});
+                            },
+                          ),
+                          verticalSpacer(),
+                          if (!_showAddCard)
+                            state is LoadingUpdate
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : submitButton(),
+                          verticalSpacer(height: _showAddCard ? 20 : 50),
+                          if (_showAddCard)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                headingText(text: AppConstants.cardNumberHint),
+                                verticalSpacer(height: 10.0),
+                                MyEditText(
+                                  AppConstants.cardNumberHint,
+                                  false,
+                                  const TextInputType.numberWithOptions(),
+                                  TextCapitalization.none,
+                                  10.0,
+                                  _cardNumberController,
+                                  Colours.hintColor.code,
+                                  true,
+                                ),
+                                verticalSpacer(),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: headingText(text: AppConstants.cardExpDateHint),
+                                    ),
+                                    horizontalSpacer(),
+                                    Expanded(
+                                      child: headingText(text: AppConstants.cardCvvHint),
+                                    ),
+                                  ],
+                                ),
+                                verticalSpacer(height: 10.0),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: MyEditText(AppConstants.cardExpDateHint, false, const TextInputType.numberWithOptions(), TextCapitalization.none, 10.0, _cardExpDateController,
+                                          Colours.hintColor.code, true),
+                                    ),
+                                    horizontalSpacer(),
+                                    Expanded(
+                                      child: MyEditText(AppConstants.cardCvvHint, false, TextInputType.number, TextCapitalization.none, 10.0, _cardCvvController, Colours.hintColor.code, true),
+                                    ),
+                                  ],
+                                ),
+                                verticalSpacer(),
+                                headingText(text: AppConstants.cardNameHint),
+                                verticalSpacer(height: 10.0),
+                                MyEditText(
+                                  AppConstants.cardNameHint,
+                                  false,
+                                  TextInputType.text,
+                                  TextCapitalization.none,
+                                  10.0,
+                                  _cardNameController,
+                                  Colours.hintColor.code,
+                                  true,
+                                ),
+                                verticalSpacer(),
+                                /* state is LoadingUpdate
+                                    ? const Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    :*/
+                                submitButton(),
+                                verticalSpacer(height: 50),
+                              ],
+                            )
+                        ],
+                      )),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 
   validate() {
-    if (fNameController.text == "") {
+    if (_fNameController.text == "") {
       CommonMethods().showToast(context: context, message: "First name is required.");
       return;
     }
-    if (lNameController.text == "") {
+    if (_lNameController.text == "") {
       CommonMethods().showToast(context: context, message: "Last name is required.");
       return;
     }
-    if (mobileController.text == "") {
+    if (_mobileController.text == "") {
       CommonMethods().showToast(context: context, message: "Phone number is required.");
       return;
     }
-    if (mobileController.text.length < 10) {
+    if (_mobileController.text.length < 10) {
       CommonMethods().showToast(context: context, message: "Invalid Phone number.");
       return;
     }
-    if (addressController.text == "") {
+    if (_addressController.text == "") {
       CommonMethods().showToast(context: context, message: "Address is required.");
       return;
     }
-    if (mobileController.text.length < 8) {
+    if (_mobileController.text.length < 8) {
       CommonMethods().showToast(context: context, message: "Please enter full address or select from map.");
       return;
     }
-    if (selectedImage == null) {
+    if (_selectedImage == null) {
       CommonMethods().showToast(context: context, message: "Please select avatar image.");
       return;
     }
@@ -351,7 +356,15 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
   void _createUpdateProfile(BuildContext context) {
     BlocProvider.of<CreateProfileBloc>(context).add(
       CreateProfileRequested(
-          fNameController.text, lNameController.text, mobileController.text.replaceAll(" ", ""), addressController.text, selectedGender, selectedImage!.path, locationLat, locationLang),
+        _fNameController.text,
+        _lNameController.text,
+        _mobileController.text.replaceAll(" ", ""),
+        _addressController.text,
+        _selectedGender,
+        _selectedImage!.path,
+        _locationLat,
+        _locationLang,
+      ),
     );
   }
 

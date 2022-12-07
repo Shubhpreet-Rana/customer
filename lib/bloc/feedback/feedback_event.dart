@@ -1,18 +1,15 @@
 part of 'feedback_bloc.dart';
 
-@immutable
-abstract class AddFeedbackEvent extends Equatable {
-  @override
-  List<Object> get props => [];
-}
+abstract class FeedbackEvent {}
 
+class FeedBackRequestedEvent extends FeedbackEvent {
+  final String providerId;
+  final String rating;
+  final String description;
 
-
-
-class FeedBackRequested extends AddFeedbackEvent {
-  final String? providerId;
-  final String? rating;
-  final String? feed;
-
-  FeedBackRequested({this.providerId,this.rating,this.feed});
+  FeedBackRequestedEvent({
+    required this.providerId,
+    required this.rating,
+    this.description = "",
+  });
 }

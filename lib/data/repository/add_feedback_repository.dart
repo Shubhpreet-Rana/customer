@@ -7,20 +7,35 @@ import 'package:app/data/network/dio_client.dart';
 import 'package:app/data/network/exceptions.dart';
 import 'package:dio/dio.dart';
 
-
 class AddFeedbackRepository {
   final netWorkLocator = getIt.get<DioClient>();
 
-  Future<Map<String, dynamic>> addFeedback({String? providerId, String? feedText, String? rating}) async {
+  Future<Map<String, dynamic>> addFeedback({
+    required String providerId,
+    required String feedText,
+    required String rating,
+  }) async {
     Completer<Map<String, dynamic>> completer = Completer<Map<String, dynamic>>();
     try {
       var userInfo = PreferenceUtils.getUserInfo(AppConstants.userInfo);
       String token = userInfo['token'];
+      Map<String, String> data = {
+        'service_provider': providerId,
+        "rating": rating,
+        "feedback_text": feedText,
+      };
 
-      var data = {'service_provider': providerId, "rating": rating, "feedback_text": feedText};
-
-      final option = Options(headers: {"Authorization": "Bearer $token", "Accept": "application/json",});
-      var response = await netWorkLocator.dio.post('${EndPoints.baseUrl}${EndPoints.addFeedback}', options: option, data: data);
+      final option = Options(
+        headers: {
+          "Authorization": "Bearer $token",
+          "Accept": "application/json",
+        },
+      );
+      var response = await netWorkLocator.dio.post(
+        EndPoints.addFeedback,
+        options: option,
+        data: data,
+      );
 
       if (response.statusCode == 200) {
         completer.complete(response.data);

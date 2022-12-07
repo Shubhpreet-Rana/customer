@@ -11,7 +11,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../bloc/booking/booking_bloc.dart';
 import '../../bloc/vehicle/view/vehicle_bloc.dart';
+import '../../common/notification_services/notifications_services.dart';
 
+final homeScreen = GlobalKey<NavigatorState>();
+final carScreen = GlobalKey<NavigatorState>();
+final calenderScreen = GlobalKey<NavigatorState>();
+final settingsScreen = GlobalKey<NavigatorState>();
 
 class HomeTabs extends StatefulWidget {
   const HomeTabs({Key? key}) : super(key: key);
@@ -25,58 +30,66 @@ class _HomeTabsState extends State<HomeTabs> with TickerProviderStateMixin<HomeT
 
   @override
   void initState() {
-    // TODO: implement initState
+    NotificationServices.instance
+      ..permissions
+      ..setForegroundNotificationPresentationOptions
+      ..getInitialMessage
+      ..onMessage
+      ..onMessageOpenedApp
+      ..onBackgroundMessage;
+
+    BlocProvider.of<BookingBloc>(context).add(
+      const GetBookingListEvent(
+        isLoadingInitialState: true,
+        isLoadingMoreDataState: false,
+        isPaginationStartFromFirstPage: true,
+      ),
+    );
+    BlocProvider.of<ServiceProviderBloc>(context).add(GetCategoryList());
+    BlocProvider.of<ServiceProviderBloc>(context).add(const AllServiceProviderList());
     super.initState();
   }
 
-  final _homeScreen = GlobalKey<NavigatorState>();
-  final _carScreen = GlobalKey<NavigatorState>();
-  final _calenderScreen = GlobalKey<NavigatorState>();
-  final _settingsScreen = GlobalKey<NavigatorState>();
-
   @override
   Widget build(BuildContext context) {
+    NotificationServices.instance.getDeviceToken.then((value) => print(value));
     context.read<VehicleBloc>().add(VehicleFetchEvent());
     return Scaffold(
-      extendBody: true,
       body: IndexedStack(
         index: _selectedTabIndex,
         children: <Widget>[
           Navigator(
-            key: _homeScreen,
+            key: homeScreen,
+            onGenerateRoute: (route) => CupertinoPageRoute(
+                settings: route,
+                builder: (context) {
+                  return HomeTab(
+                    changeTab: () {
+                      setState(() {
+                        _selectedTabIndex = 1;
+                      });
+                    },
+                  );
+                }),
+          ),
+          Navigator(
+            key: carScreen,
             onGenerateRoute: (route) => CupertinoPageRoute(
               settings: route,
-              builder: (context) {
-                BlocProvider.of<BookingBloc>(context).add(LoadBookings());
-                return HomeTab(
-                  changeTab: () {
-                    setState(() {
-                      _selectedTabIndex = 1;
-                    });
-                  },
-                );
-              }
+              builder: (context) => const CarTab(),
             ),
           ),
           Navigator(
-            key: _carScreen,
-            onGenerateRoute: (route) => CupertinoPageRoute(
-              settings: route,
-              builder: (context) =>const  CarTab(),
-            ),
-          ),
-          Navigator(
-            key: _calenderScreen,
+            key: calenderScreen,
             onGenerateRoute: (route) => CupertinoPageRoute(
               settings: route,
               builder: (context) {
-                BlocProvider.of<BookingBloc>(context).add(LoadBookings());
                 return const CalenderTab();
               },
             ),
           ),
           Navigator(
-            key: _settingsScreen,
+            key: settingsScreen,
             onGenerateRoute: (route) => CupertinoPageRoute(
               settings: route,
               builder: (context) => const ProfileTab(),
@@ -85,53 +98,55 @@ class _HomeTabsState extends State<HomeTabs> with TickerProviderStateMixin<HomeT
         ],
       ),
       bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(topRight: Radius.circular(30.0), topLeft: Radius.circular(30.0)),
-            boxShadow: [
-              BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(topRight: Radius.circular(30.0), topLeft: Radius.circular(30.0)),
+          boxShadow: [
+            BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
+          ),
+          child: BottomNavigationBar(
+            currentIndex: _selectedTabIndex,
+            onTap: (val) => _onTap(val, context),
+            type: BottomNavigationBarType.fixed,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            selectedItemColor: Colours.blue.code,
+            unselectedItemColor: Colours.unSelectTab.code,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  _selectedTabIndex == 0 ? Assets.selectedHome.name : Assets.home.name,
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  _selectedTabIndex == 1 ? Assets.selectedCar.name : Assets.car.name,
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  _selectedTabIndex == 2 ? Assets.selectedCalender.name : Assets.calender.name,
+                ),
+                label: '',
+              ),
+              const BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.person,
+                  size: 30.0,
+                ),
+                label: '',
+              ),
             ],
           ),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
-            child: BottomNavigationBar(
-              currentIndex: _selectedTabIndex,
-              onTap: (val) => _onTap(val, context),
-              type: BottomNavigationBarType.fixed,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              selectedItemColor: Colours.blue.code,
-              unselectedItemColor: Colours.unSelectTab.code,
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    _selectedTabIndex == 0 ? Assets.selectedHome.name : Assets.home.name,
-                  ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    _selectedTabIndex == 1 ? Assets.selectedCar.name : Assets.car.name,
-                  ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    _selectedTabIndex == 2 ? Assets.selectedCalender.name : Assets.calender.name,
-                  ),
-                  label: '',
-                ),
-                const BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.person,
-                      size: 30.0,
-                    ),
-                    label: ''),
-              ],
-            ),
-          )),
+        ),
+      ),
     );
   }
 
@@ -139,29 +154,25 @@ class _HomeTabsState extends State<HomeTabs> with TickerProviderStateMixin<HomeT
     if (_selectedTabIndex == val) {
       switch (val) {
         case 0:
-          _homeScreen.currentState!.popUntil((route) => route.isFirst);
+          homeScreen.currentState!.popUntil((route) => route.isFirst);
           break;
         case 1:
-          _carScreen.currentState!.popUntil((route) => route.isFirst);
+          carScreen.currentState!.popUntil((route) => route.isFirst);
           break;
         case 2:
-          _calenderScreen.currentState!.popUntil((route) => route.isFirst);
+          calenderScreen.currentState!.popUntil((route) => route.isFirst);
           break;
         case 3:
-          _settingsScreen.currentState!.popUntil((route) => route.isFirst);
+          settingsScreen.currentState!.popUntil((route) => route.isFirst);
           break;
-
         default:
+          break;
       }
     } else {
       if (mounted) {
         setState(() {
           _selectedTabIndex = val;
         });
-        if(_selectedTabIndex==1){
-          BlocProvider.of<ServiceProviderBloc>(context)
-              .add(AllServiceProviderList("", "", "",const {}));
-        }
       }
     }
   }

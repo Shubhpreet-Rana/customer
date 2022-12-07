@@ -8,7 +8,7 @@ part 'get_card_event.dart';
 
 part 'get_card_state.dart';
 
-class GetCardBloc extends Bloc<GetCardEvent, GetCardState> {
+class GetCardBloc extends Bloc<GetCardEvent, CardState> {
   final GetCardRepository getCardRepository;
 
   GetCardBloc({required this.getCardRepository}) : super(GetCardsInitialLoading()) {
@@ -16,7 +16,7 @@ class GetCardBloc extends Bloc<GetCardEvent, GetCardState> {
     on<GetSelectedCard>(_getSelectedCard);
   }
 
-  Future<FutureOr<void>> _getCards(GetCardsRequested event, Emitter<GetCardState> emit) async {
+  Future<FutureOr<void>> _getCards(GetCardsRequested event, Emitter<CardState> emit) async {
     emit(GetCardsLoading());
     try {
       var res = await getCardRepository.getCards();
@@ -30,7 +30,7 @@ class GetCardBloc extends Bloc<GetCardEvent, GetCardState> {
     }
   }
 
-  FutureOr<void> _getSelectedCard(GetSelectedCard event, Emitter<GetCardState> emit) {
+  FutureOr<void> _getSelectedCard(GetSelectedCard event, Emitter<CardState> emit) {
     try {
      emit(GetSelectedCardValue(event.selectedCard));
     } catch (e) {

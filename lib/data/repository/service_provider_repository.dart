@@ -23,7 +23,7 @@ class ServiceProviderRepository {
         "Authorization": "Bearer $token",
       };
       final response = await netWorkLocator.dio.get(
-        '${EndPoints.baseUrl}${EndPoints.getCategoryList}',
+        EndPoints.getCategoryList,
         options: Options(
           headers: headers,
         ),
@@ -73,12 +73,14 @@ class ServiceProviderRepository {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
       };
-      String url = "${EndPoints.baseUrl}${EndPoints.getProviderList}";
-      final response = await netWorkLocator.dio.get(url,
-          options: Options(
-            headers: headers,
-          ),
-          queryParameters: mapData);
+      String url = EndPoints.getProviderList;
+      final response = await netWorkLocator.dio.get(
+        url,
+        options: Options(
+          headers: headers,
+        ),
+        // queryParameters: mapData,
+      );
       if (response.statusCode != 200) {
         throw Exception('Failed to sign in');
       }
@@ -97,13 +99,15 @@ class ServiceProviderRepository {
     return completer.future;
   }
 
-  Future<Map<String, dynamic>> bookService({String? amount, String? date, String? address_lat, String? address_long, String? gst_amount, String? time, List<String>? service_cat_id}) async {
+  Future<Map<String, dynamic>> bookService(
+      {String? amount, String? date, String? address_lat, String? address_long, String? gst_amount, String? time, List<String>? service_cat_id, required String serviceProviderId}) async {
     Completer<Map<String, dynamic>> completer = Completer<Map<String, dynamic>>();
+
     try {
       String serviceCatIds = "";
       var userInfo = PreferenceUtils.getUserInfo(AppConstants.userInfo);
       String token = userInfo['token'];
-      String serviceProviderId = userInfo['user']['id'].toString();
+
       if (service_cat_id!.isNotEmpty) {
         if (service_cat_id.length == 1) {
           serviceCatIds = service_cat_id[0];
@@ -122,18 +126,19 @@ class ServiceProviderRepository {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
       };
-      String url = "${EndPoints.baseUrl}${EndPoints.serviceBooking}";
-      final response = await netWorkLocator.dio.post(url,
-          options: Options(
-            headers: headers,
-          ),
-          data: mapData);
+      const String url = EndPoints.serviceBooking;
+      final response = await netWorkLocator.dio.post(
+        url,
+        options: Options(headers: headers),
+        data: mapData,
+      );
       if (response.statusCode != 200) {
         throw Exception('Failed to sign in');
       }
       completer.complete(response.data);
     } catch (e) {
       Map<String, dynamic> error = {"message": "failed", "status": 0};
+
       if (e is DioError) {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         error.update("message", (value) => errorMessage);
@@ -141,7 +146,9 @@ class ServiceProviderRepository {
       } else {
         completer.complete(error);
       }
+      rethrow;
     }
+
     return completer.future;
   }
 }

@@ -8,8 +8,8 @@ abstract class AddCardEvent extends Equatable {
 
 
 class AddCardsRequested extends AddCardEvent {
-  final String? tokenId;
-  AddCardsRequested({this.tokenId});
+  final String tokenId;
+  AddCardsRequested({required this.tokenId});
 }
 
 

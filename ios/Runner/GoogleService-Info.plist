@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1045196393723-fsjit9935l2flb6rmucnugplbc28kqm7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1045196393723-fsjit9935l2flb6rmucnugplbc28kqm7</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1045196393723-6ajofej7fq6agalppactos66qh6fen3e.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCpNIzQHfM3tJyMwX0LOXnTyiB1XaRxf3s</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1045196393723</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.boulou.customers</string>
+	<key>PROJECT_ID</key>
+	<string>boulouservice22</string>
+	<key>STORAGE_BUCKET</key>
+	<string>boulouservice22.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1045196393723:ios:6dc4f4ee5c9df4b4ac345e</string>
+</dict>
+</plist>

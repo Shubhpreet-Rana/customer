@@ -1,10 +1,17 @@
 part of 'get_card_bloc.dart';
 
-class GetCardState extends Equatable {
-  final int? selectedCard;
+class CardState extends Equatable {
+  const CardState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GetCardState extends CardState {
+  final int selectedCard;
 
   const GetCardState({
-    this.selectedCard = 0,
+    required this.selectedCard,
   });
 
   GetCardState copyWith({
@@ -15,14 +22,14 @@ class GetCardState extends Equatable {
       );
 
   @override
-  List<Object> get props => [selectedCard!];
+  List<Object> get props => [selectedCard];
 }
 
-class GetCardsInitialLoading extends GetCardState {}
+class GetCardsInitialLoading extends CardState {}
 
-class GetCardsLoading extends GetCardState {}
+class GetCardsLoading extends CardState {}
 
-class GetCardSuccessfully extends GetCardState {
+class GetCardSuccessfully extends CardState {
   final dynamic cardList;
 
   const GetCardSuccessfully(this.cardList);
@@ -32,7 +39,7 @@ class GetCardSuccessfully extends GetCardState {
   List<Object> get props => [cardList];
 }
 
-class GetCardsFailed extends GetCardState {
+class GetCardsFailed extends CardState {
   final String? error;
 
   const GetCardsFailed(this.error);
@@ -42,10 +49,11 @@ class GetCardsFailed extends GetCardState {
   List<Object> get props => [error!];
 }
 
-class GetSelectedCardValue extends GetCardState{
-  final dynamic  selectedValue;
+class GetSelectedCardValue extends CardState {
+  final dynamic selectedValue;
+
   const GetSelectedCardValue(this.selectedValue);
+
   @override
-  // TODO: implement props
   List<Object> get props => [selectedValue!];
 }

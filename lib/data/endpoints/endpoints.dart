@@ -1,28 +1,30 @@
-class EndPoints {
-  static const String baseUrl = 'http://3.80.221.202';
+abstract class EndPoints {
+  static const String _baseUrl = 'http://www.boulouservice.com/api';
 
-  static const String allUsers = '/users/all';
-  static const String sendOTP = '/boulou/public/api/sendotp';
-  static const String forgotPassword = '/boulou/public/api/forgotpassword';
-  static const String login = '/boulou/public/api/login';
-  static const String register = '/boulou/public/api/register';
-  static const String profile = '/boulou/public/api/profile';
-  static const String addVehicle = '/boulou/public/api/addvehicle';
-  static const String getProfile = '/boulou/public/api/getprofile';
-  static const String getVehicle = '/boulou/public/api/vehicle';
-  static const String editVehicle = '/boulou/public/api/editvehicle';
-  static const String getProviderList = '/boulou/public/api/serviceprovider';
-  static const String getCategoryList = '/boulou/public/api/category';
-  static const String serviceBooking = '/boulou/public/api/booking';
-  static const String banner = '/boulou/public/api/banner';
-  static const String mybooking = '/boulou/public/api/mybooking';
-  static const String marketvehicle = '/boulou/public/api/marketvehicle';
-  static const String marketallvehicle = '/boulou/public/api/marketallvehicle';
-  static const String addmarketvehicle = '/boulou/public/api/addmarketvehicle';
-  static const String editmarketvehicle = '/boulou/public/api/editmarketvehicle';
-  static const String getCard = '/boulou/public/api/getcard';
-  static const String chargeUser = '/boulou/public/api/chargeuser';
-  static const String addFeedback = '/boulou/public/api/addfeedback';
-  static const String addCard = '/boulou/public/api/addcard';
-  static const String deleteMyMarketPlaceVehicle = '/boulou/public/api/deletemarketallvehicle';
+  static const String allUsers = '$_baseUrl/users/all';
+  static const String sendOTP = '$_baseUrl/sendotp';
+  static const String forgotPassword = '$_baseUrl/forgotpassword';
+  static const String login = '$_baseUrl/login';
+  static const String register = '$_baseUrl/register';
+  static const String profile = '$_baseUrl/profile';
+  static const String addVehicle = '$_baseUrl/addvehicle';
+  static const String getProfile = '$_baseUrl/getprofile';
+  static const String getVehicle = '$_baseUrl/vehicle';
+  static const String editVehicle = '$_baseUrl/editvehicle';
+  static const String getProviderList = '$_baseUrl/serviceprovider';
+  static const String getCategoryList = '$_baseUrl/category';
+  static const String serviceBooking = '$_baseUrl/booking';
+  static const String banner = '$_baseUrl/banner';
+  static const String myBooking = '$_baseUrl/mybooking';
+  static const String marketVehicle = '$_baseUrl/marketvehicle';
+  static const String marketallvehicle = '$_baseUrl/marketallvehicle';
+  static const String addmarketvehicle = '$_baseUrl/addmarketvehicle';
+  static const String editmarketvehicle = '$_baseUrl/editmarketvehicle';
+  static const String getCard = '$_baseUrl/getcard';
+  static const String chargeUser = '$_baseUrl/chargeuser';
+  static const String addFeedback = '$_baseUrl/addfeedback';
+  static const String addCard = '$_baseUrl/addcard';
+  static const String deleteMyMarketPlaceVehicle = '$_baseUrl/deletemarketallvehicle';
+  static const String markAsComplete = '$_baseUrl/markcomplete';
+  static const String socialLoginUrl = '$_baseUrl/sociallogin';
 }

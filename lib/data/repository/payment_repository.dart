@@ -16,7 +16,7 @@ class PaymentRepository {
 
       final option = Options(headers: {
         "Authorization": "Bearer sk_test_51L8Ss2Ih6nYkk6h8uk7Hnlr2JIY0spD23hAClpAJAWEn2MgF1zZVn2ckxNbzyOtwjWuu2i5tT9W9mVaqEbSzYcRI00I9RmIXvh",
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/x-www-form-urlencmoded"
       });
       var response = await netWorkLocator.dio.postUri(Uri.parse("https://api.stripe.com/v1/payment_intents"), data: data, options: option);
       if (response.statusCode == 200) {

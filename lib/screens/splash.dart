@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../common/ui/background.dart';
 
-class Splash extends StatefulWidget {
-  const Splash({Key? key}) : super(key: key);
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  State<Splash> createState() => _SplashState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashState extends State<Splash> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     // TODO: implement initState
@@ -25,17 +25,12 @@ class _SplashState extends State<Splash> {
 
   goToNext() async {
     await Future.delayed(const Duration(milliseconds: 1500));
-    bool? isAlreadyLogin =
-        await PreferenceUtils.getBool(AppConstants.rememberMe);
-    if (isAlreadyLogin) {
+    bool? isAlreadyLogin = await PreferenceUtils.getBool(AppConstants.rememberMe);
+    if (isAlreadyLogin && mounted) {
       context.read<ProfileBloc>().add(ProfileFetchEvent());
-      Navigator.of(context, rootNavigator: true).pushReplacement(
-          CupertinoPageRoute(builder: (context) => const HomeTabs()));
+      Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const HomeTabs()));
     } else {
-      Navigator.of(context, rootNavigator: true)
-          .pushReplacement(CupertinoPageRoute(
-        builder: (context) => const Login(),
-      ));
+      Navigator.of(context, rootNavigator: true).pushReplacement(CupertinoPageRoute(builder: (context) => const LoginScreen()));
     }
   }
 

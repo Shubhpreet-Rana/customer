@@ -2,7 +2,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../bloc/auth/auth_bloc.dart';
 import '../../common/colors.dart';
 import '../../common/constants.dart';
@@ -20,25 +19,19 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  TextEditingController emailController = TextEditingController(text: kDebugMode ? "sahil.vehiclemarketplace@gmail.com" : "");
-  TextEditingController passwordController = TextEditingController(text: kDebugMode ? "12345678" : "");
-  TextEditingController otpController = TextEditingController();
-  bool show = true;
-
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  final TextEditingController _emailController = TextEditingController(text: kDebugMode ? "sahil.vehiclemarketplace@gmail.com" : "");
+  final TextEditingController _passwordController = TextEditingController(text: kDebugMode ? "12345678" : "");
+  final TextEditingController _otpController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is ForgotPasswordOtpSent) {
-          CommonMethods().showToast(context: context, message: state.message,/* isSuccess: true*/);
+          CommonMethods().showToast(
+            context: context,
+            message: state.message, /* isSuccess: true*/
+          );
         }
         if (state is ForgotPasswordOtpSendFailed) {
           CommonMethods().showToast(context: context, message: state.error);
@@ -47,7 +40,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           CommonMethods().showToast(context: context, message: state.error);
         }
         if (state is ForgotPasswordOtpVerified) {
-          CommonMethods().showToast(context: context, message: state.message,/* isSuccess: true*/);
+          CommonMethods().showToast(
+            context: context,
+            message: state.message, /* isSuccess: true*/
+          );
           Navigator.of(context).pop();
         }
       },
@@ -80,7 +76,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             TextInputType.emailAddress,
                             TextCapitalization.none,
                             10.0,
-                            emailController,
+                            _emailController,
                             Colours.hintColor.code,
                             true,
                             textInputAction: TextInputAction.done,
@@ -95,7 +91,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   TextInputType.text,
                                   TextCapitalization.none,
                                   10.0,
-                                  passwordController,
+                                  _passwordController,
                                   Colours.hintColor.code,
                                   true,
                                   textInputAction: TextInputAction.next,
@@ -107,7 +103,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   TextInputType.number,
                                   TextCapitalization.none,
                                   10.0,
-                                  otpController,
+                                  _otpController,
                                   Colours.hintColor.code,
                                   true,
                                   textInputAction: TextInputAction.done,
@@ -122,11 +118,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   onTap: () {
                                     validate(state);
                                   },
-                                  child: appButton(
-                                      bkColor: Colours.blue.code,
-                                      text: state is ForgotPasswordOtpNotVerified
-                                          ? AppConstants.verifyHint
-                                          : AppConstants.otpText)),
+                                  child: appButton(bkColor: Colours.blue.code, text: state is ForgotPasswordOtpNotVerified ? AppConstants.verifyHint : AppConstants.otpText)),
                         ],
                       ),
                     ))
@@ -139,22 +131,22 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   validate(AuthState state) {
-    if (emailController.text == "") {
+    if (_emailController.text == "") {
       CommonMethods().showToast(context: context, message: "Email is required.");
       return;
     }
-    if (!EmailValidator.validate(emailController.text.trim())) {
+    if (!EmailValidator.validate(_emailController.text.trim())) {
       CommonMethods().showToast(context: context, message: "Invalid email.");
       return;
     }
     if (state is ForgotPasswordOtpNotSend) {
       _requestOtp(context);
     } else {
-      if (passwordController.text.length < 6) {
+      if (_passwordController.text.length < 6) {
         CommonMethods().showToast(context: context, message: "Enter minimum 6 characters for password");
         return;
       }
-      if (otpController.text == "") {
+      if (_otpController.text == "") {
         CommonMethods().showToast(context: context, message: "OTP is required.");
         return;
       }
@@ -164,15 +156,19 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   void _requestOtp(BuildContext context) {
     BlocProvider.of<AuthBloc>(context).add(
-      OtpRequested(
-        emailController.text,
+      OtpRequestedEvent(
+        _emailController.text,
       ),
     );
   }
 
   void _verifyOtp(BuildContext context) {
     BlocProvider.of<AuthBloc>(context).add(
-      ResetPasswordRequested(emailController.text, otpController.text.trim(), passwordController.text),
+      ResetPasswordRequestedEvent(
+        _emailController.text,
+        _otpController.text.trim(),
+        _passwordController.text,
+      ),
     );
   }
 }

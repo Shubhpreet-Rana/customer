@@ -55,20 +55,20 @@ class ProviderData {
 }
 
 class Profile {
-  Profile({
-    this.userImage,
-    this.businessName,
-    this.websiteLink,
-    this.image1,
-    this.image2,
-    this.image3,
-    this.experience,
-    this.address,
-    this.addressLat,
-    this.addressLong,
-    this.joinDate,
-    this.rating,
-  });
+  Profile(
+      {this.userImage,
+      this.businessName,
+      this.websiteLink,
+      this.image1,
+      this.image2,
+      this.image3,
+      this.experience,
+      this.address,
+      this.addressLat,
+      this.addressLong,
+      this.joinDate,
+      this.rating,
+      required this.userId});
 
   String? userImage;
   String? businessName;
@@ -82,21 +82,22 @@ class Profile {
   double? addressLong;
   String? joinDate;
   String? rating;
+  final int userId;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        userImage: json["user_image"],
-        businessName: json["business_name"],
-        websiteLink: json["website_link"],
-        image1: json["image1"],
-        image2: json["image2"],
-        image3: json["image3"],
-        experience: json["experience"],
-        address: json["address"],
-        addressLat: json["address_lat"].toDouble(),
-        addressLong: json["address_long"].toDouble(),
-        joinDate: json["join_date"],
-        rating: json["rating"],
-      );
+      userImage: json["user_image"],
+      businessName: json["business_name"],
+      websiteLink: json["website_link"],
+      image1: json["image1"],
+      image2: json["image2"],
+      image3: json["image3"],
+      experience: json["experience"],
+      address: json["address"],
+      addressLat: json["address_lat"].toDouble(),
+      addressLong: json["address_long"].toDouble(),
+      joinDate: json["join_date"],
+      rating: json["rating"],
+      userId: json['user_id']);
 
   Map<String, dynamic> toJson() => {
         "user_image": userImage,

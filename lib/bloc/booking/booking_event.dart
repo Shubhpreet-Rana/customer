@@ -1,22 +1,25 @@
 part of 'booking_bloc.dart';
 
-abstract class BookingEvent extends Equatable {
-  @override
-  List<Object> get props => [];
+abstract class GetMyBookingListEvent {
+  const GetMyBookingListEvent();
 }
 
-class GetBookingBanner extends BookingEvent {}
-
-class LoadBookings extends BookingEvent {
-  final String? page;
-
-  LoadBookings({this.page});
+class GetBookingInitialStateEvent extends GetMyBookingListEvent {
+  const GetBookingInitialStateEvent();
 }
 
-class FetchMoreBookings extends BookingEvent {
-  final bool? fetchingMore;
-
-  FetchMoreBookings({this.fetchingMore});
+class GetBookingBannerEvent extends GetMyBookingListEvent {
+  const GetBookingBannerEvent();
 }
 
-class GetMostPopularBookingList extends BookingEvent {}
+class GetBookingListEvent extends GetMyBookingListEvent {
+  final bool isLoadingInitialState;
+  final bool isLoadingMoreDataState;
+  final bool isPaginationStartFromFirstPage;
+
+  const GetBookingListEvent({
+    required this.isLoadingInitialState,
+    required this.isLoadingMoreDataState,
+    required this.isPaginationStartFromFirstPage,
+  });
+}

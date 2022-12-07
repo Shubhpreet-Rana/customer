@@ -59,7 +59,7 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                 bottom: false,
                 child: AppHeaders().extendedHeader(
                     onTapped: () {
-                      BlocProvider.of<ServiceProviderBloc>(context).add(AllServiceProviderList("", "", "", const {}));
+                      BlocProvider.of<ServiceProviderBloc>(context).add(const AllServiceProviderList());
                       Navigator.of(context).pop();
                     },
                     text: AppConstants.filters,
@@ -165,7 +165,7 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                                           onTap: () async {
                                             try {
                                               Position? position = await LocationUtil.getLocation();
-                                              if (position != null) {
+                                              if (position != null && mounted) {
                                                 LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
                                                     builder: (context) => PlacePicker(
                                                           "AIzaSyBPFuOfeRqXLrspLP3_p7MmgL2OaLzg9nk",
@@ -196,8 +196,13 @@ class _ApplyFiltersState extends State<ApplyFilters> {
                                           bkColor: Colours.blue.code,
                                           text: AppConstants.applyFilters,
                                           onTapped: () {
-                                            BlocProvider.of<ServiceProviderBloc>(context).add(AllServiceProviderList(
-                                                "", selectedCategoryId, "${currentRatingIndex + 1}", addressController.text.isNotEmpty ? {"lat": locationLat, "long": locationLang} : {}));
+                                            BlocProvider.of<ServiceProviderBloc>(context).add(
+                                              AllServiceProviderList(
+                                                catId: selectedCategoryId,
+                                                rating: "${currentRatingIndex + 1}",
+                                                location: addressController.text.isNotEmpty ? {"lat": locationLat, "long": locationLang} : {},
+                                              ),
+                                            );
                                             Navigator.of(context).pop();
                                           })
                                     ],

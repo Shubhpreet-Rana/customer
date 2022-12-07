@@ -6,7 +6,7 @@ class DeleteMarketPlaceVehicleState extends Equatable {
 
 class InitialLoading extends DeleteMarketPlaceVehicleState {}
 
-class Loading extends DeleteMarketPlaceVehicleState {}
+class DeleteVehicleLoadingState extends DeleteMarketPlaceVehicleState {}
 
 class DeletedMyVehicleSuccessfully extends DeleteMarketPlaceVehicleState {
   final String message;

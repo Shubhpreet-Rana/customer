@@ -11,17 +11,18 @@ String myMarketPlaceVehicleToJson(MyMarketPlaceVehicle data) =>
     json.encode(data.toJson());
 
 class MyMarketPlaceVehicle {
+
   MyMarketPlaceVehicle({
     this.status,
-    this.isLastPage,
+    required this.isLastPage,
     this.message,
-    this.vehicle,
+    this.vehicle = const[],
   });
 
   int? status;
-  int? isLastPage;
+  int isLastPage;
   String? message;
-  List<MyVehicleMarketPlace>? vehicle;
+  List<MyVehicleMarketPlace> vehicle;
 
   factory MyMarketPlaceVehicle.fromJson(Map<String, dynamic> json) =>
       MyMarketPlaceVehicle(
@@ -36,7 +37,7 @@ class MyMarketPlaceVehicle {
         "status": status,
         "is_last_page": isLastPage,
         "message": message,
-        "vehicle": List<dynamic>.from(vehicle!.map((x) => x.toJson())),
+        "vehicle": List<dynamic>.from(vehicle.map((x) => x.toJson())),
       };
 }
 

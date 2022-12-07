@@ -18,6 +18,7 @@ class AppConstants {
   static String otpText1 = 'Enter OTP';
   static String fb = 'LOGIN WITH FACEBOOK';
   static String google = 'LOGIN WITH GOOGLE';
+  static String apple = 'LOGIN WITH APPLE';
   static String dontAccount = "Don't have an account?";
   static String doAccount = "Do you have acount?";
   static String signIn = 'Sign in';
@@ -86,6 +87,7 @@ class AppConstants {
   static String bookingText = 'Bookings';
   static String bookingText1 = 'Booking';
   static String active = 'Active';
+  static String pending = 'Pending';
   static String completed = 'Completed';
   static String addToSell = 'ADD CARS TO SELL';
   static String viewCars = 'VIEW CARS';
@@ -143,12 +145,12 @@ class AppConstants {
   static String type = "Type";
   static String addPaymentMethod = "ADD PAYMENT METHOD";
   static String markAsCompleted = "MARK AS COMPLETED";
-  static String pickLocation = "Pick Lcation";
+  static String pickLocation = "Pick Location";
   static String dropLocation = "Drop Location";
   static String completeBooking = "Complete Booking";
   static String paymentAndE = "Payments and Earnings";
   static String bankAccount = "Bank Account";
-  static String cancel = "Cancel";
+  static String cancelled = "Cancelled";
   static String totalPrice = "Total Price";
   static String totalBalance = "Total balance";
   static String myProfile = "My Profile";

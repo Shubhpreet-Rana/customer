@@ -101,3 +101,22 @@ class ForgotPasswordOtpVerificationFailed extends AuthState {
   @override
   List<Object?> get props => [];
 }
+
+@immutable
+abstract class SocialAuthState extends Equatable {
+  const SocialAuthState();
+  @override
+  List<Object> get props => [];
+}
+
+class SocialAuthInitialState extends SocialAuthState {
+  const SocialAuthInitialState();
+}
+
+class SocialAuthLoadingState extends SocialAuthState {
+  const SocialAuthLoadingState();
+}
+
+class SocialAuthSuccessState extends SocialAuthState {
+  const SocialAuthSuccessState();
+}

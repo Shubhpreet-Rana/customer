@@ -50,198 +50,200 @@ class _ProfileTabState extends State<ProfileTab> {
                 height: 10.0,
               ),
               Expanded(
-                  child: Container(
-                width: CommonMethods.deviceWidth(),
-                height: CommonMethods.deviceHeight(),
-                padding: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 5.0, top: 40.0),
-                decoration: BoxDecoration(
-                  color: Colours.lightGray.code,
-                ),
-                child: Column(
-                  children: [
-                    Avatar(
-                      radius: 50.0,
-                      isCamera: false,
-                      fromUrl: true,
-                      imagePath: state.userProfile.user!.userImage!,
-                      onSelect: () {},
-                    ),
-                    verticalSpacer(height: 30.0),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 4,
-                          child: Text(
-                            AppConstants.fNameHint + ":",
-                            maxLines: 1,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.lightText,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 6,
-                          child: Text(
-                            state.userProfile.user!.firstName ?? "",
-                            maxLines: 3,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.blackSemiW400_1,
-                          ),
-                        )
-                      ],
-                    ),
-                    verticalSpacer(),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 4,
-                          child: Text(
-                            AppConstants.lNameHint + ":",
-                            maxLines: 1,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.lightText,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 6,
-                          child: Text(
-                            state.userProfile.user!.lastName ?? "",
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.blackSemiW400_1,
-                          ),
-                        )
-                      ],
-                    ),
-                    verticalSpacer(),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 4,
-                          child: Text(
-                            AppConstants.emailHint + ":",
-                            maxLines: 1,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.lightText,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 6,
-                          child: Text(
-                            state.userProfile.user!.email ?? "",
-                            maxLines: 3,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.blackSemiW400_1,
-                          ),
-                        )
-                      ],
-                    ),
-                    verticalSpacer(),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 4,
-                          child: Text(
-                            AppConstants.mobileHint + ":",
-                            maxLines: 1,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.lightText,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 6,
-                          child: Text(
-                            state.userProfile.user!.mobile ?? "",
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.blackSemiW400_1,
-                          ),
-                        )
-                      ],
-                    ),
-                    verticalSpacer(),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 4,
-                          child: Text(
-                            AppConstants.genderHint + ":",
-                            maxLines: 1,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.lightText,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 6,
-                          child: Text(
-                            state.userProfile.user!.getGenderText,
-                            maxLines: 1,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.blackSemiW400_1,
-                          ),
-                        )
-                      ],
-                    ),
-                    verticalSpacer(),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 4,
-                          child: Text(
-                            AppConstants.addressHint + ":",
-                            maxLines: 1,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.lightText,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 6,
-                          child: Text(
-                            state.userProfile.user!.address ?? "",
-                            maxLines: 3,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.blackSemiW400_1,
-                          ),
-                        )
-                      ],
-                    ),
-                    //verticalSpacer(height: 50.0),
-                    const Spacer(),
-                    GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const EditOptions()));
-                        },
-                        child: appButton(bkColor: Colours.blue.code, text: AppConstants.edit, height: 50.0)),
-                    verticalSpacer(),
-                    GestureDetector(
-                      onTap: () {
-                        PreferenceUtils().clearAllPreferences();
-                        Navigator.of(context,rootNavigator: true
-                        ).pushReplacement(MaterialPageRoute(builder: (context) => const Login()));
-                      },
-                      child: Text(
-                        AppConstants.logout,
-                        maxLines: 3,
-                        textAlign: TextAlign.start,
-                        style: AppStyles.redTextW500,
+                child: SingleChildScrollView(
+                    child: Container(
+                  width: CommonMethods.deviceWidth(),
+                  height: CommonMethods.deviceHeight(),
+                  padding: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 5.0, top: 40.0),
+                  decoration: BoxDecoration(
+                    color: Colours.lightGray.code,
+                  ),
+                  child: Column(
+                    children: [
+                      Avatar(
+                        radius: 50.0,
+                        isCamera: false,
+                        fromUrl: true,
+                        imagePath: state.userProfile.user!.userImage!,
+                        onSelect: () {},
                       ),
-                    ),
-                    const Spacer(),
-                  ],
-                ),
-              ))
+                      verticalSpacer(height: 30.0),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              "${AppConstants.fNameHint}:",
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.lightText,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 6,
+                            child: Text(
+                              state.userProfile.user!.firstName ?? "",
+                              maxLines: 3,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.blackSemiW400_1,
+                            ),
+                          )
+                        ],
+                      ),
+                      verticalSpacer(),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              "${AppConstants.lNameHint}:",
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.lightText,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 6,
+                            child: Text(
+                              state.userProfile.user!.lastName ?? "",
+                              maxLines: 2,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.blackSemiW400_1,
+                            ),
+                          )
+                        ],
+                      ),
+                      verticalSpacer(),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              "${AppConstants.emailHint}:",
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.lightText,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 6,
+                            child: Text(
+                              state.userProfile.user!.email ?? "",
+                              maxLines: 3,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.blackSemiW400_1,
+                            ),
+                          )
+                        ],
+                      ),
+                      verticalSpacer(),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              "${AppConstants.mobileHint}:",
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.lightText,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 6,
+                            child: Text(
+                              state.userProfile.user!.mobile ?? "",
+                              maxLines: 2,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.blackSemiW400_1,
+                            ),
+                          )
+                        ],
+                      ),
+                      verticalSpacer(),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              "${AppConstants.genderHint}:",
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.lightText,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 6,
+                            child: Text(
+                              state.userProfile.user!.getGenderText,
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.blackSemiW400_1,
+                            ),
+                          )
+                        ],
+                      ),
+                      verticalSpacer(),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              "${AppConstants.addressHint}:",
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.lightText,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 6,
+                            child: Text(
+                              state.userProfile.user!.address ?? "",
+                              maxLines: 3,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.blackSemiW400_1,
+                            ),
+                          )
+                        ],
+                      ),
+                      //verticalSpacer(height: 50.0),
+                      const Spacer(),
+                      GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(builder: (context) => const EditOptions()));
+                          },
+                          child: appButton(bkColor: Colours.blue.code, text: AppConstants.edit, height: 50.0)),
+                      verticalSpacer(),
+                      GestureDetector(
+                        onTap: () {
+                          PreferenceUtils().clearAllPreferences();
+                          Navigator.of(context,rootNavigator: true
+                          ).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen()));
+                        },
+                        child: Text(
+                          AppConstants.logout,
+                          maxLines: 3,
+                          textAlign: TextAlign.start,
+                          style: AppStyles.redTextW500,
+                        ),
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                )),
+              )
             ],
           ));
         }

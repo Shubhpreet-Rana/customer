@@ -52,7 +52,7 @@ class _AppDropdownState extends State<AppDropdown> {
           setState(() {});
         },
         style: AppStyles.blackText,
-        icon: const Icon(Icons.keyboard_arrow_down),
+        icon: const Flexible(child: Icon(Icons.keyboard_arrow_down)),
       ) // your Dropdown Widget here
           ),
     );
