@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:app/common/methods/common.dart';
+import 'package:app/common/services/NavigationService.dart';
 import 'package:app/data/repository/home_repository.dart';
+import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-
+import '../view_cars/view_car_bloc.dart';
 
 part 'add_car_event.dart';
 
@@ -105,4 +107,5 @@ class SellCarBloc extends Bloc<SellCarEvent, AddCarToSellState> {
       emit(UpdateSellCarFailed(e.toString()));
     }
   }
+
 }

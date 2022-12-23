@@ -132,10 +132,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   AppConstants.welcome,
                                   style: AppStyles.darkText,
                                 ),
-                                Text(
-                                  AppConstants.loginMsg,
-                                  style: AppStyles.lightText,
-                                ),
                                 verticalSpacer(
                                   height: 30.0,
                                 ),

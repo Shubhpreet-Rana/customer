@@ -346,7 +346,7 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
       CommonMethods().showToast(context: context, message: "Please enter full address or select from map.");
       return;
     }
-    if (_selectedImage == null) {
+    if (_selectedImage == null && _imageUrl == null) {
       CommonMethods().showToast(context: context, message: "Please select avatar image.");
       return;
     }
@@ -361,7 +361,7 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
         _mobileController.text.replaceAll(" ", ""),
         _addressController.text,
         _selectedGender,
-        _selectedImage!.path,
+        _selectedImage?.path ?? _imageUrl!,
         _locationLat,
         _locationLang,
       ),

@@ -1,4 +1,6 @@
+import 'package:app/common/extension_method/datetime_extension.dart';
 import 'package:app/model/all_vehicle_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/colors.dart';
@@ -46,6 +48,15 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
   Widget _listItem(AllVehicleData car) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Row(
+            children: [
+              if (car.carImage1 != null) _buildCarImgView(imageUrl: car.carImage1!),
+              const SizedBox(width: 10),
+              if (car.carImage2 != null) _buildCarImgView(imageUrl: car.carImage2!),
+              const SizedBox(width: 10),
+              if (car.carImage3 != null) _buildCarImgView(imageUrl: car.carImage3!),
+            ],
+          ),
           Container(
               padding: const EdgeInsets.all(10.0),
               decoration: const BoxDecoration(
@@ -63,7 +74,7 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: Image.network(
-                        car.carImage1!,
+                        car.userImage!,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -93,7 +104,7 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                         ],
                       ),
                       Text(
-                        "Posted on ${car.createdAt!}",
+                        "Posted on ${car.createdAt!.toDateFormat()}",
                         maxLines: 2,
                         textAlign: TextAlign.center,
                         style: AppStyles.lightText12,
@@ -203,50 +214,68 @@ class _ViewCarDetailsState extends State<ViewCarDetails> {
                     backgroundImage: NetworkImage(car.userImage!),
                   ),
                   horizontalSpacer(width: 10.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${car.userFirstName}  ${car.userLastName}",
-                        maxLines: 1,
-                        textAlign: TextAlign.start,
-                        style: AppStyles.blackSemiW400_1,
-                      ),
-                      verticalSpacer(height: 5.0),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_pin,
-                            color: Colours.gray.code,
-                          ),
-                          horizontalSpacer(width: 5.0),
-                          Text(
-                            car.address!,
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.lightText12,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.phone,
-                            color: Colours.gray.code,
-                          ),
-                          horizontalSpacer(width: 5.0),
-                          Text(
-                            car.userMobile!,
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                            style: AppStyles.lightText12,
-                          ),
-                        ],
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${car.userFirstName}  ${car.userLastName}",
+                          maxLines: 1,
+                          textAlign: TextAlign.start,
+                          style: AppStyles.blackSemiW400_1,
+                        ),
+                        verticalSpacer(height: 5.0),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.location_pin,
+                              color: Colours.gray.code,
+                            ),
+                            horizontalSpacer(width: 5.0),
+                            Flexible(
+                              child: Text(
+                                car.address!,
+                                maxLines: 2,
+                                textAlign: TextAlign.start,
+                                style: AppStyles.lightText12,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.phone,
+                              color: Colours.gray.code,
+                            ),
+                            horizontalSpacer(width: 5.0),
+                            Text(
+                              car.userMobile!,
+                              maxLines: 2,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.lightText12,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ))
         ],
       );
+
+  Widget _buildCarImgView({required String imageUrl}) {
+    return Flexible(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: CachedNetworkImage(
+          imageUrl: imageUrl,
+          width: 200,
+          height: 100,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
 }

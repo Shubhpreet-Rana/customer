@@ -138,6 +138,24 @@ class HomeRepository {
       final mimeTypeData1 = lookupMimeType(carImage_1!, headerBytes: [0xFF, 0xD8])?.split('/');
       final mimeTypeData2 = lookupMimeType(carImage_2!, headerBytes: [0xFF, 0xD8])?.split('/');
       final mimeTypeData3 = lookupMimeType(carImage_3!, headerBytes: [0xFF, 0xD8])?.split('/');
+      MultipartFile? carImage2;
+      MultipartFile? carImage3;
+      if (carImage_2.isNotEmpty) {
+        carImage2 = MultipartFile.fromFileSync(
+          carImage_2,
+          contentType: MediaType(mimeTypeData2![0], mimeTypeData2[1]),
+          filename: basename(carImage_2),
+        );
+      } else {
+        carImage2 = null;
+      }
+
+      if (carImage_3.isNotEmpty) {
+        carImage3 = MultipartFile.fromFileSync(carImage_3, contentType: MediaType(mimeTypeData3![0], mimeTypeData3[1]), filename: basename(carImage_3));
+      } else {
+        carImage3 = null;
+      }
+
       FormData formData = FormData.fromMap({
         'model_name': modelName!,
         'brand_name': brandName,
@@ -151,10 +169,14 @@ class HomeRepository {
         'address_long': address_long,
         'price': price,
         'car_image_1': MultipartFile.fromFileSync(carImage_1, contentType: MediaType(mimeTypeData1![0], mimeTypeData1[1]), filename: basename(carImage_1)),
-        'car_image_2': carImage_2.isNotEmpty ? MultipartFile.fromFileSync(carImage_2, contentType: MediaType(mimeTypeData2![0], mimeTypeData2[1]), filename: basename(carImage_2)) : null,
-        'car_image_3': carImage_3.isNotEmpty ? MultipartFile.fromFileSync(carImage_3, contentType: MediaType(mimeTypeData3![0], mimeTypeData3[1]), filename: basename(carImage_3)) : null,
+        'car_image_2': carImage2,
+        'car_image_3': carImage3,
       });
-      Map<String, String> headers = {"Accept": "application/json", "Authorization": "Bearer $token", "Content-Type": "multipart/form-data; boundary=<calculated when request is sent>"};
+      Map<String, String> headers = {
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
+        "Content-Type": "multipart/form-data; boundary=<calculated when request is sent>",
+      };
       const String url = EndPoints.addmarketvehicle;
       final response = await netWorkLocator.dio.post(
         url,
@@ -168,7 +190,9 @@ class HomeRepository {
       }
 
       completer.complete(response.data);
-    } catch (e) {
+    } catch (e, s) {
+      print(e);
+      print(s);
       Map<String, dynamic> error = {"message": "failed", "status": 0};
       if (e is DioError) {
         final errorMessage = DioExceptions.fromDioError(e).toString();

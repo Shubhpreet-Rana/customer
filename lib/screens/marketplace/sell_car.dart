@@ -23,8 +23,9 @@ import '../../common/ui/headers.dart';
 
 class SellCar extends StatefulWidget {
   final bool fromEdit;
-  final AllVehicleData? myVehicle ;
-  final MyVehicleMarketPlace? myVehicleMarketPlace ;
+  final AllVehicleData? myVehicle;
+
+  final MyVehicleMarketPlace? myVehicleMarketPlace;
 
   const SellCar({Key? key, this.fromEdit = false, this.myVehicleMarketPlace, this.myVehicle}) : super(key: key);
 
@@ -78,6 +79,8 @@ class _SellCarState extends State<SellCar> {
             if (state is AddCarSuccessfully) {
               Navigator.of(context).pop();
               CommonMethods().showToast(context: context, message: "Car added successfully" /*, isSuccess: true, title: "Success"*/);
+            } else if(state is SellCarFailed) {
+              CommonMethods().showToast(context: context, message: state.failedMsg);
             }
             if (state is UpdateCarSuccessFully) {
               BlocProvider.of<MyMarketVehicleBloc>(context).add(const MyMarketVehicleRequestEvent(

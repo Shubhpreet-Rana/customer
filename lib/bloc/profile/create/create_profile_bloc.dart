@@ -2,7 +2,12 @@ import 'dart:async';
 import 'package:app/data/repository/profile_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+
+import '../../../common/services/NavigationService.dart';
+import '../../../main.dart';
+import '../view/profile_bloc.dart';
 
 part 'create_profile_event.dart';
 
@@ -33,8 +38,10 @@ class CreateProfileBloc extends Bloc<CreateEvent, CreateProfileState> {
         lang: event.lang,
       );
       if (res['status'] == 1 && res['screen'] != 'add_vehicle') {
+        BlocProvider.of<ProfileBloc>(locator<NavigationService>().navigatorKey.currentContext!).add(ProfileFetchEvent());
         emit(CreatedSuccessfully(res['message']));
       } else if (res['status'] == 1 && res['screen'] == 'home') {
+        BlocProvider.of<ProfileBloc>(locator<NavigationService>().navigatorKey.currentContext!).add(ProfileFetchEvent());
         emit(UpdateProfileSuccessfully(res['message']));
       } else {
         emit(CreatedFailed(res['message']));

@@ -29,22 +29,33 @@ class ProfileRepository {
     String token = userInfo['token'];
     final mimeTypeData = lookupMimeType(imagePath, headerBytes: [0xFF, 0xD8])?.split('/');
     try {
-      Map<String, String> headers = {
-        "Accept": "application/json",
-        "Authorization": "Bearer $token",
-        "Content-Type": "multipart/form-data; boundary=<calculated when request is sent>"
-      };
-      FormData formData = FormData.fromMap({
+      Map<String, String> headers = {"Accept": "application/json", "Authorization": "Bearer $token", "Content-Type": "multipart/form-data; boundary=<calculated when request is sent>"};
+
+      bool isLocalFile = !imagePath.contains("http");
+      Map<String, dynamic> data = {
         'first_name': fName,
         'last_name': lName,
-        'gender': "1",
+        'gender': gender,
         'address': address,
         'mobile': mobile,
         'address_lat': lat,
         'address_long': lang,
-        'user_image': MultipartFile.fromFileSync(imagePath,
-            contentType: MediaType(mimeTypeData![0], mimeTypeData[1]), filename: basename(imagePath)),
-      });
+      };
+
+      if (isLocalFile) {
+        Map<String, MultipartFile> image = {
+          'user_image': MultipartFile.fromFileSync(
+            imagePath,
+            contentType: MediaType(
+              mimeTypeData![0],
+              mimeTypeData[1],
+            ),
+            filename: basename(imagePath),
+          )
+        };
+        data.addEntries(image.entries);
+      }
+      FormData formData = FormData.fromMap(data);
       netWorkLocator.dio.options.connectTimeout = 500000;
       netWorkLocator.dio.options.receiveTimeout = 1000000;
       /*netWorkLocator.dio.options.followRedirects = false;*/

@@ -82,10 +82,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 AppConstants.welcome,
                                 style: AppStyles.darkText,
                               ),
-                              Text(
-                                AppConstants.loginMsg,
-                                style: AppStyles.lightText,
-                              ),
                               verticalSpacer(
                                 height: 30.0,
                               ),

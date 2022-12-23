@@ -357,6 +357,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import '../../bloc/delete_my_marketplace_vehicle/delete_my_marketplace_vehicle_bloc.dart';
 import '../../bloc/home/add_car/add_car_bloc.dart';
@@ -653,10 +654,17 @@ class _ViewCarsState extends State<ViewCars> {
                             child: GestureDetector(
                                 behavior: HitTestBehavior.translucent,
                                 onTap: () {
-                                  Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
-                                      builder: (context) => const MyAppMap(
-                                            showPickUp: false,
-                                          )));
+                                  double latitude = double.parse(car.addressLat!);
+                                  double longitude = double.parse(car.addressLong!);
+                                  Navigator.of(context, rootNavigator: false).push(
+                                    CupertinoPageRoute(
+                                      builder: (context) => MyAppMap(
+                                        showPickUp: false,
+                                        showMarker: true,
+                                        latLng: LatLng(latitude, longitude),
+                                      ),
+                                    ),
+                                  );
                                 },
                                 child: rowButton(bkColor: Colours.lightWhite.code, textColor: Colours.blue.code, text: AppConstants.location1, paddingHorizontal: 8.0, paddingVertical: 7.0)),
                           ),
@@ -677,44 +685,46 @@ class _ViewCarsState extends State<ViewCars> {
         ],
       );
 
-  Widget _myListItem(MyVehicleMarketPlace car) {
-    DeleteMarketPlaceVehicleState state = BlocProvider.of<DeleteMarketPlaceVehicleBloc>(context).state;
-    if(state is DeleteVehicleLoadingState){
+  Widget _myListItem(MyVehicleMarketPlace car, DeleteMarketPlaceVehicleState state) {
+    if (state is DeleteVehicleLoadingState) {
       return const Center(child: CircularProgressIndicator());
-    }
-    return  SwipeActionCell(
+    } else {
+      return SwipeActionCell(
       key: ObjectKey(car.id),
       trailingActions: _selectedTab == 0
           ? null
           : <SwipeAction>[
-              SwipeAction(
-                  title: "",
-                  style: const TextStyle(color: Colors.white),
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.white,
-                  ),
-                  onTap: (CompletionHandler handler) async {
-                    BlocProvider.of<DeleteMarketPlaceVehicleBloc>(context).add(
-                      DeleteMyVehicleRequested(id: car.id.toString()),
-                    );
-                  },
-                  color: Colors.red),
-              SwipeAction(
-                  title: "",
-                  style: const TextStyle(color: Colors.white),
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                  onTap: (CompletionHandler handler) async {
-                    Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
-                        builder: (context) => SellCar(
-                              fromEdit: true,
-                              myVehicleMarketPlace: car,
-                            )));
-                  },
-                  color: Colors.black),
+
+                SwipeAction(
+                    title: "",
+                    style: const TextStyle(color: Colors.white),
+                    icon: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                    onTap: (CompletionHandler handler) async {
+                      if (state is! DeleteVehicleLoadingState) {
+                        BlocProvider.of<DeleteMarketPlaceVehicleBloc>(context).add(
+                          DeleteMyVehicleRequested(id: car.id.toString()),
+                        );
+                      }
+                    },
+                    color: Colors.red),
+                SwipeAction(
+                    title: "",
+                    style: const TextStyle(color: Colors.white),
+                    icon: const Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    ),
+                    onTap: (CompletionHandler handler) async {
+                      Navigator.of(context, rootNavigator: false).push(CupertinoPageRoute(
+                          builder: (context) => SellCar(
+                                fromEdit: true,
+                                myVehicleMarketPlace: car,
+                              )));
+                    },
+                    color: Colors.black),
             ],
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -753,11 +763,13 @@ class _ViewCarsState extends State<ViewCars> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            car.brandName!,
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: AppStyles.blackSemiBold,
+                          Flexible(
+                            child: Text(
+                              car.brandName!,
+                              maxLines: 2,
+                              textAlign: TextAlign.start,
+                              style: AppStyles.blackSemiBold,
+                            ),
                           ),
                           Text(
                             car.manufacturingYear!,
@@ -862,6 +874,7 @@ class _ViewCarsState extends State<ViewCars> {
         ],
       ),
     );
+    }
   }
 
   Widget _myListedCarView() {
@@ -879,7 +892,8 @@ class _ViewCarsState extends State<ViewCars> {
             ),
           );
         }
-        if (state is MyMarketVehicleLoadedState && state.myMarketVehicle.isNotEmpty) {
+        if (state is MyMarketVehicleLoadedState) {
+          _myMarketPlaceVehicle.clear();
           _myMarketPlaceVehicle.addAll(state.myMarketVehicle);
         }
         return _myMarketPlaceVehicle.isNotEmpty
@@ -914,7 +928,11 @@ class _ViewCarsState extends State<ViewCars> {
                               padding: EdgeInsets.zero,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
-                                return _myListItem(_myMarketPlaceVehicle[index]);
+                                return BlocBuilder<DeleteMarketPlaceVehicleBloc,DeleteMarketPlaceVehicleState>(
+                                  builder: (context,state) {
+                                    return _myListItem(_myMarketPlaceVehicle[index],state);
+                                  }
+                                );
                               },
                             ),
                           ],

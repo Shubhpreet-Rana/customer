@@ -51,9 +51,10 @@ class _ProfileTabState extends State<ProfileTab> {
               ),
               Expanded(
                 child: SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(),
                     child: Container(
                   width: CommonMethods.deviceWidth(),
-                  height: CommonMethods.deviceHeight(),
+                  height: CommonMethods.deviceHeight() * 0.8,
                   padding: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 5.0, top: 40.0),
                   decoration: BoxDecoration(
                     color: Colours.lightGray.code,
@@ -217,8 +218,7 @@ class _ProfileTabState extends State<ProfileTab> {
                           )
                         ],
                       ),
-                      //verticalSpacer(height: 50.0),
-                      const Spacer(),
+                      verticalSpacer(height: 50.0),
                       GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () {
@@ -239,7 +239,6 @@ class _ProfileTabState extends State<ProfileTab> {
                           style: AppStyles.redTextW500,
                         ),
                       ),
-                      const Spacer(),
                     ],
                   ),
                 )),
@@ -247,7 +246,7 @@ class _ProfileTabState extends State<ProfileTab> {
             ],
           ));
         }
-        return Container();
+        return const SizedBox();
       }),
     );
   }

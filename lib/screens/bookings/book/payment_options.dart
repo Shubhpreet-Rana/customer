@@ -3,6 +3,7 @@ import 'package:app/bloc/card%20/get_card/get_card_bloc.dart';
 import 'package:app/bloc/charge_user/charge_user_bloc.dart' as charge;
 import 'package:app/bloc/payment/payment_sheets/payment_sheets.dart';
 import 'package:app/common/styles/styles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -314,6 +315,7 @@ class _PaymentOptionsState extends State<PaymentOptions> {
   _openCardSheet() {
     return showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         isDismissible: false,
         builder: (context) {
           return const NoWebhookPaymentCardFormScreen();
@@ -358,7 +360,7 @@ class NoWebhookPaymentCardFormScreenState extends State<NoWebhookPaymentCardForm
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * .5,
+      height: MediaQuery.of(context).size.height*0.9,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: SingleChildScrollView(
@@ -372,11 +374,11 @@ class NoWebhookPaymentCardFormScreenState extends State<NoWebhookPaymentCardForm
                   borderColor: Colors.blueGrey,
                   textColor: Colors.black,
                   fontSize: 24,
-                  placeholderColor: Colors.blue,
+                  placeholderColor: Colours.blue.code,
                 ),
               ),
               const SizedBox(height: 20.0),
-              _addCardButton()
+              _addCardButton(),
             ],
           ),
         ),
@@ -390,11 +392,13 @@ class NoWebhookPaymentCardFormScreenState extends State<NoWebhookPaymentCardForm
       if (state is AddCardLoadingState) {
         return const Center(child: CircularProgressIndicator());
       } else {
-        return ElevatedButton(
-            onPressed: () {
-              _getCardToken();
-            },
-            child: Text(AppConstants.addCard));
+        return CupertinoButton(
+          onPressed: () {
+            _getCardToken();
+          },
+          color: Colours.blue.code,
+          child: Text(AppConstants.addCard),
+        );
       }
     });
   }

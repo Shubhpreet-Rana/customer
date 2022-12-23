@@ -17,8 +17,7 @@ final _navigatorKey = locator<NavigationService>().navigatorKey;
 class AllVehicleBloc extends Bloc<AllVehicleEvent, AllVehicleState> {
   final HomeRepository homeRepository;
 
-  AllVehicleBloc({required this.homeRepository})
-      : super(const AllVehicleInitialState()) {
+  AllVehicleBloc({required this.homeRepository}) : super(const AllVehicleInitialState()) {
     on<AllVehicleRequestEvent>(_getAllVehicle);
   }
 
@@ -28,14 +27,9 @@ class AllVehicleBloc extends Bloc<AllVehicleEvent, AllVehicleState> {
     AllVehicleRequestEvent event,
     Emitter<AllVehicleState> emit,
   ) async {
-    emit(AllVehicleLoadingState(
-        isInitialLoadingState: event.isInitialLoadingState,
-        isFetchingMoreLoadingState: event.isFetchingMoreLoadingState));
+    emit(AllVehicleLoadingState(isInitialLoadingState: event.isInitialLoadingState, isFetchingMoreLoadingState: event.isFetchingMoreLoadingState));
     try {
-      final res = await homeRepository.getAllVehicle(
-          event.isPaginationStartFromFirstPage
-              ? "1"
-              : "$_currentPageGetAllVehicle");
+      final res = await homeRepository.getAllVehicle(event.isPaginationStartFromFirstPage ? "1" : "$_currentPageGetAllVehicle");
       if (res['status'] == 1) {
         AllVehicle allVehicle = AllVehicle.fromJson(res);
         if (allVehicle.vehicle.isEmpty) {
@@ -48,29 +42,20 @@ class AllVehicleBloc extends Bloc<AllVehicleEvent, AllVehicleState> {
           ));
         }
       } else {
-        CommonMethods().showToast(
-            context: _navigatorKey.currentContext!, message: res['message']
-            .toString()
-            .toLowerCase()
-            .contains("no vehicle found")
-            ? "All vehicle not found"
-            : res['message']);
+        CommonMethods().showToast(context: _navigatorKey.currentContext!, message: res['message'].toString().toLowerCase().contains("no vehicle found") ? "All vehicle not found" : res['message']);
         emit(const AllVehicleInitialState());
       }
     } catch (e) {
-      CommonMethods()
-          .showToast(context: _navigatorKey.currentContext!, message: "$e");
+      CommonMethods().showToast(context: _navigatorKey.currentContext!, message: "$e");
       emit(const AllVehicleInitialState());
     }
   }
 }
 
-class MyMarketVehicleBloc
-    extends Bloc<MyMarketVehicleEvent, MyMarketVehicleState> {
+class MyMarketVehicleBloc extends Bloc<MyMarketVehicleEvent, MyMarketVehicleState> {
   final HomeRepository homeRepository;
 
-  MyMarketVehicleBloc({required this.homeRepository})
-      : super(const MyMarketVehicleInitialState()) {
+  MyMarketVehicleBloc({required this.homeRepository}) : super(const MyMarketVehicleInitialState()) {
     on<MyMarketVehicleRequestEvent>(_getMyMarketVehicle);
   }
 
@@ -80,18 +65,16 @@ class MyMarketVehicleBloc
     MyMarketVehicleRequestEvent event,
     Emitter<MyMarketVehicleState> emit,
   ) async {
-    emit(MyMarketVehicleLoadingState(
-        isInitialLoadingState: event.isInitialLoadingState,
-        isFetchingMoreLoadingState: event.isFetchingMoreLoadingState));
+    emit(MyMarketVehicleLoadingState(isInitialLoadingState: event.isInitialLoadingState, isFetchingMoreLoadingState: event.isFetchingMoreLoadingState));
     try {
-      final res = await homeRepository.getMyMarketVehicle(
-          event.isPaginationStartFromFirstPage
-              ? "1"
-              : "$_currentPageGetMyMarketVehicle");
+      final res = await homeRepository.getMyMarketVehicle(event.isPaginationStartFromFirstPage ? "1" : "$_currentPageGetMyMarketVehicle");
       if (res['status'] == 1) {
         MyMarketPlaceVehicle allVehicle = MyMarketPlaceVehicle.fromJson(res);
         if (allVehicle.vehicle.isEmpty) {
-          emit(const MyMarketVehicleInitialState());
+          emit(MyMarketVehicleLoadedState(
+            myMarketVehicle: allVehicle.vehicle,
+            isLastPage: allVehicle.isLastPage == 1 ? true : false,
+          ));
         } else {
           _currentPageGetMyMarketVehicle++;
           emit(MyMarketVehicleLoadedState(
@@ -100,19 +83,19 @@ class MyMarketVehicleBloc
           ));
         }
       } else {
-        CommonMethods().showToast(
-            context: _navigatorKey.currentContext!,
-            message: res['message']
-                    .toString()
-                    .toLowerCase()
-                    .contains("no vehicle found")
-                ? "My listed vehicle not found"
-                : res['message']);
-        emit(const MyMarketVehicleInitialState());
+        if (res['status'] == 0 && res['message'] == 'No vehicle found') {
+          emit(const MyMarketVehicleLoadedState(
+            myMarketVehicle: [],
+            isLastPage: true,
+          ));
+        } else {
+          emit(const MyMarketVehicleInitialState());
+        }
+        CommonMethods()
+            .showToast(context: _navigatorKey.currentContext!, message: res['message'].toString().toLowerCase().contains("no vehicle found") ? "My listed vehicle not found" : res['message']);
       }
     } catch (e) {
-      CommonMethods()
-          .showToast(context: _navigatorKey.currentContext!, message: "$e");
+      CommonMethods().showToast(context: _navigatorKey.currentContext!, message: "$e");
       emit(const MyMarketVehicleInitialState());
     }
   }
